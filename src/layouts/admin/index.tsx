@@ -12,13 +12,24 @@ export default function Admin(props: { [x: string]: any }) {
   const [currentRoute, setCurrentRoute] = React.useState("Main Dashboard");
 
   React.useEffect(() => {
-    window.addEventListener("resize", () =>
-      window.innerWidth < 1200 ? setOpen(false) : setOpen(true)
-    );
+    if(location.pathname !== "/admin/default"){
+      window.addEventListener("resize", () =>
+        window.innerWidth < 1200 ? setOpen(false) : setOpen(true)
+      );
+    }
   }, []);
   React.useEffect(() => {
     getActiveRoute(routes);
+    console.log(location.pathname);
+    if (location.pathname === "/admin/default") {
+      setOpen(false);
+    } else {
+      setOpen(true);
+    }
   }, [location.pathname]);
+  React.useEffect(() => {
+    console.log(open);
+  }, [open]);
 
   const getActiveRoute = (routes: RoutesType[]): string | boolean => {
     let activeRoute = "Main Dashboard";
@@ -59,12 +70,15 @@ export default function Admin(props: { [x: string]: any }) {
   document.documentElement.dir = "ltr";
   return (
     <div className="flex h-full w-full">
-      <Sidebar open={open} onClose={() => setOpen(false)} />
+      {open ? <Sidebar open={open} onClose={() => setOpen(false)} /> : null}
       {/* Navbar & Main Content */}
       <div className="h-full w-full bg-lightPrimary dark:!bg-navy-900">
         {/* Main Content */}
+        {/* ml-auto로 조정시 전체 width 사용 before - 313px*/}
         <main
-          className={`mx-[12px] h-full flex-none transition-all md:pr-2 xl:ml-[313px]`}
+          className={`mx-12 h-full flex-none transition-all md:pr-2 ${
+            open ? "xl:ml-[313px]" : "xl:ml-[150px]]"
+          }`}
         >
           {/* Routes */}
           <div className="h-full">
