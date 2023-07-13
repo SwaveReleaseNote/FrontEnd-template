@@ -1,4 +1,5 @@
 import ReactDOM from "react-dom/client";
+import { RecoilRoot } from "recoil";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 
@@ -8,6 +9,8 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <BrowserRouter>
-    <App />
+    <RecoilRoot>
+      <App />
+    </RecoilRoot>
   </BrowserRouter>
 );
