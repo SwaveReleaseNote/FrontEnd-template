@@ -4,6 +4,10 @@ import { Link, Routes, Route, Navigate } from "react-router-dom";
 import routes from "routes";
 import FixedPlugin from "components/fixedPlugin/FixedPlugin";
 
+/**
+ * @description : Login Index
+ */
+
 export default function Auth() {
   const getRoutes = (routes: RoutesType[]): any => {
     return routes.map((prop, key) => {

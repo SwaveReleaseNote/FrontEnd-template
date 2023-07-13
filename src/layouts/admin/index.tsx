@@ -44,9 +44,10 @@ export default function Admin(props: { [x: string]: any }) {
     }
     return activeNavbar;
   };
+
   const getRoutes = (routes: RoutesType[]): any => {
     return routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
+      if (prop.layout === "/admin") { 
         return (
           <Route path={`/${prop.path}`} element={prop.component} key={key} />
         );
@@ -61,7 +62,7 @@ export default function Admin(props: { [x: string]: any }) {
     <div className="flex h-full w-full">
       <Sidebar open={open} onClose={() => setOpen(false)} />
       {/* Navbar & Main Content */}
-      <div className="h-full w-full bg-lightPrimary dark:!bg-navy-900">
+      <div className="h-full w-fvmfhwull bg-lightPrimary dark:!bg-navy-900">
         {/* Main Content */}
         <main
           className={`mx-[12px] h-full flex-none transition-all md:pr-2 xl:ml-[313px]`}
@@ -76,6 +77,8 @@ export default function Admin(props: { [x: string]: any }) {
             />
             <div className="pt-5s mx-auto mb-auto h-full min-h-[84vh] p-2 md:pr-2">
               <Routes>
+                {/* TODO: routes.tsx에 프로젝트 리스트 선택할 수 있도록 추가
+                     */}
                 {getRoutes(routes)}
 
                 <Route

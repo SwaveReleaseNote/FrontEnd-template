@@ -5,6 +5,12 @@ import Links from "./components/Links";
 
 import routes from "routes";
 
+/**
+ * @description SdieBar index
+ * @param props 
+ * @returns 
+ */
+
 const Sidebar = (props: {
   open: boolean;
   onClose: React.MouseEventHandler<HTMLSpanElement>;
