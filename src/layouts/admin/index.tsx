@@ -8,20 +8,22 @@ import routes from "routes";
 export default function Admin(props: { [x: string]: any }) {
   const { ...rest } = props;
   const location = useLocation();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [currentRoute, setCurrentRoute] = React.useState("Main Dashboard");
 
-  React.useEffect(() => {
-    if(location.pathname !== "/admin/default"){
-      window.addEventListener("resize", () =>
-        window.innerWidth < 1200 ? setOpen(false) : setOpen(true)
-      );
-    }
-  }, []);
+  // React.useEffect(() => {
+  //   if(location.pathname !== "/admin/default"){
+  //     window.addEventListener("resize", () =>
+  //       window.innerWidth < 1200 ? setOpen(false) : setOpen(true)
+  //     );
+  //   }
+  // }, []);
   React.useEffect(() => {
     getActiveRoute(routes);
     console.log(location.pathname);
     if (location.pathname === "/admin/default") {
+      setOpen(false);
+    } else if (location.pathname === "/admin/createProject") {
       setOpen(false);
     } else {
       setOpen(true);

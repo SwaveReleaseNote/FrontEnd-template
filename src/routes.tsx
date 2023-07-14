@@ -19,6 +19,9 @@ import {
   MdLock,
 } from "react-icons/md";
 
+import CreateProject from "views/admin/default/pages/CreateProject";
+import ProjectDashboard from "views/admin/default/pages/ProjectDashboard";
+
 const routes = [
   {
     name: "Main Dashboard",
@@ -26,6 +29,20 @@ const routes = [
     path: "default",
     icon: <MdHome className="h-6 w-6" />,
     component: <MainDashboard />,
+  },
+  {
+    name: "Create Project",
+    layout: "/admin",
+    path: "createProject",
+    icon: <MdHome className="h-6 w-6" />,
+    component: <CreateProject />,
+  },
+  {
+    name: "Project Dashboard",
+    layout: "/admin",
+    path: "dashboard/:projectId",
+    icon: <MdHome className="h-6 w-6" />,
+    component: <ProjectDashboard />,
   },
   {
     name: "NFT Marketplace",

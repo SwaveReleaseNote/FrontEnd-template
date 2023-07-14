@@ -108,7 +108,7 @@ export default function ComplexTable(props: { tableData: any }) {
       </div>
 
       <div className="mt-8 overflow-x-scroll xl:overflow-x-hidden">
-        <table className="w-full">
+        <table className="w-full">  
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id} className="!border-px !border-gray-400">
