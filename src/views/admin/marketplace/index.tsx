@@ -12,10 +12,11 @@ import tableDataTopCreators from "views/admin/marketplace/variables/tableDataTop
 import HistoryCard from "./components/HistoryCard";
 import TopCreatorTable from "./components/TableTopCreators";
 import NftCard from "components/card/NftCard";
+import NoteField from "components/note/NoteField";
 
 const ReleaseNote = () => {
   return (
-    <div className="mt-3 grid h-full grid-cols-1 gap-5 xl:grid-cols-2 2xl:grid-cols-3">
+    <div className="h-full grid-cols-1 gap-5 2xl:grid-cols-3">
       <div className="col-span-1 h-fit w-full xl:col-span-1 2xl:col-span-2">
         {/* NFt Banner */}
         {/* <Banner /> */}
@@ -28,7 +29,6 @@ const ReleaseNote = () => {
                 className="text-base font-medium text-brand-500 hover:text-brand-500 dark:text-white"
                 href=" "
               >
-                Art
               </a>
             </li>
             <li>
@@ -36,7 +36,6 @@ const ReleaseNote = () => {
                 className="text-base font-medium text-brand-500 hover:text-brand-500 dark:text-white"
                 href=" "
               >
-                Music
               </a>
             </li>
             <li>
@@ -44,7 +43,6 @@ const ReleaseNote = () => {
                 className="text-base font-medium text-brand-500 hover:text-brand-500 dark:text-white"
                 href=" "
               >
-                Collection
               </a>
             </li>
             <li>
@@ -52,28 +50,23 @@ const ReleaseNote = () => {
                 className="text-base font-medium text-brand-500 hover:text-brand-500 dark:text-white"
                 href=" "
               >
-                <a href=" ">Sports</a>
+                <a href=" "></a>
               </a>
             </li>
           </ul>
         </div>
-
+        <div className=" z-20 grid grid-cols-1">
+          <NoteField />
+        </div>
         {/* NFTs trending card */}
         <div className="z-20 grid grid-cols-1 gap-5 md:grid-cols-3">
-          <NftCard
-            bidders={[avatar1, avatar2, avatar3]}
-            title="Abstract Colors"
-            author="Esthera Jackson"
-            price="0.91"
-            image={NFt3}
-          />
+          {/* TODO: NFTCard 대신 ReleaseNote가 들어갈 수 있도록 만들기 */}
         </div>
       </div>
-
       {/* right side section */}
 
-      <div className="col-span-1 h-full w-full rounded-xl 2xl:col-span-1">
-      </div>
+      {/* <div className="col-span-1 h-full w-full rounded-xl 2xl:col-span-1">
+      </div> */}
     </div>
   );
 };

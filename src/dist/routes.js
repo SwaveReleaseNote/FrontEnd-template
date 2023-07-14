@@ -12,19 +12,19 @@ var SignIn_1 = require("views/auth/SignIn");
 var md_1 = require("react-icons/md");
 var routes = [
     {
-        name: "Project Dashboard",
-        layout: "/admin",
-        path: "default",
-        icon: react_1["default"].createElement(md_1.MdHome, { className: "h-6 w-6" }),
-        component: react_1["default"].createElement(default_1["default"], null)
-    },
-    {
         name: "Release Note",
         layout: "/admin",
         path: "release-note",
         icon: react_1["default"].createElement(md_1.MdOutlineShoppingCart, { className: "h-6 w-6" }),
         component: react_1["default"].createElement(marketplace_1["default"], null),
         secondary: true
+    },
+    {
+        name: "Project Dashboard",
+        layout: "/admin",
+        path: "default",
+        icon: react_1["default"].createElement(md_1.MdHome, { className: "h-6 w-6" }),
+        component: react_1["default"].createElement(default_1["default"], null)
     },
     {
         name: "Data Tables",
@@ -46,6 +46,13 @@ var routes = [
         path: "sign-in",
         icon: react_1["default"].createElement(md_1.MdLock, { className: "h-6 w-6" }),
         component: react_1["default"].createElement(SignIn_1["default"], null)
+    },
+    {
+        name: "NoteFiled Test",
+        layout: "/admin",
+        path: "release-note",
+        icon: react_1["default"].createElement(md_1.MdOutlineShoppingCart, { className: "h-6 w-6" }),
+        component: react_1["default"].createElement(marketplace_1["default"], null)
     }
 ];
 exports["default"] = routes;

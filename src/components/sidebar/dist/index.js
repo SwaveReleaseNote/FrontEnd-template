@@ -16,8 +16,8 @@ var Sidebar = function (props) {
             React.createElement(hi_1.HiX, null)),
         React.createElement("div", { className: "mx-[56px] mt-[50px] flex items-center" },
             React.createElement("div", { className: "mt-1 ml-1 h-2.5 font-poppins text-[26px] font-bold uppercase text-navy-700 dark:text-white" },
-                "Horizon ",
-                React.createElement("span", { className: "font-medium" }, "FREE"))),
+                "\uC6B0\uB9AC ",
+                React.createElement("span", { className: "font-medium" }, "\uB204\uB9AC"))),
         React.createElement("div", { className: "mt-[58px] mb-7 h-px bg-gray-300 dark:bg-white/30" }),
         React.createElement("ul", { className: "mb-auto pt-1" },
             React.createElement(Links_1["default"], { routes: routes_1["default"] }))));

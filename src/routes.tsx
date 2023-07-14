@@ -2,7 +2,7 @@ import React from "react";
 
 // Admin Imports
 import MainDashboard from "views/admin/default";
-import NFTMarketplace from "views/admin/marketplace";
+import ReleaseNote from "views/admin/marketplace";
 import Profile from "views/admin/profile";
 import DataTables from "views/admin/tables";
 
@@ -20,19 +20,19 @@ import {
 
 const routes = [
   {
+    name: "Release Note",
+    layout: "/admin",
+    path: "release-note",
+    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
+    component: <ReleaseNote />,
+    secondary: true,
+  },
+  {
     name: "Project Dashboard",
     layout: "/admin",
     path: "default",
     icon: <MdHome className="h-6 w-6" />,
     component: <MainDashboard />,
-  },
-  {
-    name: "Release Note",
-    layout: "/admin",
-    path: "release-note",
-    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
-    component: <NFTMarketplace />,
-    secondary: true,
   },
   {
     name: "Data Tables",
@@ -54,6 +54,13 @@ const routes = [
     path: "sign-in",
     icon: <MdLock className="h-6 w-6" />,
     component: <SignIn />,
+  },
+  {
+    name: "NoteFiled Test",
+    layout: "/admin",
+    path: "release-note",
+    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
+    component: <ReleaseNote />,
   }
 ];
 export default routes;

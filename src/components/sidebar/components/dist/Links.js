@@ -28,10 +28,9 @@ exports.SidebarLinks = function (props) {
                                 route.icon ? route.icon : react_1["default"].createElement(DashIcon_1["default"], null),
                                 " "),
                             react_1["default"].createElement("div", null, route.name === "Release Note"
-                                ? react_1["default"].createElement(SidebarList_1["default"], { routeName: route.name, activeRoute: activeRoute })
-                                : react_1["default"].createElement("p", { className: "leading-1 ml-4 flex " + (activeRoute(route.path) === true
-                                        ? "font-bold text-navy-700 dark:text-white"
-                                        : "font-medium text-gray-600") }, route.name))),
+                                ? react_1["default"].createElement(SidebarList_1["default"], { routeName: route.name, activeRoute: activeRoute }) : react_1["default"].createElement("p", { className: "leading-1 ml-4 flex " + (activeRoute(route.path) === true
+                                    ? "font-bold text-navy-700 dark:text-white"
+                                    : "font-medium text-gray-600") }, route.name))),
                         activeRoute(route.path) ? (react_1["default"].createElement("div", { className: "absolute right-0 top-px h-9 w-1 rounded-lg bg-brand-500 dark:bg-brand-400" })) : null)));
             }
         });

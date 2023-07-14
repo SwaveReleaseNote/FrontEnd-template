@@ -43,8 +43,7 @@ export const SidebarLinks = (props: { routes: RoutesType[] }): JSX.Element => {
                 <div>
                   {
                     route.name === "Release Note"
-                      ? <SidebarList routeName={route.name} activeRoute={activeRoute} />
-                      : <p
+                      ? <SidebarList routeName={route.name} activeRoute={activeRoute} />                      : <p
                         className={`leading-1 ml-4 flex ${activeRoute(route.path) === true
                           ? "font-bold text-navy-700 dark:text-white"
                           : "font-medium text-gray-600"
