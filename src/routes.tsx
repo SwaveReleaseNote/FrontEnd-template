@@ -9,6 +9,7 @@ import RTLDefault from "views/rtl/default";
 
 // Auth Imports
 import SignIn from "views/auth/SignIn";
+import Login from "views/auth/Login";
 
 // Icon Imports
 import {
@@ -18,6 +19,8 @@ import {
   MdPerson,
   MdLock,
 } from "react-icons/md";
+import MyPage from "views/auth/MyPage";
+
 
 import CreateProject from "views/admin/default/pages/CreateProject";
 import ProjectDashboard from "views/admin/default/pages/ProjectDashboard";
@@ -68,11 +71,25 @@ const routes = [
     component: <DataTables />,
   },
   {
+    name: "LogIn",
+    layout: "/default",
+    path: "login",
+    icon: <MdLock className="h-6 w-6" />,
+    component: <Login />,
+  },
+  // {
+  //   name: "Profile",
+  //   layout: "/admin",
+  //   path: "profile",
+  //   icon: <MdPerson className="h-6 w-6" />,
+  //   component: <Profile />,
+  // },
+  {
     name: "Profile",
     layout: "/admin",
     path: "profile",
     icon: <MdPerson className="h-6 w-6" />,
-    component: <Profile />,
+    component: <MyPage />,
   },
   {
     name: "Sign In",
