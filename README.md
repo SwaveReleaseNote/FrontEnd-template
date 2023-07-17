@@ -33,9 +33,9 @@ URINURI UI is available in Figma format as well! Check it out on Figma Community
 
 ### Community
 
-💬 [Join the #URINURI Notion Community!]([https://www.notion.so/dogfactory/6ecf52d6df0c40d2b54326502b0fa1cb?v=0135a9ffc7d74984be969a94061b91cd])
+💬 [Join the #URINURI Notion Community!](https://www.notion.so/dogfactory/6ecf52d6df0c40d2b54326502b0fa1cb?v=0135a9ffc7d74984be969a94061b91cd)
 
-💬 [Join the #URINURI Jira Community!]([(https://swavejira.atlassian.net/jira/core/projects/REL/board)])
+💬 [Join the #URINURI Jira Community!]((https://swavejira.atlassian.net/jira/core/projects/REL/board))
 
 ### Copyright and license
 
