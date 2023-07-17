@@ -6,6 +6,12 @@ import MemberStatusCard from "../components/MemberStatusCard";
 import RecentComment from "../components/RecentComment";
 import SearchRelease from "../components/SearchRelease";
 
+enum UserRole {
+  Subscriber = "구독자",
+  Developer = "개발자",
+  Manager = "관리자",
+}
+
 const ProjectDashboard: React.FC = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -32,7 +38,7 @@ const ProjectDashboard: React.FC = () => {
     <div>
       <div className="h-100% mt-4 flex w-auto justify-items-center rounded-[20px] bg-white bg-clip-border p-6 text-4xl font-bold shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none sm:overflow-x-auto">
         {projectName}
-        {role === "Manager" && (
+        {role === UserRole.Manager && (
           <button className="absolute right-[8%] text-xl">
             프로젝트 관리⚙️
           </button>

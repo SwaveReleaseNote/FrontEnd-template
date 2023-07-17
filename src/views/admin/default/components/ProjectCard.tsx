@@ -6,6 +6,12 @@ import banner from "assets/img/profile/banner2.png";
 import Card from "components/card";
 import { MdStar } from "react-icons/md";
 
+enum UserRole {
+  Subscriber = "구독자",
+  Developer = "개발자",
+  Manager = "관리자",
+}
+
 interface ProjectCardProps {
   projectId: number;
   projectName: string;
@@ -13,7 +19,7 @@ interface ProjectCardProps {
   projectMemberNumber: number;
   projectRecentRelease: string;
   projectCreateDate: string;
-  projectRole: string;
+  projectRole: UserRole;
 }
 
 function ProjectCard({
@@ -56,7 +62,7 @@ function ProjectCard({
           style={{ backgroundImage: `url(${banner})` }}
         >
           <div className="absolute right-[5%] top-[5%]">
-            {projectRole === "Manager" && (
+            {projectRole === UserRole.Manager && (
               <>
                 {/* <MdStar className="mr-2 text-3xl text-yellow-500" /> */}
                 <p className="text-2xl">👑</p>
@@ -99,7 +105,7 @@ function ProjectCard({
             {projectCreateDate}
           </h1>
           <p className="text-l font-normal text-gray-600">생성 날짜</p>
-          {projectRole === "Manager" && (
+          {projectRole === UserRole.Manager && (
             <div className="relative">
               <button
                 className="text-xl"

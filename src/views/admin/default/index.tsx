@@ -14,22 +14,26 @@ import TaskCard from "views/admin/default/components/TaskCard";
 import tableDataCheck from "./variables/tableDataCheck";
 import tableDataComplex from "./variables/tableDataComplex";
 
-import { loginState } from "../../../context/atom";
-import { useRecoilValue } from "recoil";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import RecentRelease from "./components/RecentRelease";
 import ProjectCard from "./components/ProjectCard";
 
+enum UserRole {
+  Subscriber = "구독자",
+  Developer = "개발자",
+  Manager = "관리자",
+}
+
 interface Project {
   id: number;
-  role: string;
+  role: UserRole;
   name: string;
   description: string;
   createDate: string;
   count: number;
-  recentRelease: string;
+  recentReleaseVersion: string;
 }
 
 const Dashboard = () => {
@@ -51,7 +55,6 @@ const Dashboard = () => {
   const [subscriberProjectList, setSubscriberProjectList] = useState<Project[]>(
     []
   );
-  const login = useRecoilValue(loginState);
 
   const displayedManageDevelopList = managerDeveloperProjectList.slice(
     manageDevelopOffset,
@@ -75,20 +78,19 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    const userId = login.id; // Replace with the actual user ID
 
     const fetchData = async () => {
       try {
-        const response = await axios.get(`/api/project/load/all/${userId}`);
+        const response = await axios.get(`/api/project/load/all`);
         const fetchedProjectList = response.data;
 
         const managerDeveloperProjects = fetchedProjectList.filter(
           (project: { role: string }) =>
-            project.role === "Manager" || project.role === "Developer"
+            project.role === UserRole.Manager || project.role === UserRole.Developer
         );
 
         const subscriberProjects = fetchedProjectList.filter(
-          (project: { role: string }) => project.role === "Subscriber"
+          (project: { role: string }) => project.role === UserRole.Subscriber
         );
 
         setProjectList(fetchedProjectList);
@@ -135,85 +137,85 @@ const Dashboard = () => {
     const fetchedProjectList = [
       {
         id: 1,
-        role: "Manager",
+        role: UserRole.Manager,
         name: "Manager1",
         description: "사내 릴리즈 노트 공유 시스템",
         createDate: "Wed Jul 12 2023",
-        recentRelease: "3.6.7",
+        recentReleaseVersion: "3.6.7",
         count: 5,
       },
       {
         id: 2,
-        role: "Manager",
+        role: UserRole.Manager,
         name: "Manager2",
         description: "사내 릴리즈 노트 공유 시스템",
         createDate: "Wed Jul 12 2023",
-        recentRelease: "3.6.7",
+        recentReleaseVersion: "3.6.7",
         count: 5,
       },
       {
         id: 3,
-        role: "Developer",
+        role: UserRole.Developer,
         name: "Developer1",
         description: "사내 릴리즈 노트 공유 시스템",
         createDate: "Wed Jul 12 2023",
-        recentRelease: "3.6.7",
+        recentReleaseVersion: "3.6.7",
         count: 5,
       },
       {
         id: 4,
-        role: "Developer",
+        role: UserRole.Developer,
         name: "Developer2",
         description: "사내 릴리즈 노트 공유 시스템",
         createDate: "Wed Jul 12 2023",
-        recentRelease: "3.6.7",
+        recentReleaseVersion: "3.6.7",
         count: 5,
       },
       {
         id: 5,
-        role: "Developer",
+        role: UserRole.Developer,
         name: "Developer3",
         description: "사내 릴리즈 노트 공유 시스템",
         createDate: "Wed Jul 12 2023",
-        recentRelease: "3.6.7",
+        recentReleaseVersion: "3.6.7",
         count: 5,
       },
       {
         id: 6,
-        role: "Developer",
+        role: UserRole.Developer,
         name: "Developer4",
         description: "사내 릴리즈 노트 공유 시스템",
         createDate: "Wed Jul 12 2023",
-        recentRelease: "3.6.7",
+        recentReleaseVersion: "3.6.7",
         count: 5,
       },
       {
         id: 7,
-        role: "Developer",
+        role: UserRole.Developer,
         name: "Developer5",
         description: "사내 릴리즈 노트 공유 시스템",
         createDate: "Wed Jul 12 2023",
-        recentRelease: "3.6.7",
+        recentReleaseVersion: "3.6.7",
         count: 5,
       },
       {
         id: 8,
-        role: "Subscriber",
+        role: UserRole.Subscriber,
         name: "사내 릴리즈 노트 공유 시스템",
         description: "사내 릴리즈 노트 공유 시스템",
         createDate: "Wed Jul 12 2023",
-        recentRelease: "3.6.7",
+        recentReleaseVersion: "3.6.7",
         count: 5,
       },
     ];
 
     const managerDeveloperProjects = fetchedProjectList.filter(
       (project: { role: string }) =>
-        project.role === "Manager" || project.role === "Developer"
+        project.role === UserRole.Manager || project.role === UserRole.Developer
     );
 
     const subscriberProjects = fetchedProjectList.filter(
-      (project: { role: string }) => project.role === "Subscriber"
+      (project: { role: string }) => project.role === UserRole.Subscriber
     );
 
     setProjectList(fetchedProjectList);
@@ -304,7 +306,7 @@ const Dashboard = () => {
                 projectName={project.name}
                 projectDescription={project.description}
                 projectMemberNumber={project.count}
-                projectRecentRelease={project.recentRelease}
+                projectRecentRelease={project.recentReleaseVersion}
                 projectCreateDate={project.createDate}
                 projectRole={project.role}
               />
@@ -319,7 +321,7 @@ const Dashboard = () => {
                 projectName={project.name}
                 projectDescription={project.description}
                 projectMemberNumber={project.count}
-                projectRecentRelease={project.recentRelease}
+                projectRecentRelease={project.recentReleaseVersion}
                 projectCreateDate={project.createDate}
                 projectRole={project.role}
               />
