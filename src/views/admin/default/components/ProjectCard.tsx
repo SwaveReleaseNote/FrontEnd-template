@@ -26,20 +26,28 @@ function ProjectCard({
   projectRole,
 }: ProjectCardProps): ReactElement {
   const navigate = useNavigate();
-  
-  function handleClickProjectCard(id: number) {
-    navigate(`/admin/dashboard/${id}`, {
-      state: {
-        id: { id },
-      },
-    });
+
+  function handleClickProjectCard(projectId: number, projectRole: string) {
+    const queryString = `projectId=${projectId}&role=${encodeURIComponent(
+      projectRole
+    )}&projectName=${projectName}`;
+    const url = `/admin/dashboard?${queryString}`;
+
+    navigate(url);
     console.log("handleClickProjectCard");
   }
+
+  const handleClickManagerSettingButton = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
+    console.log("handleClickManagerSettingButton");
+  };
 
   return (
     <button
       className="rounded-3xl pl-2 pr-2 hover:bg-gray-500 focus:ring-4 focus:ring-blue-300"
-      onClick={() => handleClickProjectCard(projectId)}
+      onClick={() => handleClickProjectCard(projectId, projectRole)}
     >
       <Card extra={"items-center w-auto h-[95%] p-[16px] bg-cover"}>
         {/* Background and profile */}
@@ -49,7 +57,10 @@ function ProjectCard({
         >
           <div className="absolute right-[5%] top-[5%]">
             {projectRole === "Manager" && (
-              <MdStar className="mr-2 text-3xl text-yellow-500" />
+              <>
+                {/* <MdStar className="mr-2 text-3xl text-yellow-500" /> */}
+                <p className="text-2xl">👑</p>
+              </>
             )}
           </div>
           <div className="bg-white-400 absolute left-[0%] flex h-full w-full items-center overflow-hidden overflow-ellipsis whitespace-nowrap rounded-3xl border-none border-white dark:!border-navy-700">
@@ -58,7 +69,7 @@ function ProjectCard({
               {projectName}
             </p>
           </div>
-          <div className="absolute top-[70%] right-[-5%] flex h-[47px] w-[47px] items-center justify-center rounded-full border-[4px] border-white bg-blue-400 dark:!border-navy-700 dark:!bg-navy-700">
+          <div className="absolute right-[-5%] top-[70%] flex h-[47px] w-[47px] items-center justify-center rounded-full border-[4px] border-white bg-blue-400 dark:!border-navy-700 dark:!bg-navy-700">
             {/* <img className="h-full w-full rounded-full" src={avatar} alt="" /> */}
             <p className="text-2xl font-bold text-white dark:text-white">
               {projectMemberNumber}
@@ -88,6 +99,16 @@ function ProjectCard({
             {projectCreateDate}
           </h1>
           <p className="text-l font-normal text-gray-600">생성 날짜</p>
+          {projectRole === "Manager" && (
+            <div className="relative">
+              <button
+                className="text-xl"
+                onClick={() => handleClickManagerSettingButton}
+              >
+                ⚙️
+              </button>
+            </div>
+          )}
         </div>
 
         {/* 추후에 총 구독자 수 같은 다른 내용 추가를 위해 보류

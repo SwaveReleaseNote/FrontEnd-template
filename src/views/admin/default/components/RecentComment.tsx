@@ -1,9 +1,22 @@
-import PieChart from "components/charts/PieChart";
-import { pieChartData, pieChartOptions } from "variables/charts";
 import Card from "components/card";
 import RecentCommentList from "./RecentCommentList";
+import React, { useState } from "react";
 
-const RecentComment = () => {
+type Props = {
+  projectId: {
+    id: number;
+  };
+};
+
+const RecentComment: React.FC<Props> = ({ projectId }) => {
+  const [selectedValue, setSelectedValue] = useState("All");
+
+  const handleChangeSelectOption = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setSelectedValue(e.target.value);
+  };
+
   return (
     <Card extra="rounded-[20px] p-3 h-full">
       <div className="flex flex-row justify-between px-3 pt-2">
@@ -14,16 +27,20 @@ const RecentComment = () => {
         </div>
 
         <div className="mb-6 flex items-center justify-center">
-          <select className="mb-3 mr-2 flex items-center justify-center text-sm font-bold text-gray-600 hover:cursor-pointer dark:!bg-navy-800 dark:text-white">
-            <option value="monthly">All</option>
-            <option value="yearly">Comment</option>
-            <option value="weekly">Mention</option>
+          <select
+            value={selectedValue}
+            onChange={handleChangeSelectOption}
+            className="mb-3 mr-2 flex items-center justify-center text-sm font-bold text-gray-600 hover:cursor-pointer dark:!bg-navy-800 dark:text-white"
+          >
+            <option value="All">All</option>
+            <option value="Comment">Comment</option>
+            <option value="Mention">Mention</option>
           </select>
         </div>
       </div>
 
       <div className="mb-auto flex h-[220px] w-full items-center justify-center">
-        <RecentCommentList />
+        <RecentCommentList projectId={projectId.id} />
       </div>
     </Card>
   );

@@ -29,7 +29,7 @@ const Navbar = (props: {
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      navigate("/project/searchResult", {
+      navigate("/admin/project/searchResult", {
         state: {
           searchTerm: { searchTerm },
         },
@@ -213,7 +213,7 @@ const Navbar = (props: {
             //   alt="Elon Musk"
             // />
             <div className="flex w-full flex-col gap-2 rounded-[20px]">
-              <p className="cursor-pointer overflow-break">
+              <p className="cursor-pointer overflow-break dark:text-white">
                 Hello <b>{login.name}</b> 👻⚙️
               </p>
             </div>

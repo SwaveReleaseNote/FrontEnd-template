@@ -1,63 +1,92 @@
 import Card from "../../../../components/card";
+import { loginState } from "../../../../context/atom";
+import { useRecoilValue } from "recoil";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
+
+type NoteBlock = {
+  noteBlockContext: string;
+};
+
+type RecentReleaseNote = {
+  version: string;
+  lastModifiedDate: string;
+  releaseDate: string;
+  noteBlocks: NoteBlock[];
+};
+
 const RecentRelease = () => {
+  const login = useRecoilValue(loginState);
+  const [recentReleaseNote, setRecentReleaseNote] = useState<
+    RecentReleaseNote | undefined
+  >(); // Set initial state as undefined
+
+  // fetch All Members
+  const fetchRecentReleaseNote = async () => {
+    try {
+      const response = await axios.get(
+        `localhost:8080/api/project/release/load_recent`
+      );
+
+      setRecentReleaseNote(response.data);
+    } catch (error) {
+      console.error("Error fetching recent release note:", error);
+      console.log("Mocking");
+      mockFetchRecentRelease();
+    }
+  };
+
+  const mockFetchRecentRelease = () => {
+    // Simulate API response with mock data
+    const mockResponse: RecentReleaseNote = {
+      version: "3.6.7",
+      lastModifiedDate: new Date().toString(),
+      releaseDate: new Date().toString(),
+      noteBlocks: [
+        {
+          noteBlockContext: "release note context1",
+        },
+        {
+          noteBlockContext: "release note context2",
+        },
+      ],
+    };
+
+    setRecentReleaseNote(mockResponse);
+  };
+
+  // First Rendering
+  useEffect(() => {
+    console.log("Recent Release Page rendered");
+    fetchRecentReleaseNote();
+  }, []);
+
   return (
     <Card extra={"w-full h-full p-3 mt-2"}>
-      {/* Header */}
-      <div className="mt-2 mb-8 w-full">
+      <div className="mb-8 mt-2 w-full">
         <h4 className="px-2 text-xl font-bold text-navy-700 dark:text-white">
-          Recent Release Note
+        <p className="text-4xl">🆕</p>Recent Release Note
         </h4>
-        <p className="mt-2 px-2 text-base text-gray-600">
-          As we live, our hearts turn colder. Cause pain is what we go through
-          as we become older. We get insulted by others, lose trust for those
-          others. We get back stabbed by friends. It becomes harder for us to
-          give others a hand. We get our heart broken by people we love, even
-          that we give them all...
-        </p>
-      </div>
-      {/* Cards */}
-      <div className="grid grid-cols-2 gap-4 px-2">
-        <div className="flex flex-col items-start justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
-          <p className="text-sm text-gray-600">Education</p>
-          <p className="text-base font-medium text-navy-700 dark:text-white">
-            Stanford University
-          </p>
-        </div>
-
-        <div className="flex flex-col justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
-          <p className="text-sm text-gray-600">Languages</p>
-          <p className="text-base font-medium text-navy-700 dark:text-white">
-            English, Spanish, Italian
-          </p>
-        </div>
-
-        <div className="flex flex-col items-start justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
-          <p className="text-sm text-gray-600">Department</p>
-          <p className="text-base font-medium text-navy-700 dark:text-white">
-            Product Design
-          </p>
-        </div>
-
-        <div className="flex flex-col justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
-          <p className="text-sm text-gray-600">Work History</p>
-          <p className="text-base font-medium text-navy-700 dark:text-white">
-            English, Spanish, Italian
-          </p>
-        </div>
-
-        <div className="flex flex-col items-start justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
-          <p className="text-sm text-gray-600">Organization</p>
-          <p className="text-base font-medium text-navy-700 dark:text-white">
-            Simmmple Web LLC
-          </p>
-        </div>
-
-        <div className="flex flex-col justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
-          <p className="text-sm text-gray-600">Birthday</p>
-          <p className="text-base font-medium text-navy-700 dark:text-white">
-            20 July 1986
-          </p>
-        </div>
+        {/* Conditional rendering based on whether recentReleaseNote is defined */}
+        {recentReleaseNote ? (
+          <>
+            <h4 className="px-2 text-l font-bold text-navy-700 dark:text-white">
+              version: {recentReleaseNote.version}
+            </h4>
+            <h4 className="px-2 text-l font-bold text-navy-700 dark:text-white">
+              lastModifiedDate: {recentReleaseNote.lastModifiedDate}
+            </h4><h4 className="px-2 text-l font-bold text-navy-700 dark:text-white">
+              releaseDate: {recentReleaseNote.releaseDate}
+            </h4>
+            {recentReleaseNote.noteBlocks.map((noteBlock) => (
+              <p key={noteBlock.noteBlockContext} className="mt-2 px-2 text-base text-gray-600">
+                {noteBlock.noteBlockContext}
+              </p>
+            ))}
+          </>
+        ) : (
+          <p>Loading recent release note...</p>
+        )}
       </div>
     </Card>
   );

@@ -256,7 +256,7 @@ const Dashboard = () => {
           <button
             onClick={handleClickProjectCreateButton}
             type="button"
-            className="mr-2 mb-2 rounded-3xl bg-gray-300 px-5 py-2.5 text-sm font-bold font-medium text-white hover:bg-gray-800 focus:ring-4 focus:ring-blue-300"
+            className="mb-2 mr-2 rounded-3xl bg-gray-300 px-5 py-2.5 text-sm font-bold font-medium text-white hover:bg-gray-800 focus:ring-4 focus:ring-blue-300"
           >
             만들기
           </button>
@@ -299,6 +299,7 @@ const Dashboard = () => {
           <div className="ml-10 mr-10 grid h-[50%] w-full grid-cols-1 gap-20 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 3xl:grid-cols-6">
             {displayedManageDevelopList.map((project) => (
               <ProjectCard
+                key={project.id}
                 projectId={project.id}
                 projectName={project.name}
                 projectDescription={project.description}
@@ -312,15 +313,16 @@ const Dashboard = () => {
         ) : (
           <div className="ml-10 mr-10 grid h-[50%] w-full grid-cols-1 gap-20 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 3xl:grid-cols-6">
             {displayedSubscribeList.map((project) => (
-                <ProjectCard
-                  projectId={project.id}
-                  projectName={project.name}
-                  projectDescription={project.description}
-                  projectMemberNumber={project.count}
-                  projectRecentRelease={project.recentRelease}
-                  projectCreateDate={project.createDate}
-                  projectRole={project.role}
-                />
+              <ProjectCard
+                key={project.id}
+                projectId={project.id}
+                projectName={project.name}
+                projectDescription={project.description}
+                projectMemberNumber={project.count}
+                projectRecentRelease={project.recentRelease}
+                projectCreateDate={project.createDate}
+                projectRole={project.role}
+              />
             ))}
           </div>
         )}

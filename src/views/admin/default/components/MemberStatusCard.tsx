@@ -8,6 +8,7 @@ type Props = {
 };
 
 type MemberStatus = {
+  memberId: number;
   memberName: string;
   status: boolean;
 };
@@ -31,18 +32,18 @@ const MemberStatusCard: React.FC<Props> = ({ projectId }) => {
         console.log("Mocking data");
 
         const mockResponse: MemberStatus[] = [
-          { memberName: "함건욱", status: true },
-          { memberName: "김기현", status: false },
-          { memberName: "김성국", status: false },
-          { memberName: "강준희", status: true },
-          { memberName: "전강훈", status: true },
-          { memberName: "이승섭", status: true },
-          { memberName: "이승섭", status: true },
-          { memberName: "이승섭", status: true },
-          { memberName: "이승섭", status: true },
-          { memberName: "이승섭", status: true },
-          { memberName: "이승섭", status: true },
-          { memberName: "이승섭", status: true },
+          { memberId: 1, memberName: "함건욱", status: true },
+          { memberId: 2, memberName: "김기현", status: false },
+          { memberId: 3, memberName: "김성국", status: false },
+          { memberId: 4, memberName: "강준희", status: true },
+          { memberId: 5, memberName: "전강훈", status: true },
+          { memberId: 6, memberName: "이승섭", status: true },
+          { memberId: 7, memberName: "이승섭", status: true },
+          { memberId: 8, memberName: "이승섭", status: true },
+          { memberId: 9, memberName: "이승섭", status: true },
+          { memberId: 10, memberName: "이승섭", status: true },
+          { memberId: 11, memberName: "이승섭", status: true },
+          { memberId: 12, memberName: "이승섭", status: true },
         ];
 
         setMemberStatus(mockResponse);
@@ -61,40 +62,40 @@ const MemberStatusCard: React.FC<Props> = ({ projectId }) => {
           Member Status
         </div>
       </div>
-      <table className="mt-2 w-full w-full overflow-x-scroll xl:overflow-x-hidden">
-        <div>
-          <thead>
-            <tr className="!border-px !border-gray-400 text-gray-500">
-              <th className="border-b-[1px] border-gray-200 pb-2 pr-4 pt-4 text-start">
-                NAME
-              </th>
-              <th className="pl-10 border-b-[1px] border-gray-200 pb-2 pr-10 pt-4 text-start">
-                STATUS
-              </th>
-            </tr>
-          </thead>
-        </div>
-        <div className="overflow-auto" style={{ maxHeight: "250px" }}>
-          <tbody>
-            {memberStatus.map((member) => (
-              // <tr key={member.memberName}>
-              <tr>
-                <td className="py-2">{member.memberName}</td>
-                <td className="pl-[50px] flex items-center py-2">
-                  {member.status ? "온라인" : "오프라인"}
-                </td>
-                <td>
-                  <div
-                    className={`ml-5 h-4 w-4 rounded-full ${
-                      member.status ? "bg-green-400" : "bg-red-400"
-                    }`}
-                  ></div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </div>
+      <table className="mt-2 w-full overflow-x-scroll xl:overflow-x-hidden">
+        <thead>
+          <tr className="!border-px !border-gray-400 text-gray-500">
+            <th className="border-b-[1px] border-gray-200 pb-2 pt-4 text-start">
+              NAME
+            </th>
+            <th className="border-b-[1px] border-gray-200 pb-2 pl-10 pr-10 pt-4 text-start">
+              STATUS
+            </th>
+          </tr>
+        </thead>
       </table>
+      <div className="overflow-auto" style={{ maxHeight: "250px" }}>
+      <table>
+        <tbody>
+          {memberStatus.map((member) => (
+            // <tr key={member.memberName}>
+            <tr key={member.memberId}>
+              <td className="py-2">{member.memberName}</td>
+              <td className="flex items-center py-2 pl-[50px]">
+                {member.status ? "온라인" : "오프라인"}
+              </td>
+              <td>
+                <div
+                  className={`ml-5 h-4 w-4 rounded-full ${
+                    member.status ? "bg-green-400" : "bg-red-400"
+                  }`}
+                ></div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      </div>
     </div>
   );
 };

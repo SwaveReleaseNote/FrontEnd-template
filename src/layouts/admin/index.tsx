@@ -5,19 +5,14 @@ import Sidebar from "components/sidebar";
 import Footer from "components/footer/Footer";
 import routes from "routes";
 
+import ProjectDashboard from "views/admin/default/pages/ProjectDashboard";
+
 export default function Admin(props: { [x: string]: any }) {
   const { ...rest } = props;
   const location = useLocation();
   const [open, setOpen] = React.useState(false);
   const [currentRoute, setCurrentRoute] = React.useState("Main Dashboard");
 
-  // React.useEffect(() => {
-  //   if(location.pathname !== "/admin/default"){
-  //     window.addEventListener("resize", () =>
-  //       window.innerWidth < 1200 ? setOpen(false) : setOpen(true)
-  //     );
-  //   }
-  // }, []);
   React.useEffect(() => {
     getActiveRoute(routes);
     console.log(location.pathname);
@@ -60,9 +55,23 @@ export default function Admin(props: { [x: string]: any }) {
   const getRoutes = (routes: RoutesType[]): any => {
     return routes.map((prop, key) => {
       if (prop.layout === "/admin") {
-        return (
-          <Route path={`/${prop.path}`} element={prop.component} key={key} />
-        );
+        if (prop.path === "dashboard/:projectId/:role") {
+          return (
+            <Route
+              path={`/${prop.path}`}
+              element={<ProjectDashboard />}
+              key={key}
+            />
+          );
+        } else {
+          return (
+            <Route
+              path={`/${prop.path}`}
+              element={prop.component}
+              key={key}
+            />
+          );
+        }
       } else {
         return null;
       }

@@ -1,6 +1,19 @@
-import SearchReleaseList from "./SearchReleaseList";
+import React, { useState } from 'react';
+import SearchReleaseList from './SearchReleaseList';
 
-const PieChartCard = () => {
+type Props = {
+  projectId: {
+    id: number;
+  };
+};
+
+const SearchRelease: React.FC<Props> = ({ projectId }) => {
+  const [selectedValue, setSelectedValue] = useState('New');
+
+  const handleChangeSelectOption = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedValue(e.target.value);
+  };
+
   return (
     <div
       className={`!z-5 relative flex h-full w-full flex-col rounded-[20px] bg-white bg-clip-border px-6 pb-6 shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none sm:overflow-x-auto`}
@@ -13,22 +26,29 @@ const PieChartCard = () => {
         </div>
 
         <div className="mb-6 flex items-center justify-center">
-          <select className="mb-3 mr-2 flex items-center justify-center text-sm font-bold text-gray-600 hover:cursor-pointer dark:!bg-navy-800 dark:text-white">
-            <option value="monthly">New</option>
-            <option value="yearly">Update</option>
-            <option value="weekly">Stop</option>
-            <option value="monthly">Bug Fixed</option>
-            <option value="yearly">Delete</option>
+          <select
+            className="mb-3 mr-2 flex items-center justify-center text-sm font-bold text-gray-600 hover:cursor-pointer dark:!bg-navy-800 dark:text-white"
+            value={selectedValue}
+            onChange={handleChangeSelectOption}
+          >
+            <option value="New">New</option>
+            <option value="Update">Update</option>
+            <option value="Stop">Stop</option>
+            <option value="BugFix">BugFix</option>
+            <option value="Delete">Delete</option>
           </select>
         </div>
       </div>
-      <div className="">
-      <SearchReleaseList projectId={{
-        id: 0
-      }} />
+      <div>
+        <SearchReleaseList
+          searchRelease={{
+            projectId: projectId.id,
+            label: selectedValue,
+          }}
+        />
       </div>
     </div>
   );
 };
 
-export default PieChartCard;
+export default SearchRelease;
