@@ -3,25 +3,26 @@ import axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState } from 'recoil';
 import { atom } from 'recoil';
+import { loginState } from './contexts/atom';
 
-interface LoginState {
-  state: boolean;
-  name: string | null;
-  info: string | null;
-  email: string | null;
-  token: string | null;
-}
+// interface LoginState {
+//   state: boolean;
+//   name: string | null;
+//   info: string | null;
+//   email: string | null;
+//   token: string | null;
+// }
 
-const loginState = atom<LoginState>({
-  key: "loginState",
-  default: {
-    state: false,
-    name: null,
-    info: null,
-    email: null,
-    token: null
-  }
-});
+// const loginState = atom<LoginState>({
+//   key: "loginState",
+//   default: {
+//     state: false,
+//     name: null,
+//     info: null,
+//     email: null,
+//     token: null
+//   }
+// });
 
 const Auth = (): JSX.Element => {
   const navigate = useNavigate();
@@ -36,18 +37,19 @@ const Auth = (): JSX.Element => {
       console.log(code);
       //url의 인가코드
       try {
-        const res = await axios.post(`http://localhost:8080/api/user/oauth/token?code=${code}&provider=${provider}`);
+        const res = await axios.post(`http://localhost:8080/api/user/login/oauth?code=${code}&provider=${provider}`);
         //인가코드를 백엔드로 보내고 헤더에서 엑세스 토큰 받아옴
         const token = res.headers.authorization;
         console.log(token);
         //로컬스토리지에 저장
-
+        window.localStorage.setItem('token', token);
         setIsLogined((prev) => {
           return {
             state: true,
             name: "테스트",
             email: "1223ndj@gachon.ac.kr",
             info: "",
+            department:"",
             token: String(token)
           };
         });
@@ -63,9 +65,10 @@ const Auth = (): JSX.Element => {
             setIsLogined((prev) => {
               return {
                 state: true,
-                name: response.data.name,
+                name: response.data.username,
                 email: response.data.email,
                 info: "",
+                department:response.data.department,
                 token: String(token)
               };
             });

@@ -3,8 +3,12 @@ import React, { useState } from "react";
 import { FcGoogle, FcComments } from "react-icons/fc";
 import Checkbox from "components/checkbox";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { atom } from "recoil";
 import axios from "axios";
 import "./SignIn.css";
+import { loginState } from './contexts/atom';
 import {
   MDBBtn,
   MDBContainer,
@@ -27,7 +31,26 @@ interface LoginFormData {
   login_email: string;
   login_password: string;
 }
+// interface LoginState {
+//   state: boolean;
+//   name: string | null;
+//   info: string | null;
+//   email: string | null;
+//   token: string | null;
+// }
+// const loginState = atom<LoginState>({
+//   key: "loginState",
+//   default: {
+//     state: false,
+//     name: null,
+//     info: null,
+//     email: null,
+//     token: null,
+//   },
+// });
 export default function SignIn() {
+  const navigate = useNavigate();
+  const [isLogined, setIsLogined] = useRecoilState(loginState);
   const host = "http://localhost:3000";
   const KAKAO_REST_API_KEY = "4646a32b25c060e42407ceb8c13ef14a";
   const KAKAO_REDIRECT_URI = host + "/oauth/callback/kakao";
@@ -78,7 +101,7 @@ export default function SignIn() {
       register_confirmPassword,
     });
     axios
-      .post("http://localhost:8080/api/login/createUser", {
+      .post("http://localhost:8080/api/user/create", {
         name: register_name,
         email: register_email,
         password: register_password,
@@ -92,6 +115,10 @@ export default function SignIn() {
           password: "",
           confirmPassword: "",
         });
+        alert("Sign UP Success!");
+        setShowRegisterModal(!showRegisterModal);
+        setShowAuthInput(true);
+        setIsAuthenticated(false);
       })
       .catch((error) => {
         // Handle error
@@ -103,14 +130,47 @@ export default function SignIn() {
   const handleClickLoginFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(loginData);
+
     axios
-      .post("http://localhost:8080/api/login/login", loginData)
+      .post("http://localhost:8080/api/user/login", {
+        email: loginData.login_email,
+        password: loginData.login_password,
+      })
       .then((response) => {
         // Handle successful response
         console.log(response.data);
+        const token = response.data;
+        if (response.data === "Information Not valid") {
+          alert("Information Not valid");
+          return console.error("error");
+        }
+        try {
+          axios.get(`http://localhost:8080/api/user/me`, {
+            headers: {
+              Authorization: "Bearer "+token,
+            },
+          }).then((response) => { //api의 응답을 제대로 받은경우 
+            console.log(response);
+            console.log(response.data);
+            setIsLogined((prev) => {
+              return {
+                state: true,
+                name: response.data.username,
+                email: response.data.email,
+                info: "",
+                department:response.data.department,
+                token: String("Bearer "+token)
+              };
+            });
+          });
+          navigate('/admin');
+        } catch (e) {
+          console.error(e);
+        }
       })
       .catch((error) => {
         // Handle error
+        alert(error);
         console.error(error);
       });
     reset(); // Reset the form after submission
@@ -129,54 +189,91 @@ export default function SignIn() {
       "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one special character"
     );
   };
-  const isFormValid = Object.keys(errors).length === 0;
 
   /*이메일 유효성검사 인증 파트*/
-  const [showAuthInput, setShowAuthInput] = useState(false);
-  const [authNumber, setAuthNumber] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showAuthInput, setShowAuthInput] = useState(false); //인증번호 넣는칸 보여주기
+  const [frontAuthNumber, setFrontAuthNumber] = useState(""); //front에서 입력한 인증번호
+  const [backAuthNumber, setBackAuthNumber] = useState(""); //back에서 받은 인증번호
+  const [isAuthenticated, setIsAuthenticated] = useState(false); //인증이 맞는지 체크
   const handleValidationButtonClick = () => {
     setShowAuthInput(true);
+    axios
+      .post("http://localhost:8080/api/user/sendmail", {
+        email: register_email,
+      })
+      .then((response) => {
+        // Handle successful response
+        console.log(response.data);
+        setBackAuthNumber(response.data);
+      })
+      .catch((error) => {
+        // Handle error
+        console.error(error);
+      });
   };
   const handleAuthInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setAuthNumber(event.target.value);
+    setFrontAuthNumber(event.target.value);
   };
-  const handleValidationSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // Perform validation logic with the authNumber
+  const handleValidationSubmit = () => {
+    // Perform validation logic with the frontAuthNumber
     // ...
-    setIsAuthenticated(true);
+    console.log(frontAuthNumber);
+    if (frontAuthNumber.length!==0 && frontAuthNumber === backAuthNumber) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
     // Reset the authentication number and hide the input window
-    setAuthNumber("");
-    setShowAuthInput(false);
+    setFrontAuthNumber("");
+    // setShowAuthInput(false);
   };
 
   /* 패스워드 찾기 */
   const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
+  const [forgotPasswordMessage, setForgotPasswordMessage] = useState("");
   const handleForgotPasswordModalButton = () => {
     setShowForgotPasswordModal(!showForgotPasswordModal);
   };
-
   const handleClickForgotPasswordFormSubmit = (
-    e: React.FormEvent<HTMLFormElement>
+    event: React.FormEvent<HTMLFormElement>
   ) => {
-    e.preventDefault();
+    event.preventDefault();
     // Handle forgot password form submission
+    console.log(forgotPasswordEmail);
+    axios
+      .post(
+        "http://localhost:8080/api/login/forgotpassword",
+        forgotPasswordEmail
+      )
+      .then((response) => {
+        // Handle successful response
+        console.log(response.data);
+        setForgotPasswordMessage(response.data);
+        setForgotPasswordMessage("");
+      })
+      .catch((error) => {
+        // Handle error
+        console.error(error);
+        setForgotPasswordMessage("An error occurred. Please try again later.");
+        setForgotPasswordMessage("");
+      });
   };
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
-
   const handleForgotPasswordInputChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setForgotPasswordEmail(e.target.value);
   };
+
+  /*Register 오류 검사*/
+  const isFormValid = isAuthenticated && Object.keys(errors).length === 0;
   return (
     <>
       <div
         className={`mb-16 mt-16 flex h-full w-full items-center justify-center px-2 md:mx-0 md:px-0 lg:mb-10 lg:items-center lg:justify-start ${
-          showRegisterModal ? "blur-background" : ""
+          showForgotPasswordModal || showRegisterModal ? "blur-background" : ""
         }`}
       >
         {/* Sign in section */}
@@ -226,7 +323,7 @@ export default function SignIn() {
               name="login_password"
               onChange={handleLoginInputChange}
             />
-            {/* Checkbox */}
+            {/* Forgot Password */}
             <div className="flex items-center justify-between px-2">
               <a
                 onClick={handleForgotPasswordModalButton}
@@ -258,148 +355,156 @@ export default function SignIn() {
       {/* Register Modal */}
       {showRegisterModal && (
         <MDBModal
-          show={showRegisterModal}
-          tabIndex={-1}
-          setShow={setShowRegisterModal}
-        >
-          <MDBModalDialog size="lg">
-            <MDBModalContent>
-              <MDBModalHeader>
-                <MDBModalTitle>Register</MDBModalTitle>
-                <MDBBtn
-                  className="btn-close"
-                  color="none"
-                  onClick={handleRegisterModalButton}
-                ></MDBBtn>
-              </MDBModalHeader>
-              <MDBModalBody>
-                <form onSubmit={handleClickRegisterFormSubmit}>
-                  <MDBCardBody className="px-5">
-                    <h2 className="text-uppercase mb-5 text-center">
-                      Create an account
-                    </h2>
+        show={showRegisterModal}
+        tabIndex={-1}
+        setShow={setShowRegisterModal}
+      >
+        <MDBModalDialog size="lg" className="custom-modal-dialog">
+          <MDBModalContent className="custom-modal-content">
+            <MDBModalHeader>
+              <MDBModalTitle>Register</MDBModalTitle>
+              <MDBBtn
+                className="btn-close"
+                color="none"
+                onClick={handleRegisterModalButton}
+              ></MDBBtn>
+            </MDBModalHeader>
+            <MDBModalBody>
+              <form onSubmit={handleClickRegisterFormSubmit}>
+                <MDBCardBody className="px-5">
+                  <h2 className="text-uppercase mb-5 text-center">
+                    Create an account
+                  </h2>
+                   <MDBInput
+                    wrapperClass="mb-4 w-50"
+                    label="Your Name"
+                    // size="lg"
+                    id="register_form1"
+                    type="text"
+                    defaultValue={registerData.email}
+                    // onChange={handleRegisterInputChange}
+                    {...register("name", { required: true })}
+                  />
+                  {errors.name && (
+                    <span className="text-danger">Name is required</span>
+                  )}
+                  <div className="d-flex align-items-center mb-4">
                     <MDBInput
-                      wrapperClass="mb-4 w-50"
-                      label="Your Name"
-                      // size="lg"
-                      id="register_form1"
-                      type="text"
+                      wrapperClass="me-2"
+                      label="Your Email"
+                      size="lg"
+                      id="register_form2"
+                      type="email"
                       defaultValue={registerData.email}
-                      // onChange={handleRegisterInputChange}
-                      {...register("name", { required: true })}
-                    />
-                    {errors.name && (
-                      <span className="text-danger">Name is required</span>
-                    )}
-                    <div className="d-flex align-items-center mb-4">
-                      <MDBInput
-                        wrapperClass="me-2"
-                        label="Your Email"
-                        size="lg"
-                        id="register_form2"
-                        type="email"
-                        defaultValue={registerData.email}
-                        {...register("email", {
-                          required: true,
-                          pattern: {
-                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                            message: "Invalid email address",
-                          },
-                        })}
-                      />
-                      <MDBBtn
-                        className="w-25 mb-2"
-                        style={{ backgroundColor: "#A3AED0" }}
-                        type="button"
-                        onClick={handleValidationButtonClick}
-                        size="lg"
-                      >
-                        유효성검사
-                      </MDBBtn>
-                    </div>
-                    {errors.email && <p>{errors.email.message}</p>}
-                    <form onSubmit={handleValidationSubmit}>
-                      {showAuthInput && (
-                        <div className="mb-4">
-                          <MDBInput
-                            label="Authentication number"
-                            wrapperClass="mb-4 w-50"
-                            type="text"
-                            value={authNumber}
-                            onChange={handleAuthInputChange}
-                            placeholder="Enter authentication number"
-                          />
-                          <MDBBtn className="w-25 mb-2" type="submit">
-                            Submit
-                          </MDBBtn>
-                        </div>
-                      )}
-                      {showAuthInput &&
-                        (isAuthenticated ? (
-                          <div className="text-success">
-                            Authentication success
-                          </div>
-                        ) : (
-                          <div className="text-fail">Authentication fail</div>
-                        ))}
-                    </form>
-                    <MDBInput
-                      wrapperClass="mb-4 w-50"
-                      label="Password"
-                      size="lg"
-                      id="register_form3"
-                      type="password"
-                      defaultValue={registerData.password}
-                      // onChange={handleRegisterInputChange}
-                      {...register("password", {
+                      {...register("email", {
                         required: true,
-                        minLength: {
-                          value: 8,
-                          message: "Password must be at least 8 characters",
+                        pattern: {
+                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                          message: "Invalid email address",
                         },
-                        validate: validatePassword,
                       })}
                     />
-                    {errors.password && (
-                      <div className="text-danger">
-                        {errors.password.message}
-                      </div>
-                    )}
-
-                    <MDBInput
-                      wrapperClass="mb-4 w-50"
-                      label="Repeat your password"
-                      size="lg"
-                      id="register_form4"
-                      type="password"
-                      // value={registerData.confirmPassword}
-                      // onChange={handleRegisterInputChange}
-                      {...register("confirmPassword", {
-                        required: true,
-                        validate: (value) =>
-                          value === register_password ||
-                          "Passwords do not match", // Use password variable
-                      })}
-                    />
-                    {errors.confirmPassword && (
-                      <div className="text-danger">
-                        {errors.confirmPassword.message}
-                      </div>
-                    )}
                     <MDBBtn
-                      className="w-100 mb-4"
+                      className="w-25 mb-2"
+                      style={{ backgroundColor: "#A3AED0" }}
+                      type="button"
+                      onClick={handleValidationButtonClick}
                       size="lg"
-                      // style={{ backgroundColor: "#A3AED0" }}
-                      disabled={!isFormValid}
                     >
-                      Register
+                      유효성검사
                     </MDBBtn>
-                  </MDBCardBody>
-                </form>
-              </MDBModalBody>
-            </MDBModalContent>
-          </MDBModalDialog>
-        </MDBModal>
+                  </div>
+                  {errors.email && <p>{errors.email.message}</p>}
+                  {/* <form onSubmit={handleValidationSubmit}> */}
+                  {showAuthInput && (
+                    <div className="mb-4">
+                      <MDBInput
+                        label="Authentication number"
+                        wrapperClass="mb-4 w-50"
+                        type="text"
+                        value={frontAuthNumber}
+                        onChange={handleAuthInputChange}
+                        placeholder="Enter authentication number"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleValidationSubmit}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        Submit
+                      </button>
+                      {/* <MDBBtn className="w-25 mb-2">
+                          Submit
+                        </MDBBtn> */}
+                    </div>
+                  )}
+                  {/* </form> */}
+                  {showAuthInput &&
+                    (isAuthenticated ? (
+                      <div className="text-success">
+                        Authentication success
+                      </div>
+                    ) : (
+                      <div className="text-fail">Authentication fail</div>
+                    ))}
+                  <MDBInput
+                    wrapperClass="mb-4 w-50"
+                    label="Password"
+                    size="lg"
+                    id="register_form3"
+                    type="password"
+                    defaultValue={registerData.password}
+                    // onChange={handleRegisterInputChange}
+                    {...register("password", {
+                      required: true,
+                      minLength: {
+                        value: 8,
+                        message: "Password must be at least 8 characters",
+                      },
+                      validate: validatePassword,
+                    })}
+                  />
+                  {errors.password && (
+                    <div className="text-danger">
+                      {errors.password.message}
+                    </div>
+                  )}
+
+                  <MDBInput
+                    wrapperClass="mb-4 w-50"
+                    label="Repeat your password"
+                    size="lg"
+                    id="register_form4"
+                    type="password"
+                    // value={registerData.confirmPassword}
+                    // onChange={handleRegisterInputChange}
+                    {...register("confirmPassword", {
+                      required: true,
+                      validate: (value) =>
+                        value === register_password ||
+                        "Passwords do not match", // Use password variable
+                    })}
+                  />
+                  {errors.confirmPassword && (
+                    <div className="text-danger">
+                      {errors.confirmPassword.message}
+                    </div>
+                  )}
+                  <MDBBtn
+                    className="w-100 mb-4"
+                    size="lg"
+                    // style={{ backgroundColor: "#A3AED0" }}
+                    disabled={!isFormValid}
+                    type="submit"
+                  >
+                    Register
+                  </MDBBtn>
+                </MDBCardBody>
+              </form>
+            </MDBModalBody>
+          </MDBModalContent>
+        </MDBModalDialog>
+      </MDBModal>
       )}
       {/* Forgot Password Modal */}
       {showForgotPasswordModal && (
@@ -454,6 +559,11 @@ export default function SignIn() {
                   Submit
                 </button>
               </div>
+              {forgotPasswordMessage && (
+                <p className="mt-4 text-sm text-red-500">
+                  {forgotPasswordMessage}
+                </p>
+              )}
             </form>
           </div>
         </div>
