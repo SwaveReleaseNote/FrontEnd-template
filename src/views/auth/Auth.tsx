@@ -5,28 +5,10 @@ import { useRecoilState } from 'recoil';
 import { atom } from 'recoil';
 import { loginState } from './contexts/atom';
 
-// interface LoginState {
-//   state: boolean;
-//   name: string | null;
-//   info: string | null;
-//   email: string | null;
-//   token: string | null;
-// }
-
-// const loginState = atom<LoginState>({
-//   key: "loginState",
-//   default: {
-//     state: false,
-//     name: null,
-//     info: null,
-//     email: null,
-//     token: null
-//   }
-// });
-
 const Auth = (): JSX.Element => {
   const navigate = useNavigate();
   const [isLogined, setIsLogined] = useRecoilState(loginState);
+  /*로그인 페이지에서 Auth로 넘어오는지 log 확인 */
   console.log("sdafafsadfsads");
   const { provider } = useParams<{ provider: string }>();
 
@@ -60,7 +42,7 @@ const Auth = (): JSX.Element => {
               Authorization: token,
             },
           }).then((response) => { //api의 응답을 제대로 받은경우 
-            console.log(response);
+            /* axios 값 log 확인*/
             console.log(response.data);
             setIsLogined((prev) => {
               return {
@@ -74,11 +56,11 @@ const Auth = (): JSX.Element => {
             });
           });
           navigate('/admin');
-        } catch (e) {
-          console.error(e);
+        } catch (error) {
+          console.error(error);
         }
-      } catch (e) {
-        console.error(e);
+      } catch (error) {
+        console.error(error);
         navigate('/');
       }
     })();

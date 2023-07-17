@@ -14,7 +14,7 @@ const App = () => {
       <Route path="/oauth/callback/:provider" element={<Auth/>} />
       <Route path="/admin/*" element={<AdminLayout />} />
       <Route path="/rtl/*" element={<RtlLayout />} />
-      <Route path="/" element={<Navigate to="/default" replace />} />
+      <Route path="/" element={<Navigate to="/auth" replace />} />
       <Route path="/default/*" element={<Login />} />
       <Route path="/mypage/*" element={<MyPage />} />
       <Route path="/department/*" element={<DepartmentSelect />} />

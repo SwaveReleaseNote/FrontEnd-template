@@ -31,23 +31,7 @@ interface LoginFormData {
   login_email: string;
   login_password: string;
 }
-// interface LoginState {
-//   state: boolean;
-//   name: string | null;
-//   info: string | null;
-//   email: string | null;
-//   token: string | null;
-// }
-// const loginState = atom<LoginState>({
-//   key: "loginState",
-//   default: {
-//     state: false,
-//     name: null,
-//     info: null,
-//     email: null,
-//     token: null,
-//   },
-// });
+
 export default function SignIn() {
   const navigate = useNavigate();
   const [isLogined, setIsLogined] = useRecoilState(loginState);
@@ -85,7 +69,7 @@ export default function SignIn() {
   const register_email = watch("email");
   const register_confirmPassword = watch("confirmPassword");
   const handleClickRegisterFormSubmit = (
-    e: React.FormEvent<HTMLFormElement>
+    event: React.FormEvent<HTMLFormElement>
   ) => {
     setRegisterData({
       name: register_name,
@@ -93,7 +77,7 @@ export default function SignIn() {
       password: register_password,
       confirmPassword: register_confirmPassword,
     });
-    e.preventDefault();
+    event.preventDefault();
     console.log({
       register_name,
       register_email,
@@ -126,9 +110,10 @@ export default function SignIn() {
       });
     reset(); // Reset the form after submission
   };
+
   /*로그인 데이터 변경 감지 및 보내기*/
-  const handleClickLoginFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleClickLoginFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     console.log(loginData);
 
     axios
@@ -164,8 +149,8 @@ export default function SignIn() {
             });
           });
           navigate('/admin');
-        } catch (e) {
-          console.error(e);
+        } catch (error) {
+          console.error(error);
         }
       })
       .catch((error) => {
@@ -175,8 +160,8 @@ export default function SignIn() {
       });
     reset(); // Reset the form after submission
   };
-  const handleLoginInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  const handleLoginInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
     setLoginData((prevLoginData) => ({ ...prevLoginData, [name]: value }));
   };
 
@@ -233,6 +218,7 @@ export default function SignIn() {
   /* 패스워드 찾기 */
   const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
   const [forgotPasswordMessage, setForgotPasswordMessage] = useState("");
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
   const handleForgotPasswordModalButton = () => {
     setShowForgotPasswordModal(!showForgotPasswordModal);
   };
@@ -260,11 +246,10 @@ export default function SignIn() {
         setForgotPasswordMessage("");
       });
   };
-  const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
   const handleForgotPasswordInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setForgotPasswordEmail(e.target.value);
+    setForgotPasswordEmail(event.target.value);
   };
 
   /*Register 오류 검사*/

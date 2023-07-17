@@ -5,26 +5,24 @@ import { useRecoilState } from "recoil";
 import { loginState } from "./contexts/atom";
 import axios from "axios";
 import "./UserProfileCard.css";
+import DepartmentSelect from "./DepartmentSelect";
+
 function UserProfileCard(): ReactElement {
   const navigate = useNavigate();
   const [isLogined, setIsLogined] = useRecoilState(loginState);
-
   const [userName, setUserName] = useState(isLogined.name);
   const [email, setEmail] = useState(isLogined.email);
   const [phone, setPhone] = useState("0001-213-998761");
   const [department, setDepartment] = useState(isLogined.department);
   const [mostViewed, setMostViewed] = useState("dolor sit amet.");
-
-  const [tempName, setTempName] = useState(isLogined.name);
-  const [tempInfo, setTempInfo] = useState(isLogined.info);
-  const [tempEmail, setTempEmail] = useState(isLogined.email);
   const [showDepartmentRegisterModal, setShowDepartmentRegisterModal] =useState(false);
+  const [isDepartment, setIsDepartment] = useState(false);
 
   useEffect(() => {
     console.log(isLogined.token);
     console.log(isLogined.department);
     console.log(localStorage.getItem("token"));
-    if (isLogined.department === "") {
+    if (isLogined.department === null) {
       console.log("showdepartment");
       setShowDepartmentRegisterModal(true);
     }
@@ -61,8 +59,9 @@ function UserProfileCard(): ReactElement {
       console.error(e);
     }
   }, []);
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+
+  const handleUserUpdateFormSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
     console.log(userName, email, phone, department, mostViewed);
     axios
       .put("http://localhost:8080/api/user/update", {
@@ -88,9 +87,8 @@ function UserProfileCard(): ReactElement {
     console.log("Form submitted");
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
+  const handleChangeUserInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
     switch (name) {
       case "name":
         setUserName(value);
@@ -111,16 +109,14 @@ function UserProfileCard(): ReactElement {
         break;
     }
   };
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = e.target;
+
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = event.target;
     setDepartment(value);
   };
 
 
-  const [isDepartment, setIsDepartment] = useState(false);
-
-
-  const handleModalSave = () => {
+  const handleClickSaveChangeButton = () => {
     axios
       .patch("http://localhost:8080/api/user/updateDepartment", {
         department:department
@@ -144,9 +140,10 @@ function UserProfileCard(): ReactElement {
   const handleModalClose = () => {
     setIsDepartment(false);
   };
+
   return (
     <>
-      <form onSubmit={handleFormSubmit}>
+      <form onSubmit={handleUserUpdateFormSubmit}>
         <div className="wrapper h-full w-full" style={{ paddingTop: '10px' }}>
           <div className="left">
             <img src="https://i.imgur.com/cMy8V5j.png" alt="user" width="100" />
@@ -155,7 +152,7 @@ function UserProfileCard(): ReactElement {
               type="text"
               name="name"
               value={userName}
-              onChange={handleInputChange}
+              onChange={handleChangeUserInputChange}
               style={{
                 background: "#01dbdf",
                 textAlign: "center",
@@ -172,7 +169,7 @@ function UserProfileCard(): ReactElement {
                     type="text"
                     name="email"
                     value={email}
-                    onChange={handleInputChange}
+                    onChange={handleChangeUserInputChange}
                   />
                 </div>
                 <div className="data">
@@ -181,7 +178,7 @@ function UserProfileCard(): ReactElement {
                     type="text"
                     name="phone"
                     value={phone}
-                    onChange={handleInputChange}
+                    onChange={handleChangeUserInputChange}
                   />
                 </div>
               </div>
@@ -192,12 +189,6 @@ function UserProfileCard(): ReactElement {
               <div className="projects_data">
                 <div className="data">
                   <h4>Department</h4>
-                  {/* <input
-                  type="text"
-                  name="department"
-                  value={department}
-                  onChange={handleInputChange}
-                /> */}
                   <select
                     name="department"
                     value={department}
@@ -214,7 +205,7 @@ function UserProfileCard(): ReactElement {
                     type="text"
                     name="mostViewed"
                     value={mostViewed}
-                    onChange={handleInputChange}
+                    onChange={handleChangeUserInputChange}
                   />
                 </div>
               </div>
@@ -223,12 +214,10 @@ function UserProfileCard(): ReactElement {
             <button type="submit">Save</button>
           </div>
         </div>
-        {/* <button type="button" onClick={() => setIsDepartment(true)}>
-  Select Department
-</button> */}
+
       </form>
       {showDepartmentRegisterModal && (
-        <div className="modal-overlay">
+         <div className="modal-overlay">
           <div className="modal-content">
             <span className="close" onClick={handleModalClose}>
               &times;
@@ -246,7 +235,7 @@ function UserProfileCard(): ReactElement {
                 <option value="Department 3">Department 3</option>
               </select>
             </div>
-            <button type="button" onClick={handleModalSave}>
+            <button type="button" onClick={handleClickSaveChangeButton}>
               Select Department
             </button>
           </div>

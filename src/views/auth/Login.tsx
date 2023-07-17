@@ -30,6 +30,7 @@ interface LoginFormData {
   email: string;
   password: string;
 }
+
 function Login(): ReactElement {
   const host = "http://localhost:3000";
   const KAKAO_REST_API_KEY = "4646a32b25c060e42407ceb8c13ef14a";
@@ -65,7 +66,7 @@ function Login(): ReactElement {
   const register_email = watch("email");
   const register_confirmPassword = watch("confirmPassword");
   const handleClickRegisterFormSubmit = (
-    e: React.FormEvent<HTMLFormElement>
+    event: React.FormEvent<HTMLFormElement>
   ) => {
     setRegisterData({
       name: register_name,
@@ -73,7 +74,7 @@ function Login(): ReactElement {
       password: register_password,
       confirmPassword: register_confirmPassword,
     });
-    e.preventDefault();
+    event.preventDefault();
     console.log({
       register_name,
       register_email,
@@ -103,8 +104,8 @@ function Login(): ReactElement {
     reset(); // Reset the form after submission
   };
   /*로그인 데이터 변경 감지 및 보내기*/
-  const handleClickLoginFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleClickLoginFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     console.log(loginData);
     axios
       .post("http://localhost:8080/api/login/login", loginData)
@@ -118,8 +119,8 @@ function Login(): ReactElement {
       });
     reset(); // Reset the form after submission
   };
-  const handleLoginInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  const handleLoginInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
     setLoginData((prevLoginData) => ({ ...prevLoginData, [name]: value }));
   };
 
