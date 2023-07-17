@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import {RecoilRoot} from 'recoil';
 
 import RtlLayout from "layouts/rtl";
 import AdminLayout from "layouts/admin";
