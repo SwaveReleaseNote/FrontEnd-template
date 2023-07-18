@@ -14,7 +14,7 @@ type lable = {
     labelName: string;
 }
 
-export default function inputNote(pros: {
+export default function inputNoteField(pros: {
     version: string;
     releaseDate: Date;
     text: TextBlock[];
