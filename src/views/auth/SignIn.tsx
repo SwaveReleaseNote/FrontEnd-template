@@ -9,18 +9,18 @@ import { atom } from "recoil";
 import axios from "axios";
 import "./SignIn.css";
 import { loginState } from './contexts/atom';
-import {
-  MDBBtn,
-  MDBContainer,
-  MDBCardBody,
-  MDBInput,
-  MDBModal,
-  MDBModalDialog,
-  MDBModalContent,
-  MDBModalHeader,
-  MDBModalTitle,
-  MDBModalBody,
-} from "mdb-react-ui-kit";
+// import {
+//   MDBBtn,
+//   MDBContainer,
+//   MDBCardBody,
+//   MDBInput,
+//   MDBModal,
+//   MDBModalDialog,
+//   MDBModalContent,
+//   MDBModalHeader,
+//   MDBModalTitle,
+//   MDBModalBody,
+// } from "mdb-react-ui-kit";
 interface RegisterFormData {
   name: string;
   email: string;
@@ -353,159 +353,7 @@ export default function SignIn() {
         </div>
       </div>
       {/* Register Modal */}
-      {showRegisterModal && (
-        <MDBModal
-        show={showRegisterModal}
-        tabIndex={-1}
-        setShow={setShowRegisterModal}
-      >
-        <MDBModalDialog size="lg" className="custom-modal-dialog">
-          <MDBModalContent className="custom-modal-content">
-            <MDBModalHeader>
-              <MDBModalTitle>Register</MDBModalTitle>
-              <MDBBtn
-                className="btn-close"
-                color="none"
-                onClick={handleRegisterModalButton}
-              ></MDBBtn>
-            </MDBModalHeader>
-            <MDBModalBody>
-              <form onSubmit={handleClickRegisterFormSubmit}>
-                <MDBCardBody className="px-5">
-                  <h2 className="text-uppercase mb-5 text-center">
-                    Create an account
-                  </h2>
-                   <MDBInput
-                    wrapperClass="mb-4 w-50"
-                    label="Your Name"
-                    // size="lg"
-                    id="register_form1"
-                    type="text"
-                    defaultValue={registerData.email}
-                    // onChange={handleRegisterInputChange}
-                    {...register("name", { required: true })}
-                  />
-                  {errors.name && (
-                    <span className="text-danger">Name is required</span>
-                  )}
-                  <div className="d-flex align-items-center mb-4">
-                    <MDBInput
-                      wrapperClass="me-2"
-                      label="Your Email"
-                      size="lg"
-                      id="register_form2"
-                      type="email"
-                      defaultValue={registerData.email}
-                      {...register("email", {
-                        required: true,
-                        pattern: {
-                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                          message: "Invalid email address",
-                        },
-                      })}
-                    />
-                    <MDBBtn
-                      className="w-25 mb-2"
-                      style={{ backgroundColor: "#A3AED0" }}
-                      type="button"
-                      onClick={handleValidationButtonClick}
-                      size="lg"
-                    >
-                      유효성검사
-                    </MDBBtn>
-                  </div>
-                  {errors.email && <p>{errors.email.message}</p>}
-                  {/* <form onSubmit={handleValidationSubmit}> */}
-                  {showAuthInput && (
-                    <div className="mb-4">
-                      <MDBInput
-                        label="Authentication number"
-                        wrapperClass="mb-4 w-50"
-                        type="text"
-                        value={frontAuthNumber}
-                        onChange={handleAuthInputChange}
-                        placeholder="Enter authentication number"
-                      />
-                      <button
-                        type="button"
-                        onClick={handleValidationSubmit}
-                        className="text-gray-500 hover:text-gray-700"
-                      >
-                        Submit
-                      </button>
-                      {/* <MDBBtn className="w-25 mb-2">
-                          Submit
-                        </MDBBtn> */}
-                    </div>
-                  )}
-                  {/* </form> */}
-                  {showAuthInput &&
-                    (isAuthenticated ? (
-                      <div className="text-success">
-                        Authentication success
-                      </div>
-                    ) : (
-                      <div className="text-fail">Authentication fail</div>
-                    ))}
-                  <MDBInput
-                    wrapperClass="mb-4 w-50"
-                    label="Password"
-                    size="lg"
-                    id="register_form3"
-                    type="password"
-                    defaultValue={registerData.password}
-                    // onChange={handleRegisterInputChange}
-                    {...register("password", {
-                      required: true,
-                      minLength: {
-                        value: 8,
-                        message: "Password must be at least 8 characters",
-                      },
-                      validate: validatePassword,
-                    })}
-                  />
-                  {errors.password && (
-                    <div className="text-danger">
-                      {errors.password.message}
-                    </div>
-                  )}
-
-                  <MDBInput
-                    wrapperClass="mb-4 w-50"
-                    label="Repeat your password"
-                    size="lg"
-                    id="register_form4"
-                    type="password"
-                    // value={registerData.confirmPassword}
-                    // onChange={handleRegisterInputChange}
-                    {...register("confirmPassword", {
-                      required: true,
-                      validate: (value) =>
-                        value === register_password ||
-                        "Passwords do not match", // Use password variable
-                    })}
-                  />
-                  {errors.confirmPassword && (
-                    <div className="text-danger">
-                      {errors.confirmPassword.message}
-                    </div>
-                  )}
-                  <MDBBtn
-                    className="w-100 mb-4"
-                    size="lg"
-                    // style={{ backgroundColor: "#A3AED0" }}
-                    disabled={!isFormValid}
-                    type="submit"
-                  >
-                    Register
-                  </MDBBtn>
-                </MDBCardBody>
-              </form>
-            </MDBModalBody>
-          </MDBModalContent>
-        </MDBModalDialog>
-      </MDBModal>
-      )}
+     
       {/* Forgot Password Modal */}
       {showForgotPasswordModal && (
         <div className="fixed inset-0 z-10 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
