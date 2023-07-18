@@ -1,5 +1,6 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Dropdown from "components/dropdown";
 
 import avatar from "assets/img/avatars/avatar11.png";
 import banner from "assets/img/profile/banner2.png";
@@ -32,6 +33,7 @@ function ProjectCard({
   projectRole,
 }: ProjectCardProps): ReactElement {
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   function handleClickProjectCard(projectId: number, projectRole: string) {
     const queryString = `projectId=${projectId}&role=${encodeURIComponent(
@@ -44,10 +46,18 @@ function ProjectCard({
   }
 
   const handleClickManagerSettingButton = async (
-    event: React.FormEvent<HTMLFormElement>
+    event: React.MouseEvent<HTMLButtonElement>
   ) => {
-    event.preventDefault();
+    event.stopPropagation();
+    setIsMenuOpen(!isMenuOpen);
     console.log("handleClickManagerSettingButton");
+  };
+  const handleClickDeleteButton = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.stopPropagation();
+    setIsMenuOpen(!isMenuOpen);
+    console.log("handleClickDeleteButton");
   };
 
   return (
@@ -56,6 +66,21 @@ function ProjectCard({
       onClick={() => handleClickProjectCard(projectId, projectRole)}
     >
       <Card extra={"items-center w-auto h-[95%] p-[16px] bg-cover"}>
+        <div className="relative bottom-[1%] left-[43%]">
+          <button
+            className={projectRole === UserRole.Manager ? "text-xl" : "text-l"}
+            onClick={handleClickManagerSettingButton}
+          >
+            {projectRole === UserRole.Manager ? "⚙️" : "❌"}
+          </button>
+
+          {/* Drop-down menu */}
+          {isMenuOpen && (
+            <div className="absolute right-0 top-full mt-2 bg-white p-2 shadow">
+              hello menu
+            </div>
+          )}
+        </div>
         {/* Background and profile */}
         <div
           className="relative mt-1 flex h-32 w-full justify-center rounded-xl bg-cover"
@@ -105,16 +130,6 @@ function ProjectCard({
             {projectCreateDate}
           </h1>
           <p className="text-l font-normal text-gray-600">생성 날짜</p>
-          {projectRole === UserRole.Manager && (
-            <div className="relative">
-              <button
-                className="text-xl"
-                onClick={() => handleClickManagerSettingButton}
-              >
-                ⚙️
-              </button>
-            </div>
-          )}
         </div>
 
         {/* 추후에 총 구독자 수 같은 다른 내용 추가를 위해 보류
