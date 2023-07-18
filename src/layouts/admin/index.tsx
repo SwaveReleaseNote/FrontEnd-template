@@ -84,7 +84,7 @@ export default function Admin(props: { [x: string]: any }) {
     <div className="flex h-full w-full">
       {open ? <Sidebar open={open} onClose={() => setOpen(false)} /> : null}
       {/* Navbar & Main Content */}
-      <div className="h-full w-fvmfhwull bg-lightPrimary dark:!bg-navy-900">
+      <div className="h-full w-full bg-lightPrimary dark:!bg-navy-900">
         {/* Main Content */}
         {/* ml-auto로 조정시 전체 width 사용 before - 313px*/}
         <main

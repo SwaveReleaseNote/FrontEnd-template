@@ -86,7 +86,7 @@ function Admin(props) {
     document.documentElement.dir = "ltr";
     return (react_1["default"].createElement("div", { className: "flex h-full w-full" },
         open ? react_1["default"].createElement(sidebar_1["default"], { open: open, onClose: function () { return setOpen(false); } }) : null,
-        react_1["default"].createElement("div", { className: "h-full w-fvmfhwull bg-lightPrimary dark:!bg-navy-900" },
+        react_1["default"].createElement("div", { className: "h-full w-full bg-lightPrimary dark:!bg-navy-900" },
             react_1["default"].createElement("main", { className: "mx-12 h-full flex-none transition-all md:pr-2 " + (open ? "xl:ml-[313px]" : "xl:ml-[150px]]") },
                 react_1["default"].createElement("div", { className: "h-full" },
                     react_1["default"].createElement(navbar_1["default"], __assign({ onOpenSidenav: function () { return setOpen(true); }, brandText: currentRoute, secondary: getActiveNavbar(routes_1["default"]) }, rest)),
