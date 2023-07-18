@@ -5,6 +5,7 @@ import MainDashboard from "views/admin/default";
 import ReleaseNote from "views/admin/marketplace";
 import Profile from "views/admin/profile";
 import DataTables from "views/admin/tables";
+import CreateReleaseNote from "views/admin/note";
 
 // Auth Imports
 import SignIn from "views/auth/SignIn";
@@ -95,6 +96,13 @@ const routes = [
     path: "release-note",
     icon: <MdOutlineShoppingCart className="h-6 w-6" />,
     component: <ReleaseNote />,
+  },
+  {
+    name: "Create Release Note",
+    layout: "/admin",
+    path: "create-note",
+    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
+    component: <CreateReleaseNote />,
   }
 ];
 export default routes;

@@ -1,0 +1,1 @@
+{"version":3,"sources":["InputText.tsx"],"names":[],"mappings":";;AAAA,+BAAyB;AAEzB,SAAwB,SAAS;IAC/B,OAAO,CACL,0DAAoB,CACrB,CAAA;AACH,CAAC;AAJD,+BAIC","file":"InputText.js","sourcesContent":["import React from 'react'\r\n\r\nexport default function InputText() {\r\n  return (\r\n    <div>InputText</div>\r\n  )\r\n}\r\n"]}

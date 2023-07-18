@@ -84,7 +84,7 @@ export default function Admin(props: { [x: string]: any }) {
     <div className="flex h-full w-full">
       {open ? <Sidebar open={open} onClose={() => setOpen(false)} /> : null}
       {/* Navbar & Main Content */}
-      <div className="h-full w-fvmfhwull bg-lightPrimary dark:!bg-navy-900">
+      <div className="h-full w-full bg-lightPrimary dark:!bg-navy-900">
         {/* Main Content */}
         {/* ml-auto로 조정시 전체 width 사용 before - 313px*/}
         <main
@@ -100,7 +100,7 @@ export default function Admin(props: { [x: string]: any }) {
               secondary={getActiveNavbar(routes)}
               {...rest}
             />
-            <div className="pt-5s mx-auto mb-auto h-full min-h-[84vh] p-2 md:pr-2">
+            <div className="pt-5s mx-auto mb-auto w-full h-full min-h-[84vh] p-2 md:pr-2">
               <Routes>
                 {/* TODO: routes.tsx에 프로젝트 리스트 선택할 수 있도록 추가
                      */}
