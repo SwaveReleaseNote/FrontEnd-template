@@ -22,6 +22,10 @@ import {
 import MyPage from "views/auth/MyPage";
 
 
+import CreateProject from "views/admin/default/pages/CreateProject";
+import ProjectDashboard from "views/admin/default/pages/ProjectDashboard";
+import SearchProjectList from "views/admin/default/pages/SearchProjectList";
+
 const routes = [
   {
     name: "Main Dashboard",
@@ -29,6 +33,27 @@ const routes = [
     path: "default",
     icon: <MdHome className="h-6 w-6" />,
     component: <MainDashboard />,
+  },
+  {
+    name: "Create Project",
+    layout: "/admin",
+    path: "createProject",
+    icon: <MdHome className="h-6 w-6" />,
+    component: <CreateProject />,
+  },
+  {
+    name: "Search ProjectList",
+    layout: "/admin",
+    path: "project/searchResult",
+    icon: <MdHome className="h-6 w-6" />,
+    component: <SearchProjectList />,
+  },
+  {
+    name: "Project Dashboard",
+    layout: "/admin",
+    path: "dashboard", 
+    icon: <MdHome className="h-6 w-6" />,
+    component: <ProjectDashboard />, 
   },
   {
     name: "NFT Marketplace",

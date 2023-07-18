@@ -5,20 +5,28 @@ import Sidebar from "components/sidebar";
 import Footer from "components/footer/Footer";
 import routes from "routes";
 
+import ProjectDashboard from "views/admin/default/pages/ProjectDashboard";
+
 export default function Admin(props: { [x: string]: any }) {
   const { ...rest } = props;
   const location = useLocation();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [currentRoute, setCurrentRoute] = React.useState("Main Dashboard");
 
   React.useEffect(() => {
-    window.addEventListener("resize", () =>
-      window.innerWidth < 1200 ? setOpen(false) : setOpen(true)
-    );
-  }, []);
-  React.useEffect(() => {
     getActiveRoute(routes);
+    console.log(location.pathname);
+    if (location.pathname === "/admin/default") {
+      setOpen(false);
+    } else if (location.pathname === "/admin/createProject") {
+      setOpen(false);
+    } else {
+      setOpen(true);
+    }
   }, [location.pathname]);
+  React.useEffect(() => {
+    console.log(open);
+  }, [open]);
 
   const getActiveRoute = (routes: RoutesType[]): string | boolean => {
     let activeRoute = "Main Dashboard";
@@ -47,9 +55,23 @@ export default function Admin(props: { [x: string]: any }) {
   const getRoutes = (routes: RoutesType[]): any => {
     return routes.map((prop, key) => {
       if (prop.layout === "/admin") {
-        return (
-          <Route path={`/${prop.path}`} element={prop.component} key={key} />
-        );
+        if (prop.path === "dashboard/:projectId/:role") {
+          return (
+            <Route
+              path={`/${prop.path}`}
+              element={<ProjectDashboard />}
+              key={key}
+            />
+          );
+        } else {
+          return (
+            <Route
+              path={`/${prop.path}`}
+              element={prop.component}
+              key={key}
+            />
+          );
+        }
       } else {
         return null;
       }
@@ -59,12 +81,15 @@ export default function Admin(props: { [x: string]: any }) {
   document.documentElement.dir = "ltr";
   return (
     <div className="flex h-full w-full">
-      <Sidebar open={open} onClose={() => setOpen(false)} />
+      {open ? <Sidebar open={open} onClose={() => setOpen(false)} /> : null}
       {/* Navbar & Main Content */}
       <div className="h-full w-full bg-lightPrimary dark:!bg-navy-900">
         {/* Main Content */}
+        {/* ml-auto로 조정시 전체 width 사용 before - 313px*/}
         <main
-          className={`mx-[12px] h-full flex-none transition-all md:pr-2 xl:ml-[313px]`}
+          className={`mx-12 h-full flex-none transition-all md:pr-2 ${
+            open ? "xl:ml-[313px]" : "xl:ml-[150px]]"
+          }`}
         >
           {/* Routes */}
           <div className="h-full">
