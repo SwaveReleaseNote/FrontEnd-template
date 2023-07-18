@@ -8,19 +8,8 @@ import { useRecoilState } from "recoil";
 import { atom } from "recoil";
 import axios from "axios";
 import "./SignIn.css";
-import { loginState } from './contexts/atom';
-// import {
-//   MDBBtn,
-//   MDBContainer,
-//   MDBCardBody,
-//   MDBInput,
-//   MDBModal,
-//   MDBModalDialog,
-//   MDBModalContent,
-//   MDBModalHeader,
-//   MDBModalTitle,
-//   MDBModalBody,
-// } from "mdb-react-ui-kit";
+import { loginState } from "./contexts/atom";
+
 interface RegisterFormData {
   name: string;
   email: string;
@@ -31,23 +20,7 @@ interface LoginFormData {
   login_email: string;
   login_password: string;
 }
-// interface LoginState {
-//   state: boolean;
-//   name: string | null;
-//   info: string | null;
-//   email: string | null;
-//   token: string | null;
-// }
-// const loginState = atom<LoginState>({
-//   key: "loginState",
-//   default: {
-//     state: false,
-//     name: null,
-//     info: null,
-//     email: null,
-//     token: null,
-//   },
-// });
+
 export default function SignIn() {
   const navigate = useNavigate();
   const [isLogined, setIsLogined] = useRecoilState(loginState);
@@ -85,15 +58,15 @@ export default function SignIn() {
   const register_email = watch("email");
   const register_confirmPassword = watch("confirmPassword");
   const handleClickRegisterFormSubmit = (
-    e: React.FormEvent<HTMLFormElement>
+    event: React.FormEvent<HTMLFormElement>
   ) => {
+    event.preventDefault();
     setRegisterData({
       name: register_name,
       email: register_email,
       password: register_password,
       confirmPassword: register_confirmPassword,
     });
-    e.preventDefault();
     console.log({
       register_name,
       register_email,
@@ -101,7 +74,7 @@ export default function SignIn() {
       register_confirmPassword,
     });
     axios
-      .post("http://localhost:8080/api/user/create", {
+      .post("http://localhost:8080/api/user/prelogin/create", {
         name: register_name,
         email: register_email,
         password: register_password,
@@ -126,13 +99,14 @@ export default function SignIn() {
       });
     reset(); // Reset the form after submission
   };
+
   /*로그인 데이터 변경 감지 및 보내기*/
-  const handleClickLoginFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleClickLoginFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     console.log(loginData);
 
     axios
-      .post("http://localhost:8080/api/user/login", {
+      .post("http://localhost:8080/api/user/prelogin/login-by-server", {
         email: loginData.login_email,
         password: loginData.login_password,
       })
@@ -145,27 +119,30 @@ export default function SignIn() {
           return console.error("error");
         }
         try {
-          axios.get(`http://localhost:8080/api/user/me`, {
-            headers: {
-              Authorization: "Bearer "+token,
-            },
-          }).then((response) => { //api의 응답을 제대로 받은경우 
-            console.log(response);
-            console.log(response.data);
-            setIsLogined((prev) => {
-              return {
-                state: true,
-                name: response.data.username,
-                email: response.data.email,
-                info: "",
-                department:response.data.department,
-                token: String("Bearer "+token)
-              };
+          axios
+            .get(`http://localhost:8080/api/user/getuser`, {
+              headers: {
+                Authorization: "Bearer " + token,
+              },
+            })
+            .then((response) => {
+              //api의 응답을 제대로 받은경우
+              console.log(response);
+              console.log(response.data);
+              setIsLogined((prev) => {
+                return {
+                  state: true,
+                  name: response.data.username,
+                  email: response.data.email,
+                  info: "",
+                  department: response.data.department,
+                  token: String("Bearer " + token),
+                };
+              });
             });
-          });
-          navigate('/admin');
-        } catch (e) {
-          console.error(e);
+          navigate("/admin");
+        } catch (error) {
+          console.error(error);
         }
       })
       .catch((error) => {
@@ -175,8 +152,8 @@ export default function SignIn() {
       });
     reset(); // Reset the form after submission
   };
-  const handleLoginInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  const handleLoginInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
     setLoginData((prevLoginData) => ({ ...prevLoginData, [name]: value }));
   };
 
@@ -198,7 +175,7 @@ export default function SignIn() {
   const handleValidationButtonClick = () => {
     setShowAuthInput(true);
     axios
-      .post("http://localhost:8080/api/user/sendmail", {
+      .post("http://localhost:8080/api/user/prelogin/sendmail", {
         email: register_email,
       })
       .then((response) => {
@@ -220,13 +197,13 @@ export default function SignIn() {
     // Perform validation logic with the frontAuthNumber
     // ...
     console.log(frontAuthNumber);
-    if (frontAuthNumber.length!==0 && frontAuthNumber === backAuthNumber) {
+    if (frontAuthNumber.length !== 0 && frontAuthNumber === backAuthNumber) {
       setIsAuthenticated(true);
+      setFrontAuthNumber("");
     } else {
       setIsAuthenticated(false);
     }
     // Reset the authentication number and hide the input window
-    setFrontAuthNumber("");
     // setShowAuthInput(false);
   };
 
@@ -244,8 +221,8 @@ export default function SignIn() {
     console.log(forgotPasswordEmail);
     axios
       .post(
-        "http://localhost:8080/api/login/forgotpassword",
-        forgotPasswordEmail
+        "http://localhost:8080/api/login/prelogin/get-temporary-email",{
+        email:forgotPasswordEmail}
       )
       .then((response) => {
         // Handle successful response
@@ -262,13 +239,14 @@ export default function SignIn() {
   };
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
   const handleForgotPasswordInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setForgotPasswordEmail(e.target.value);
+    setForgotPasswordEmail(event.target.value);
   };
 
   /*Register 오류 검사*/
   const isFormValid = isAuthenticated && Object.keys(errors).length === 0;
+
   return (
     <>
       <div
@@ -353,7 +331,178 @@ export default function SignIn() {
         </div>
       </div>
       {/* Register Modal */}
-     
+      {showRegisterModal && (
+        <div className="fixed inset-0 z-10 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
+          <div className="relative mx-auto my-4 w-full max-w-3xl rounded-xl bg-white p-8 shadow-lg">
+            <div className="mb-6 flex items-start justify-between">
+              <h3 className="text-xl font-semibold">Create an Account</h3>
+              <button
+                onClick={handleRegisterModalButton}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            <form onSubmit={handleClickRegisterFormSubmit}>
+              {/* Register form fields */}
+              <div className="mb-4">
+                <label
+                  htmlFor="register_form1"
+                  className="mb-2 block font-medium text-gray-800"
+                >
+                  Your Name
+                </label>
+                <input
+                  id="register_form1"
+                  type="text"
+                  className="w-full rounded-md border px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  defaultValue={registerData.email}
+                  {...register("name", { required: true })}
+                />
+                {errors.name && (
+                  <span className="text-danger">Name is required</span>
+                )}
+              </div>
+              <div className="mb-4 flex items-center justify-between">
+                <div className="w-1/2 me-2">
+                  <label
+                    htmlFor="register_form2"
+                    className="mb-2 block font-medium text-gray-800"
+                  >
+                    Your Email
+                  </label>
+                  <input
+                    id="register_form2"
+                    type="email"
+                    className="w-full rounded-md border px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    defaultValue={registerData.email}
+                    {...register("email", {
+                      required: true,
+                      pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                        message: "Invalid email address",
+                      },
+                    })}
+                  />
+                  {errors.email && (
+                    <p className="text-danger">{errors.email.message}</p>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={handleValidationButtonClick}
+                  className="w-1/4 rounded-md bg-blue-500 px-4 py-2 font-medium text-white hover:bg-blue-600 focus:bg-blue-600 focus:outline-none"
+                >
+                  유효성검사
+                </button>
+              </div>
+              {/* Authentication number input */}
+              {showAuthInput && (
+                <div className="mb-4">
+                  <label
+                    htmlFor="auth_number"
+                    className="mb-2 block font-medium text-gray-800"
+                  >
+                    Authentication number
+                  </label>
+                  <input
+                    id="auth_number"
+                    type="text"
+                    className="w-full rounded-md border px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={frontAuthNumber}
+                    onChange={handleAuthInputChange}
+                    placeholder="Enter authentication number"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleValidationSubmit}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    Submit
+                  </button>
+                </div>
+              )}
+              {/* Authentication success/fail message */}
+              {showAuthInput &&
+                (isAuthenticated ? (
+                  <div className="text-green-500">Authentication success</div>
+                ) : (
+                  <div className="text-red-500">Authentication fail</div>
+                ))}
+              {/* Password */}
+              <div className="mb-4">
+                <label
+                  htmlFor="register_form3"
+                  className="mb-2 block font-medium text-gray-800"
+                >
+                  Password
+                </label>
+                <input
+                  id="register_form3"
+                  type="password"
+                  className="w-full rounded-md border px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  defaultValue={registerData.password}
+                  {...register("password", {
+                    required: true,
+                    minLength: {
+                      value: 8,
+                      message: "Password must be at least 8 characters",
+                    },
+                    validate: validatePassword,
+                  })}
+                />
+                {errors.password && (
+                  <div className="text-danger">{errors.password.message}</div>
+                )}
+              </div>
+              {/* Repeat Password */}
+              <div className="mb-4">
+                <label
+                  htmlFor="register_form4"
+                  className="mb-2 block font-medium text-gray-800"
+                >
+                  Repeat your password
+                </label>
+                <input
+                  id="register_form4"
+                  type="password"
+                  className="w-full rounded-md border px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  {...register("confirmPassword", {
+                    required: true,
+                    validate: (value) =>
+                      value === register_password || "Passwords do not match", // Use password variable
+                  })}
+                />
+                {errors.confirmPassword && (
+                  <div className="text-danger">
+                    {errors.confirmPassword.message}
+                  </div>
+                )}
+              </div>
+              <button
+                className="mb-4 w-full rounded-md bg-brand-500 px-4 py-2 text-lg font-medium text-white hover:bg-brand-600 focus:bg-brand-600"
+                disabled={!isFormValid}
+                type="submit"
+              >
+                Register
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
       {/* Forgot Password Modal */}
       {showForgotPasswordModal && (
         <div className="fixed inset-0 z-10 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
