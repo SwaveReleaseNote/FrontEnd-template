@@ -2,10 +2,9 @@ import React from "react";
 
 // Admin Imports
 import MainDashboard from "views/admin/default";
-import NFTMarketplace from "views/admin/marketplace";
+import ReleaseNote from "views/admin/marketplace";
 import Profile from "views/admin/profile";
 import DataTables from "views/admin/tables";
-import RTLDefault from "views/rtl/default";
 
 // Auth Imports
 import SignIn from "views/auth/SignIn";
@@ -27,7 +26,15 @@ import SearchProjectList from "views/admin/default/pages/SearchProjectList";
 
 const routes = [
   {
-    name: "Main Dashboard",
+    name: "Release Note",
+    layout: "/admin",
+    path: "release-note",
+    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
+    component: <ReleaseNote />,
+    secondary: true,
+  },
+  {
+    name: "Project Dashboard",
     layout: "/admin",
     path: "default",
     icon: <MdHome className="h-6 w-6" />,
@@ -53,14 +60,6 @@ const routes = [
     path: "dashboard", 
     icon: <MdHome className="h-6 w-6" />,
     component: <ProjectDashboard />, 
-  },
-  {
-    name: "NFT Marketplace",
-    layout: "/admin",
-    path: "nft-marketplace",
-    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
-    component: <NFTMarketplace />,
-    secondary: true,
   },
   {
     name: "Data Tables",
@@ -91,11 +90,11 @@ const routes = [
     component: <SignIn />,
   },
   {
-    name: "RTL Admin",
-    layout: "/rtl",
-    path: "rtl",
-    icon: <MdHome className="h-6 w-6" />,
-    component: <RTLDefault />,
-  },
+    name: "NoteFiled Test",
+    layout: "/admin",
+    path: "release-note",
+    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
+    component: <ReleaseNote />,
+  }
 ];
 export default routes;

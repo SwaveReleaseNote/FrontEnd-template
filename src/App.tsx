@@ -1,7 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import {RecoilRoot} from 'recoil';
 
-import RtlLayout from "layouts/rtl";
 import AdminLayout from "layouts/admin";
 import AuthLayout from "layouts/auth";
 import Auth from "views/auth/Auth";
@@ -15,7 +14,6 @@ const App = () => {
         <Route path="auth/*" element={<AuthLayout />} />
         <Route path="/oauth/callback/:provider" element={<Auth/>} />
         <Route path="/admin/*" element={<AdminLayout />} />
-        <Route path="/rtl/*" element={<RtlLayout />} />
         <Route path="/" element={<Navigate to="/auth/sign-in" replace />} />
         <Route path="/mypage/*" element={<MyPage />} />
         <Route path="/department/*" element={<DepartmentSelect />} />

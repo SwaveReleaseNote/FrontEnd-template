@@ -1,0 +1,7 @@
+{
+    "mock": {
+        "projectId": 1,
+        "projectName": "project 1",
+        "releaseNote" : "3.6.5"
+    }
+}

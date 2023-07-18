@@ -1,0 +1,1 @@
+{"version":3,"sources":["Liked.tsx"],"names":[],"mappings":";;AAAA,+BAAyB;AAEzB,SAAwB,KAAK;IAC3B,OAAO,CACL,sDAAgB,CACjB,CAAA;AACH,CAAC;AAJD,2BAIC","file":"Liked.js","sourcesContent":["import React from 'react'\r\n\r\nexport default function Liked() {\r\n  return (\r\n    <div>Liked</div>\r\n  )\r\n}\r\n"]}
