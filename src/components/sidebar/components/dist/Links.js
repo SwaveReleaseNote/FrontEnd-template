@@ -18,7 +18,9 @@ exports.SidebarLinks = function (props) {
     var createLinks = function (routes) {
         return routes.map(function (route, index) {
             if (route.layout === "/admin" ||
-                route.layout === "/auth") {
+                route.layout === "/auth" ||
+                route.layout === "/default" ||
+                route.layout === "/rtl") {
                 return (react_1["default"].createElement(react_router_dom_1.Link, { key: index, to: route.layout + "/" + route.path },
                     react_1["default"].createElement("div", { className: "relative mb-3 flex hover:cursor-pointer" },
                         react_1["default"].createElement("li", { className: "my-[3px] flex cursor-pointer items-center px-8", key: index },

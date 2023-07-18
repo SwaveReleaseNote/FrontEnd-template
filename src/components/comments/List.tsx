@@ -15,6 +15,7 @@ export default function List() {
     // 댓글 내용
     const [comments, setComments] = useRecoilState<Comment[]>(commentState);
     setComments(data.mock.releaseNote.comment)
+
     const view = comments?.map((comment) => {
         return (
             <Card extra={"w-full p-4 h-full"}>

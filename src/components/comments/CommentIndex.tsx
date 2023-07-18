@@ -6,6 +6,7 @@ export default function CommentIndex(props: any) {
   const comment = props.NoteFieldComment
   console.log(comment.content)
   return (
+    // TODO: 개발자냐 구독자냐에 따라 seen check 볼 수 있게 만들기
     <div className='relative flex flex-col rounded-[20px]
      bg-white bg-clip-border shadow-3xl shadow-shadow-500
       dark:!bg-navy-800 dark:text-white dark:shadow-none'>
