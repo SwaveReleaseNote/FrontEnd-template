@@ -9,7 +9,6 @@ import RTLDefault from "views/rtl/default";
 
 // Auth Imports
 import SignIn from "views/auth/SignIn";
-import Login from "views/auth/Login";
 
 // Icon Imports
 import {
@@ -69,13 +68,6 @@ const routes = [
     icon: <MdBarChart className="h-6 w-6" />,
     path: "data-tables",
     component: <DataTables />,
-  },
-  {
-    name: "LogIn",
-    layout: "/default",
-    path: "login",
-    icon: <MdLock className="h-6 w-6" />,
-    component: <Login />,
   },
   // {
   //   name: "Profile",
