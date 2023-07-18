@@ -35,7 +35,8 @@ function NoteField() {
                     react_1["default"].createElement("a", { target: "blank", className: "text-base font-medium text-black-600 hover:text-gray-600" },
                         "Liked   ",
                         react_1["default"].createElement("span", { className: 'text-blue-700 dark:text-blue-500' }, "4"))))),
-        react_1["default"].createElement("div", null, noteFieldComment)));
+        react_1["default"].createElement("div", null,
+            react_1["default"].createElement(CommentIndex_1["default"], { NoteFieldComment: noteField.comment }))));
 }
 exports["default"] = NoteField;
 

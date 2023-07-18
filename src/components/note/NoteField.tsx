@@ -57,7 +57,7 @@ export default function NoteField() {
 
             {/* 댓글 보여주는 부분 */}
             <div>
-                {noteFieldComment}
+                <CommentIndex NoteFieldComment={noteField.comment} />
             </div>
         </div>
     )

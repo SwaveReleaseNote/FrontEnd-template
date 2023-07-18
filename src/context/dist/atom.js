@@ -27,5 +27,12 @@ exports.labelState = recoil_1.atom({
         text: ""
     }
 });
+exports.commentState = recoil_1.atom({
+    key: "commentState",
+    "default": [{
+            writer: "",
+            content: ""
+        }]
+});
 
 //# sourceMappingURL=atom.js.map

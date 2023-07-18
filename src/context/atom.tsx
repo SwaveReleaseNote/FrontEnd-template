@@ -27,3 +27,11 @@ export const labelState = atom({
         text:""
     }
 })
+
+export const commentState = atom({
+    key: "commentState",
+    default: [{
+        writer:"",
+        content:""
+    }]
+})
