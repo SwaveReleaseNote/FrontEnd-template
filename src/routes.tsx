@@ -17,6 +17,12 @@ import {
   MdPerson,
   MdLock,
 } from "react-icons/md";
+import MyPage from "views/auth/MyPage";
+
+
+import CreateProject from "views/admin/default/pages/CreateProject";
+import ProjectDashboard from "views/admin/default/pages/ProjectDashboard";
+import SearchProjectList from "views/admin/default/pages/SearchProjectList";
 
 const routes = [
   {
@@ -35,18 +41,46 @@ const routes = [
     component: <MainDashboard />,
   },
   {
+    name: "Create Project",
+    layout: "/admin",
+    path: "createProject",
+    icon: <MdHome className="h-6 w-6" />,
+    component: <CreateProject />,
+  },
+  {
+    name: "Search ProjectList",
+    layout: "/admin",
+    path: "project/searchResult",
+    icon: <MdHome className="h-6 w-6" />,
+    component: <SearchProjectList />,
+  },
+  {
+    name: "Project Dashboard",
+    layout: "/admin",
+    path: "dashboard", 
+    icon: <MdHome className="h-6 w-6" />,
+    component: <ProjectDashboard />, 
+  },
+  {
     name: "Data Tables",
     layout: "/admin",
     icon: <MdBarChart className="h-6 w-6" />,
     path: "data-tables",
     component: <DataTables />,
   },
+  // {
+  //   name: "Profile",
+  //   layout: "/admin",
+  //   path: "profile",
+  //   icon: <MdPerson className="h-6 w-6" />,
+  //   component: <Profile />,
+  // },
   {
     name: "Profile",
     layout: "/admin",
     path: "profile",
     icon: <MdPerson className="h-6 w-6" />,
-    component: <Profile />,
+    component: <MyPage />,
   },
   {
     name: "Sign In",
