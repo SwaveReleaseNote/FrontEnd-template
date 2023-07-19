@@ -6,6 +6,7 @@ import AuthLayout from "layouts/auth";
 import Auth from "views/auth/Auth";
 import MyPage from "views/auth/MyPage";
 import DepartmentSelect from "./views/auth/DepartmentSelect";
+import ManageProject from "views/admin/default/pages/ManageProject";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/" element={<Navigate to="/auth/sign-in" replace />} />
         <Route path="/mypage/*" element={<MyPage />} />
         <Route path="/department/*" element={<DepartmentSelect />} />
+        <Route path="/project/manage" element={<ManageProject />} />
       </Routes>
     </RecoilRoot>
   );

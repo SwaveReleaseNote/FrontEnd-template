@@ -18,8 +18,6 @@ export default function Admin(props: { [x: string]: any }) {
     console.log(location.pathname);
     if (location.pathname === "/admin/default") {
       setOpen(false);
-    } else if (location.pathname === "/admin/createProject") {
-      setOpen(false);
     } else {
       setOpen(true);
     }
@@ -86,7 +84,6 @@ export default function Admin(props: { [x: string]: any }) {
       {/* Navbar & Main Content */}
       <div className="h-full w-full bg-lightPrimary dark:!bg-navy-900">
         {/* Main Content */}
-        {/* ml-auto로 조정시 전체 width 사용 before - 313px*/}
         <main
           className={`mx-12 h-full flex-none transition-all md:pr-2 ${
             open ? "xl:ml-[313px]" : "xl:ml-[150px]]"
