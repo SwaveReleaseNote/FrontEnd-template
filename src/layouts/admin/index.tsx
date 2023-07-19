@@ -52,6 +52,7 @@ export default function Admin(props: { [x: string]: any }) {
     }
     return activeNavbar;
   };
+
   const getRoutes = (routes: RoutesType[]): any => {
     return routes.map((prop, key) => {
       if (prop.layout === "/admin") {
@@ -101,6 +102,8 @@ export default function Admin(props: { [x: string]: any }) {
             />
             <div className="pt-5s mx-auto mb-auto h-full min-h-[84vh] p-2 md:pr-2">
               <Routes>
+                {/* TODO: routes.tsx에 프로젝트 리스트 선택할 수 있도록 추가
+                     */}
                 {getRoutes(routes)}
 
                 <Route

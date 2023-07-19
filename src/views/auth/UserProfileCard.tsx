@@ -11,7 +11,6 @@ function UserProfileCard(): ReactElement {
   const [phone, setPhone] = useState("0001-213-998761");
   const [department, setDepartment] = useState(localStorage.getItem("department"));
   const [mostViewed, setMostViewed] = useState("dolor sit amet.");
-
   const [showDepartmentRegisterModal, setShowDepartmentRegisterModal] =
     useState(false);
 
@@ -252,7 +251,6 @@ function UserProfileCard(): ReactElement {
                 <option value="Department 3">Department 3</option>
               </select>
             </div>
-
             <button type="button" onClick={handleClickSaveChangeButton}>
               Save
             </button>
