@@ -38,7 +38,7 @@ export default function Version(props: { latestVersion: string }) {
   console.log(major, minor, patch);
 
   return (
-    <Card extra={"w-full p-4 h-full"}>
+    <Card extra={"w-full p-4 h-full mb-4"}>
       <div className=' flex flex-col items-center'>
         <header className="relative flex items-center justify-between pt-4">
           <div className="text-2xl font-bold text-navy-700 dark:text-white">
@@ -59,7 +59,7 @@ export default function Version(props: { latestVersion: string }) {
         </div>
         <hr className='flex w-full mb-5 dark:text-gray-800' />
         {/* 선택지 부분 */}
-        {/* TODO: Element로 만들어서 map으로 코드 단순화하기
+        {/* TODO: Element로 만들어서 map으로 코드 단순화하기 */}
         <div className=' w-[80%] justify-between grid grid-cols-2 text-center m-'>
           <div className=' hover:cursor-pointer text-gray-400 grid-cols-1'>
             <div onClick={handleClickType}><button>Major</button></div>
@@ -78,7 +78,7 @@ export default function Version(props: { latestVersion: string }) {
             </div>
           </div>
         </div> 
-        */}
+       
       </div>
     </Card>
   )

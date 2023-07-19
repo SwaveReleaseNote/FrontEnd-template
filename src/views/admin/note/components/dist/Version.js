@@ -21,7 +21,7 @@ function Version(props) {
         // Version 저장
     };
     console.log(major, minor, patch);
-    return (react_1["default"].createElement(card_1["default"], { extra: "w-full p-4 h-full" },
+    return (react_1["default"].createElement(card_1["default"], { extra: "w-full p-4 h-full mb-4" },
         react_1["default"].createElement("div", { className: ' flex flex-col items-center' },
             react_1["default"].createElement("header", { className: "relative flex items-center justify-between pt-4" },
                 react_1["default"].createElement("div", { className: "text-2xl font-bold text-navy-700 dark:text-white" }, "Version Card Test")),
@@ -33,7 +33,33 @@ function Version(props) {
             react_1["default"].createElement("div", { className: 'grid grid-cols-2 w-[80%] text-center justify-between mt-5 mb-3 font-extrabold leading-none tracking-tight \r\n        dark:text-white text-gray-800' },
                 react_1["default"].createElement("div", { className: '' }, "TYPE"),
                 react_1["default"].createElement("div", null, "NEXT VERSION")),
-            react_1["default"].createElement("hr", { className: 'flex w-full mb-5 dark:text-gray-800' }))));
+            react_1["default"].createElement("hr", { className: 'flex w-full mb-5 dark:text-gray-800' }),
+            react_1["default"].createElement("div", { className: ' w-[80%] justify-between grid grid-cols-2 text-center m-' },
+                react_1["default"].createElement("div", { className: ' hover:cursor-pointer text-gray-400 grid-cols-1' },
+                    react_1["default"].createElement("div", { onClick: handleClickType },
+                        react_1["default"].createElement("button", null, "Major")),
+                    react_1["default"].createElement("div", { onClick: handleClickType },
+                        react_1["default"].createElement("button", null, "Minor")),
+                    react_1["default"].createElement("div", { onClick: handleClickType },
+                        react_1["default"].createElement("button", null, "Patch"))),
+                react_1["default"].createElement("div", { className: ' text-gray-400 grid-cols-2' },
+                    react_1["default"].createElement("div", null,
+                        react_1["default"].createElement("span", null,
+                            major + 1,
+                            ".0.1")),
+                    react_1["default"].createElement("div", null,
+                        react_1["default"].createElement("span", null,
+                            major,
+                            ".",
+                            minor + 1,
+                            ".1")),
+                    react_1["default"].createElement("div", null,
+                        react_1["default"].createElement("span", null,
+                            major,
+                            ".",
+                            minor,
+                            ".",
+                            patch + 1)))))));
 }
 exports["default"] = Version;
 
