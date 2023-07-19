@@ -18,19 +18,20 @@ function UserProfileCard(): ReactElement {
   const [tempName, setTempName] = useState(isLogined.name);
   const [tempInfo, setTempInfo] = useState(isLogined.info);
   const [tempEmail, setTempEmail] = useState(isLogined.email);
-  const [showDepartmentRegisterModal, setShowDepartmentRegisterModal] =useState(false);
+  const [showDepartmentRegisterModal, setShowDepartmentRegisterModal] =
+    useState(false);
 
   useEffect(() => {
     console.log(isLogined.token);
     console.log(isLogined.department);
     console.log(localStorage.getItem("token"));
-    if (isLogined.department === "") {
+    if (isLogined.department === null) {
       console.log("showdepartment");
       setShowDepartmentRegisterModal(true);
     }
     try {
       axios
-        .get(`http://localhost:8080/api/user/me`, {
+        .get(`http://localhost:8080/api/user/getuser`, {
           headers: {
             Authorization: isLogined.token,
           },
@@ -38,7 +39,6 @@ function UserProfileCard(): ReactElement {
         .then((response) => {
           //api의 응답을 제대로 받은경우
           console.log(response);
-          console.log(response.data);
           setIsLogined((prev) => {
             return {
               state: true,
@@ -61,23 +61,26 @@ function UserProfileCard(): ReactElement {
       console.error(e);
     }
   }, []);
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleUserUpdateFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(userName, email, phone, department, mostViewed);
     axios
-      .put("http://localhost:8080/api/user/update", {
-        name:userName,
-        email:email,
-        phone:phone,
-        department:department,
-        mostViewed:mostViewed,
-      },
-      {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': isLogined.token
+      .put(
+        "http://localhost:8080/api/user/update",
+        {
+          name: userName,
+          email: email,
+          phone: phone,
+          department: department,
+          mostViewed: mostViewed,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: isLogined.token,
+          },
         }
-    })
+      )
       .then((response) => {
         console.log(response.data); // Process the response as needed
       })
@@ -88,7 +91,9 @@ function UserProfileCard(): ReactElement {
     console.log("Form submitted");
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeUserInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { name, value } = e.target;
 
     switch (name) {
@@ -111,26 +116,29 @@ function UserProfileCard(): ReactElement {
         break;
     }
   };
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSelectUserDepartmentChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setDepartment(value);
   };
 
-
   const [isDepartment, setIsDepartment] = useState(false);
 
-
-  const handleModalSave = () => {
+  const handleClickSaveChangeButton = () => {
     axios
-      .patch("http://localhost:8080/api/user/updateDepartment", {
-        department:department
-      },
-      {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': isLogined.token
+      .patch(
+        "http://localhost:8080/api/user/updateDepartment",
+        {
+          department: department,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: isLogined.token,
+          },
         }
-    })
+      )
       .then((response) => {
         console.log(response.data); // Process the response as needed
       })
@@ -144,10 +152,30 @@ function UserProfileCard(): ReactElement {
   const handleModalClose = () => {
     setIsDepartment(false);
   };
+
+  /* 유저 삭제 */
+  const handleClickButtonDeleteUser = () => {
+    axios
+      .post("http://localhost:8080/api/user/delete", {
+        headers: {
+          Authorization: isLogined.token,
+        },
+      })
+      .then((response) => {
+        console.log(response.data); // Process the response as needed
+        // Navigate to the authentication page or perform other necessary actions
+        navigate("/auth");
+      })
+      .catch((error) => {
+        console.error(error);
+        // Handle error cases here
+      });
+  };
+
   return (
     <>
-      <form onSubmit={handleFormSubmit}>
-        <div className="wrapper h-full w-full" style={{ paddingTop: '10px' }}>
+      <form onSubmit={handleUserUpdateFormSubmit}>
+        <div className="wrapper h-full w-full" style={{ paddingTop: "10px" }}>
           <div className="left">
             <img src="https://i.imgur.com/cMy8V5j.png" alt="user" width="100" />
             <h3>Name</h3>
@@ -155,7 +183,7 @@ function UserProfileCard(): ReactElement {
               type="text"
               name="name"
               value={userName}
-              onChange={handleInputChange}
+              onChange={handleChangeUserInputChange}
               style={{
                 background: "#01dbdf",
                 textAlign: "center",
@@ -172,7 +200,8 @@ function UserProfileCard(): ReactElement {
                     type="text"
                     name="email"
                     value={email}
-                    onChange={handleInputChange}
+                    onChange={handleChangeUserInputChange}
+                    size={30}
                   />
                 </div>
                 <div className="data">
@@ -181,7 +210,7 @@ function UserProfileCard(): ReactElement {
                     type="text"
                     name="phone"
                     value={phone}
-                    onChange={handleInputChange}
+                    onChange={handleChangeUserInputChange}
                   />
                 </div>
               </div>
@@ -192,16 +221,10 @@ function UserProfileCard(): ReactElement {
               <div className="projects_data">
                 <div className="data">
                   <h4>Department</h4>
-                  {/* <input
-                  type="text"
-                  name="department"
-                  value={department}
-                  onChange={handleInputChange}
-                /> */}
                   <select
                     name="department"
                     value={department}
-                    onChange={handleSelectChange}
+                    onChange={handleSelectUserDepartmentChange}
                   >
                     <option value="Department 1">Department 1</option>
                     <option value="Department 2">Department 2</option>
@@ -214,7 +237,7 @@ function UserProfileCard(): ReactElement {
                     type="text"
                     name="mostViewed"
                     value={mostViewed}
-                    onChange={handleInputChange}
+                    onChange={handleChangeUserInputChange}
                   />
                 </div>
               </div>
@@ -223,14 +246,11 @@ function UserProfileCard(): ReactElement {
             <button type="submit">Save</button>
           </div>
         </div>
-        {/* <button type="button" onClick={() => setIsDepartment(true)}>
-  Select Department
-</button> */}
       </form>
       {showDepartmentRegisterModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <span className="close" onClick={handleModalClose}>
+        <div className="userprofileCard-modal-overlay">
+          <div className="userprofileCard-modal-content">
+            <span className="userprofileCard-close" onClick={handleModalClose}>
               &times;
             </span>
             <h2>Select Department</h2>
@@ -239,17 +259,20 @@ function UserProfileCard(): ReactElement {
               <select
                 name="department"
                 value={department}
-                onChange={handleSelectChange}
+                onChange={handleSelectUserDepartmentChange}
               >
                 <option value="Department 1">Department 1</option>
                 <option value="Department 2">Department 2</option>
                 <option value="Department 3">Department 3</option>
               </select>
             </div>
-            <button type="button" onClick={handleModalSave}>
-              Select Department
+            <button type="button" onClick={handleClickSaveChangeButton}>
+              Save
             </button>
           </div>
+          <button type="button" onClick={handleClickButtonDeleteUser}>
+              Delete User
+            </button>
         </div>
       )}
     </>
