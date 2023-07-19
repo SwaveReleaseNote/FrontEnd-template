@@ -19,10 +19,10 @@ function NotificationPopup({
         <p className="text-lg">❌ {message}</p>
         <p className="text-l text-red-500">({subMessage})</p>
         <div className="mt-4 flex justify-end">
-          <button className="mr-2" onClick={onCancel}>
+          <button onClick={onConfirm}>Yes</button>
+          <button className="ml-2" onClick={onCancel}>
             No
           </button>
-          <button onClick={onConfirm}>Yes</button>
         </div>
       </div>
     </div>

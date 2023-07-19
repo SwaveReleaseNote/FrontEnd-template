@@ -1,8 +1,10 @@
 import React, { ReactElement, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import banner from "assets/img/profile/banner2.png";
 import Card from "components/card";
+import NotificationPopup from "../components/NotificationPopup";
 
 enum UserRole {
   Subscriber = "구독자",
@@ -30,6 +32,7 @@ function ProjectCard({
   projectRole,
 }: ProjectCardProps): ReactElement {
   const navigate = useNavigate();
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   function handleClickProjectCard(projectId: number, projectRole: string) {
     const queryString = `projectId=${projectId}&role=${encodeURIComponent(
@@ -42,21 +45,50 @@ function ProjectCard({
   }
 
   const handleClickManageButton = async (
-    event: React.MouseEvent<HTMLButtonElement>, projectId: number
+    event: React.MouseEvent<HTMLButtonElement>,
+    projectId: number
   ) => {
     event.stopPropagation();
     navigate(`/admin/project/manage?projectId=${projectId}`);
     console.log("handleClickManageButton");
   };
-  const handleClickDeleteButton = async (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.stopPropagation();
-    console.log("handleClickDeleteButton");
+
+  const handleConfirmDelete = async (): Promise<void> => {
+    // Perform the project deletion logic
+    console.log("Project deletion confirmed");
+    try {
+      await axios.delete(
+        `http://localhost:8080/api/project/drop/${projectId}`
+      );
+    } catch (error) {
+      console.error("Error delete project:", error);
+      alert("서버 에러 입니다. 다시 시도하세요.");
+    } finally {
+      setShowConfirmation(false);
+    }
+  };
+
+  const handleCancelDelete = (): void => {
+    // Cancel the project deletion
+    console.log("Project deletion canceled");
+    setShowConfirmation(false);
+  };
+
+  const handleClickProjectDeleteButton = () => {
+    setShowConfirmation(true);
+    console.log("handleClickProjectDeleteButton");
   };
 
   return (
     <div>
+      {showConfirmation && (
+        <NotificationPopup
+          message="이 프로젝트에서 탈퇴하시겠습니까??"
+          subMessage="주의"
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+        />
+      )}
       <button
         className="rounded-3xl pl-2 pr-2 hover:bg-gray-500 focus:ring-4 focus:ring-blue-300"
         onClick={() => handleClickProjectCard(projectId, projectRole)}
@@ -73,16 +105,17 @@ function ProjectCard({
               >
                 ⚙️
               </button>
-            ) : <button
-            className="text-l"
-            onClick={(event) => {
-              event.stopPropagation();
-              handleClickDeleteButton(event);
-            }}
-          >
-            ❌
-          </button>}
-            
+            ) : (
+              <button
+                className="text-l"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleClickProjectDeleteButton();
+                }}
+              >
+                ❌
+              </button>
+            )}
           </div>
           {/* Background and profile */}
           <div

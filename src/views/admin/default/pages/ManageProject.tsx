@@ -287,7 +287,7 @@ const ManageProject: React.FC = () => {
       setTeamMembers([]);
       navigate("../");
     } catch (error) {
-      console.error("Error submitting project:", error);
+      console.error("Error delete project:", error);
       alert("서버 에러 입니다. 다시 시도하세요.");
     }
     setShowConfirmation(false);
