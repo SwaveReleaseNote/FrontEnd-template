@@ -1,68 +1,38 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ReactElement } from "react";
-import { useRecoilState } from "recoil";
-import { loginState } from "./contexts/atom";
 import axios from "axios";
 import "./UserProfileCard.css";
 function UserProfileCard(): ReactElement {
   const navigate = useNavigate();
-  const [isLogined, setIsLogined] = useRecoilState(loginState);
 
-  const [userName, setUserName] = useState(isLogined.name);
-  const [email, setEmail] = useState(isLogined.email);
+  const [userName, setUserName] = useState(localStorage.getItem("name"));
+  const [email, setEmail] = useState(localStorage.getItem("department"));
   const [phone, setPhone] = useState("0001-213-998761");
-  const [department, setDepartment] = useState(isLogined.department);
+  const [department, setDepartment] = useState(localStorage.getItem("department"));
   const [mostViewed, setMostViewed] = useState("dolor sit amet.");
 
-  const [tempName, setTempName] = useState(isLogined.name);
-  const [tempInfo, setTempInfo] = useState(isLogined.info);
-  const [tempEmail, setTempEmail] = useState(isLogined.email);
   const [showDepartmentRegisterModal, setShowDepartmentRegisterModal] =
     useState(false);
 
   useEffect(() => {
-    console.log(isLogined.token);
-    console.log(isLogined.department);
-    console.log(localStorage.getItem("token"));
-    if (isLogined.department === null) {
+    console.log(localStorage.getItem("department"));
+    if (localStorage.getItem("department") === "null") {
       console.log("showdepartment");
       setShowDepartmentRegisterModal(true);
     }
     try {
-      axios
-        .get(`http://localhost:8080/api/user/getuser`, {
-          headers: {
-            Authorization: isLogined.token,
-          },
-        })
-        .then((response) => {
-          //api의 응답을 제대로 받은경우
-          console.log(response);
-          setIsLogined((prev) => {
-            return {
-              state: true,
-              name: response.data.username,
-              email: response.data.email,
-              info: "",
-              department: response.data.department,
-              token: String(isLogined.token),
-            };
-          });
-        })
-        .catch((error) => {
-          alert("재로그인해주세요.");
-          navigate("/auth");
-          console.error(error);
-        });
-    } catch (e) {
+      setUserName(localStorage.getItem("name"));
+      setEmail(localStorage.getItem("email"));
+      setDepartment(localStorage.getItem("department"));
+    } catch (error) {
       alert("재로그인해주세요.");
       navigate("/auth");
-      console.error(e);
+      console.error(error);
     }
   }, []);
-  const handleUserUpdateFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleUserUpdateFormSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
     console.log(userName, email, phone, department, mostViewed);
     axios
       .put(
@@ -76,13 +46,18 @@ function UserProfileCard(): ReactElement {
         },
         {
           headers: {
-            "Content-Type": "application/json",
-            Authorization: isLogined.token,
+            Authorization: localStorage.getItem("token"),
           },
         }
       )
       .then((response) => {
         console.log(response.data); // Process the response as needed
+        localStorage.setItem("name",userName);
+        localStorage.setItem("email",email);
+        localStorage.setItem("department",department);
+        setUserName(localStorage.getItem("name"));
+        setEmail(localStorage.getItem("email"));
+        setDepartment(localStorage.getItem("department"));
       })
       .catch((error) => {
         console.error(error);
@@ -92,9 +67,9 @@ function UserProfileCard(): ReactElement {
   };
 
   const handleChangeUserInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const { name, value } = e.target;
+    const { name, value } = event.target;
 
     switch (name) {
       case "name":
@@ -106,9 +81,6 @@ function UserProfileCard(): ReactElement {
       case "phone":
         setPhone(value);
         break;
-      case "department":
-        setDepartment(value);
-        break;
       case "mostViewed":
         setMostViewed(value);
         break;
@@ -117,9 +89,9 @@ function UserProfileCard(): ReactElement {
     }
   };
   const handleSelectUserDepartmentChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
+    event: React.ChangeEvent<HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
+    const { name, value } = event.target;
     setDepartment(value);
   };
 
@@ -134,13 +106,14 @@ function UserProfileCard(): ReactElement {
         },
         {
           headers: {
-            "Content-Type": "application/json",
-            Authorization: isLogined.token,
+            Authorization: localStorage.getItem("token"),
           },
         }
       )
       .then((response) => {
         console.log(response.data); // Process the response as needed
+        localStorage.setItem("department",department);
+        setDepartment(localStorage.getItem("department"));
       })
       .catch((error) => {
         console.error(error);
@@ -155,10 +128,11 @@ function UserProfileCard(): ReactElement {
 
   /* 유저 삭제 */
   const handleClickButtonDeleteUser = () => {
+    console.log(localStorage.getItem("token"));
     axios
-      .post("http://localhost:8080/api/user/delete", {
+      .delete("http://localhost:8080/api/user/delete", {
         headers: {
-          Authorization: isLogined.token,
+          Authorization: localStorage.getItem("token"),
         },
       })
       .then((response) => {
@@ -242,8 +216,20 @@ function UserProfileCard(): ReactElement {
                 </div>
               </div>
             </div>
-
-            <button type="submit">Save</button>
+            <div className="flex justify-end">
+              <button type="submit" className="mr-2">
+                Save
+              </button>
+              <div className="ml-auto">
+                <button
+                  type="button"
+                  onClick={handleClickButtonDeleteUser}
+                  className="text-red-600"
+                >
+                  Delete User
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </form>
@@ -266,13 +252,11 @@ function UserProfileCard(): ReactElement {
                 <option value="Department 3">Department 3</option>
               </select>
             </div>
+
             <button type="button" onClick={handleClickSaveChangeButton}>
               Save
             </button>
           </div>
-          <button type="button" onClick={handleClickButtonDeleteUser}>
-              Delete User
-            </button>
         </div>
       )}
     </>

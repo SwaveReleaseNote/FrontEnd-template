@@ -44,16 +44,12 @@ const Auth = (): JSX.Element => {
           }).then((response) => { //api의 응답을 제대로 받은경우 
             /* axios 값 log 확인*/
             console.log(response.data);
-            setIsLogined((prev) => {
-              return {
-                state: true,
-                name: response.data.username,
-                email: response.data.email,
-                info: "",
-                department:response.data.department,
-                token: String(token)
-              };
-            });
+            window.localStorage.setItem('state', "true");
+            window.localStorage.setItem('name', response.data.username);
+            window.localStorage.setItem('email', response.data.email);
+            window.localStorage.setItem('info', "");
+            window.localStorage.setItem('department', response.data.department);
+            console.log(localStorage.getItem("email"))
           });
           navigate('/admin');
         } catch (error) {

@@ -77,9 +77,9 @@ const routes = [
   //   component: <Profile />,
   // },
   {
-    name: "Profile",
+    name: "My Page",
     layout: "/admin",
-    path: "profile",
+    path: "mypage",
     icon: <MdPerson className="h-6 w-6" />,
     component: <MyPage />,
   },

@@ -4,11 +4,8 @@ import { FcGoogle, FcComments } from "react-icons/fc";
 import Checkbox from "components/checkbox";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { atom } from "recoil";
 import axios from "axios";
 import "./SignIn.css";
-import { loginState } from "./contexts/atom";
 
 interface RegisterFormData {
   name: string;
@@ -23,7 +20,6 @@ interface LoginFormData {
 
 export default function SignIn() {
   const navigate = useNavigate();
-  const [isLogined, setIsLogined] = useRecoilState(loginState);
   const host = "http://localhost:3000";
   const KAKAO_REST_API_KEY = "4646a32b25c060e42407ceb8c13ef14a";
   const KAKAO_REDIRECT_URI = host + "/oauth/callback/kakao";
@@ -129,16 +125,12 @@ export default function SignIn() {
               //api의 응답을 제대로 받은경우
               console.log(response);
               console.log(response.data);
-              setIsLogined((prev) => {
-                return {
-                  state: true,
-                  name: response.data.username,
-                  email: response.data.email,
-                  info: "",
-                  department: response.data.department,
-                  token: String("Bearer " + token),
-                };
-              });
+              window.localStorage.setItem('state', "true");
+              window.localStorage.setItem('name', response.data.username);
+              window.localStorage.setItem('email', response.data.email);
+              window.localStorage.setItem('info', "");
+              window.localStorage.setItem('department', response.data.department);
+              window.localStorage.setItem('token',String("Bearer " + token));
             });
           navigate("/admin");
         } catch (error) {
