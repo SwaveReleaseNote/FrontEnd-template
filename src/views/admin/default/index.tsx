@@ -21,9 +21,9 @@ import RecentRelease from "./components/RecentRelease";
 import ProjectCard from "./components/ProjectCard";
 
 enum UserRole {
-  Subscriber = "구독자",
-  Developer = "개발자",
-  Manager = "관리자",
+  Subscriber = "Subscriber",
+  Developer = "Developer",
+  Manager = "Manager",
 }
 
 interface Project {
@@ -78,15 +78,20 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-
     const fetchData = async () => {
       try {
-        const response = await axios.get(`/api/project/load/all`);
+        const response = await axios.get(`http://localhost:8080/api/project/load/all`, {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        });
         const fetchedProjectList = response.data;
+        console.log(fetchedProjectList);
 
         const managerDeveloperProjects = fetchedProjectList.filter(
           (project: { role: string }) =>
-            project.role === UserRole.Manager || project.role === UserRole.Developer
+            project.role === UserRole.Manager ||
+            project.role === UserRole.Developer
         );
 
         const subscriberProjects = fetchedProjectList.filter(

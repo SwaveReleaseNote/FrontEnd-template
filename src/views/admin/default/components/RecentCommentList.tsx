@@ -21,6 +21,11 @@ const RecentCommentList: React.FC<Props> = ({ projectId }) => {
       try {
         const response = await axios.get(
           `/api/project/${projectId}/release/comment/load_recent`,
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          }
           // { data: searchComment }
         );
         const data: CommentList[] = response.data;

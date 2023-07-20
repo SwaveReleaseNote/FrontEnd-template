@@ -26,7 +26,12 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
       try {
         const response = await axios.get(
           `/api/project/dashboard/searchRelease`,
-          { data: searchRelease } // Pass searchRelease as data
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+            data: searchRelease,
+          } // Pass searchRelease as data
         );
 
         const data: ReleaseList[] = response.data;

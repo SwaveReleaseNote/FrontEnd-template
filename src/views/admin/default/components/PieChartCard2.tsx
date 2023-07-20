@@ -24,7 +24,12 @@ const PieChartCard: React.FC<Props> = ({ projectId }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `/api/project/dashboard/pieChart/${projectId.id}`
+          `/api/project/dashboard/pieChart/${projectId.id}`,
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          }
         );
         const data: LabelNum[] = response.data;
         renderChart(data);

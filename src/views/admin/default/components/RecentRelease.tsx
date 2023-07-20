@@ -25,7 +25,12 @@ const RecentRelease = () => {
   const fetchRecentReleaseNote = async () => {
     try {
       const response = await axios.get(
-        `localhost:8080/api/project/release/load_recent`
+        `http://localhost:8080/api/project/release/load_recent`,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
       );
 
       setRecentReleaseNote(response.data);

@@ -115,9 +115,21 @@ const ManageProject: React.FC = () => {
 
   const fetchData = async () => {
     try {
-      const allMembersResponse = await axios.get("localhost:8080/api/members");
+      const allMembersResponse = await axios.get(
+        "http://localhost:8080/api/user/prelogin/getuserlist",
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
       const projectInfoResponse = await axios.get(
-        `localhost:8080/api/project/manage/${projectId}`
+        `http://localhost:8080/api/project/manage/${projectId}`,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
       );
 
       const allMembers: TeamMember[] = allMembersResponse.data.map(
@@ -254,7 +266,12 @@ const ManageProject: React.FC = () => {
       // Send projectData to the backend using axios
       await axios.post(
         "http://localhost:8080/api/project/update/",
-        projectData
+        projectData,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
       );
 
       // Clear the form fields and team member list
@@ -278,9 +295,14 @@ const ManageProject: React.FC = () => {
     console.log("Project deletion confirmed");
     try {
       await axios.delete(
-        `http://localhost:8080/api/project/delete/${projectId}`
+        `http://localhost:8080/api/project/delete/${projectId}`,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
       );
-
+      
       // Clear the form fields and team member list
       setProjectName("");
       setDescription("");

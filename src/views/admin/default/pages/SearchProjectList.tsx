@@ -15,7 +15,11 @@ const SearchProjectList: React.FC = () => {
     console.log("searchTerm:", searchTerm);
     console.log("Search Result component rendered");
     axios
-      .get(`/api/project/search/${searchTerm}`)
+      .get(`/api/project/search/${searchTerm}`, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
       .then((response: { data: { search: string } }) => {
         const search = response.data.search;
         setSearchResult(search);

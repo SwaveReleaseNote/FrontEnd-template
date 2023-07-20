@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
 import PieChartCard from "../components/PieChartCard2";
 import MemberStatusCard from "../components/MemberStatusCard";
 import RecentComment from "../components/RecentComment";
@@ -13,6 +15,7 @@ enum UserRole {
 }
 
 const ProjectDashboard: React.FC = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const projectId = searchParams.get("projectId");
@@ -23,7 +26,11 @@ const ProjectDashboard: React.FC = () => {
     console.log("projectId:", projectId);
     console.log("role:", role);
     axios
-      .get(`http://localhost:8080/api/project/load/one/${projectId}`)
+      .get(`http://localhost:8080/api/project/load/one/${projectId}`, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
       .then((response: { data: any }) => {
         const projectId = response.data.id;
         console.log(response.data);
@@ -34,12 +41,27 @@ const ProjectDashboard: React.FC = () => {
       });
   }, [projectId, role]);
 
+  const handleClickManageButton = async (
+    event: React.MouseEvent<HTMLButtonElement>,
+    projectId: number
+  ) => {
+    event.stopPropagation();
+    navigate(`/admin/project/manage?projectId=${projectId}`);
+    console.log("handleClickManageButton");
+  };
+
   return (
     <div>
       <div className="h-100% mt-4 flex w-auto justify-items-center rounded-[20px] bg-white bg-clip-border p-6 text-4xl font-bold shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none sm:overflow-x-auto">
         {projectName}
         {role === UserRole.Manager && (
-          <button className="absolute right-[8%] text-xl">
+          <button
+            onClick={(event) => {
+              event.stopPropagation();
+              handleClickManageButton(event, Number(projectId));
+            }}
+            className="absolute right-[8%] text-xl"
+          >
             프로젝트 관리⚙️
           </button>
         )}

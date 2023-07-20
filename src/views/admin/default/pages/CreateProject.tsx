@@ -23,16 +23,28 @@ const CreateProject: React.FC = () => {
   const [description, setDescription] = useState("");
 
   // fetch All Members
+  // 자기 자신은 빼기
   const fetchMembers = async () => {
     try {
-      const response = await axios.get("localhost:8080/api/members");
-      const members: TeamMember[] = response.data.map((member: any) => ({
-        user_id: member.user_id,
-        user_name: member.user_name,
-        user_department: member.user_department,
-      }));
+      const response = await axios.get(
+        "http://localhost:8080/api/user/prelogin/getuserlist",
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+      const members: TeamMember[] = response.data
+        .filter((member: any) => member.user_id !== Number(localStorage.getItem("id")))
+        .map((member: any) => ({
+          user_id: member.user_id,
+          user_name: member.user_name,
+          user_department: member.user_department,
+        }));
 
       setAllMembers(members);
+      console.log(allMembers);
+      console.log( Number(localStorage.getItem("id")));
     } catch (error) {
       console.error("Error fetching members:", error);
       console.log("Mocking");
@@ -102,14 +114,21 @@ const CreateProject: React.FC = () => {
       const projectData = {
         projectName,
         description,
-        userId,
         users,
       };
 
       console.log(projectData);
 
       // Send projectData to the backend using axios
-      await axios.post("http://localhost:8080/api/project/create", projectData);
+      await axios.post(
+        "http://localhost:8080/api/project/create",
+        projectData,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
 
       // Clear the form fields and team member list
       setProjectName("");
@@ -152,7 +171,7 @@ const CreateProject: React.FC = () => {
           <div>
             <button
               type="submit"
-              className="border border-black absolute right-[15%] top-[30%] flex rounded bg-gray-100 px-4 py-2 font-bold shadow-3xl shadow-shadow-500 dark:bg-navy-600 dark:text-white"
+              className="border-black absolute right-[15%] top-[30%] flex rounded border bg-gray-100 px-4 py-2 font-bold shadow-3xl shadow-shadow-500 dark:bg-navy-600 dark:text-white"
             >
               프로젝트 생성
             </button>
@@ -240,7 +259,7 @@ const CreateProject: React.FC = () => {
                         {member.department}
                       </p>
                       <button
-                        className="ml-5 rounded-xl px-2 py-1 font-bold bg-gray-50 text-blue-500 text-3xl"
+                        className="ml-5 rounded-xl bg-gray-50 px-2 py-1 text-3xl font-bold text-blue-500"
                         onClick={() => handleClickAddMemberButton(member)}
                       >
                         +
