@@ -225,7 +225,7 @@ const Dashboard = () => {
 
   function handleClickProjectCreateButton() {
     console.log("project create button clicked");
-    navigate("/admin/createProject");
+    navigate("/admin/project/create");
   }
 
   return (

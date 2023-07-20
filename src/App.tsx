@@ -5,7 +5,7 @@ import AdminLayout from "layouts/admin";
 import AuthLayout from "layouts/auth";
 import Auth from "views/auth/Auth";
 import MyPage from "views/auth/MyPage";
-import DepartmentSelect from "./views/auth/DepartmentSelect";
+import Logout from "views/auth/Logout";
 
 const App = () => {
   return (
@@ -15,8 +15,7 @@ const App = () => {
         <Route path="/oauth/callback/:provider" element={<Auth/>} />
         <Route path="/admin/*" element={<AdminLayout />} />
         <Route path="/" element={<Navigate to="/auth/sign-in" replace />} />
-        <Route path="/mypage/*" element={<MyPage />} />
-        <Route path="/department/*" element={<DepartmentSelect />} />
+        <Route path="/user/logout" element={<Logout />} />
       </Routes>
     </RecoilRoot>
   );

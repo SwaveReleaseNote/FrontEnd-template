@@ -96,7 +96,11 @@ const PieChartCard: React.FC<Props> = ({ projectId }) => {
       </div>
 
       <div className="mb-auto mt-auto flex h-[220px] w-full items-center justify-center">
-        <canvas className="mt-4" ref={chartRef}></canvas>
+        <canvas
+          className="mt-4"
+          ref={chartRef}
+          style={{ width: "100%", height: "100%" }} // Added style for fixed size
+        ></canvas>
       </div>
       <div className="justify-between rounded-2xl px-6 py-3 shadow-2xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
         <div className="flex flex-col items-center justify-center">
