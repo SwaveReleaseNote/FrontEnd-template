@@ -27,9 +27,9 @@ const CreateProject: React.FC = () => {
     try {
       const response = await axios.get("localhost:8080/api/members");
       const members: TeamMember[] = response.data.map((member: any) => ({
-        user_id: member.user_id,
-        user_name: member.user_name,
-        user_department: member.user_department,
+        id: member.user_id,
+        name: member.user_name,
+        department: member.user_department,
       }));
 
       setAllMembers(members);
@@ -152,7 +152,7 @@ const CreateProject: React.FC = () => {
           <div>
             <button
               type="submit"
-              className="border border-black absolute right-[15%] top-[30%] flex rounded bg-gray-100 px-4 py-2 font-bold shadow-3xl shadow-shadow-500 dark:bg-navy-600 dark:text-white"
+              className="absolute right-[30%] top-[30%] flex rounded bg-gray-100 px-4 py-2 font-bold shadow-3xl shadow-shadow-500 dark:bg-navy-600 dark:text-white"
             >
               프로젝트 생성
             </button>

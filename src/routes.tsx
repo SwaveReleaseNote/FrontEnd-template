@@ -24,7 +24,6 @@ import MyPage from "views/auth/MyPage";
 import CreateProject from "views/admin/default/pages/CreateProject";
 import ProjectDashboard from "views/admin/default/pages/ProjectDashboard";
 import SearchProjectList from "views/admin/default/pages/SearchProjectList";
-import ManageProject from "views/admin/default/pages/ManageProject";
 
 const routes = [
   {
@@ -45,7 +44,7 @@ const routes = [
   {
     name: "Create Project",
     layout: "/admin",
-    path: "project/create",
+    path: "createProject",
     icon: <MdHome className="h-6 w-6" />,
     component: <CreateProject />,
   },
@@ -64,13 +63,6 @@ const routes = [
     component: <ProjectDashboard />, 
   },
   {
-    name: "Project Manage",
-    layout: "/admin",
-    path: "project/manage/*", 
-    icon: <MdHome className="h-6 w-6" />,
-    component: <ManageProject />, 
-  },
-  {
     name: "Data Tables",
     layout: "/admin",
     icon: <MdBarChart className="h-6 w-6" />,
@@ -85,9 +77,9 @@ const routes = [
   //   component: <Profile />,
   // },
   {
-    name: "My Page",
+    name: "Profile",
     layout: "/admin",
-    path: "mypage",
+    path: "profile",
     icon: <MdPerson className="h-6 w-6" />,
     component: <MyPage />,
   },

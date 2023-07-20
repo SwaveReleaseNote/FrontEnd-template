@@ -214,7 +214,7 @@ const Navbar = (props: {
             // />
             <div className="flex w-full flex-col gap-2 rounded-[20px]">
               <p className="cursor-pointer overflow-break dark:text-white">
-                Hello <b>{localStorage.getItem("name")}</b> 👻⚙️
+                Hello <b>{login.name}</b> 👻⚙️
               </p>
             </div>
           }
@@ -223,7 +223,7 @@ const Navbar = (props: {
               <div className="ml-5 mt-3">
                 <div className="flex items-center gap-2">
                   <p className="text-sm font-bold text-navy-700 dark:text-white">
-                    👋 Hey, <b>{localStorage.getItem("name")}</b>
+                    👋 Hey, <b>{login.name}</b>
                   </p>{" "}
                 </div>
               </div>
@@ -231,13 +231,13 @@ const Navbar = (props: {
 
               <div className="ml-4 mt-3 flex flex-col">
                 <a
-                  href="/admin/mypage"
+                  href="/user/MyPage"
                   className="text-sm text-gray-800 dark:text-white hover:dark:text-white"
                 >
                   My Page
                 </a>
                 <a
-                  href="/user/logout"
+                  href="/user/LogOut"
                   className="mt-3 text-sm font-medium text-red-500 hover:text-red-500"
                 >
                   Log Out
