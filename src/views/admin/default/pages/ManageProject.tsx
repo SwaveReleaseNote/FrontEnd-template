@@ -7,13 +7,13 @@ import NotificationPopup from "../components/NotificationPopup";
 
 type TeamMember = {
   user_id: number;
-  user_name: string;
+  username: string;
   user_department: string;
 };
 
 type ProjectInfo = {
-  projectId: number;
-  projectName: string;
+  id: number;
+  name: string;
   description: string;
   managerId: number;
   managerName: string;
@@ -58,12 +58,12 @@ const ManageProject: React.FC = () => {
   const mockFetchAllMembers = () => {
     // Simulate API response with mock data
     setAllMembers([
-      { user_id: 1, user_name: "김기현", user_department: "Project Manager" },
-      { user_id: 2, user_name: "김성국", user_department: "Architecture" },
-      { user_id: 3, user_name: "함건욱", user_department: "Backend" },
-      { user_id: 4, user_name: "강준희", user_department: "Frontend" },
-      { user_id: 5, user_name: "이승섭", user_department: "OAuth" },
-      { user_id: 6, user_name: "전강훈", user_department: "Machine Learning" },
+      { user_id: 1, username: "김기현", user_department: "Project Manager" },
+      { user_id: 2, username: "김성국", user_department: "Architecture" },
+      { user_id: 3, username: "함건욱", user_department: "Backend" },
+      { user_id: 4, username: "강준희", user_department: "Frontend" },
+      { user_id: 5, username: "이승섭", user_department: "OAuth" },
+      { user_id: 6, username: "전강훈", user_department: "Machine Learning" },
     ]);
     console.log("mock fetch all members");
   };
@@ -71,19 +71,19 @@ const ManageProject: React.FC = () => {
   const mockFetchProjectInfo = () => {
     // Simulate API response with mock data
     const mockResponse: ProjectInfo = {
-      projectId: 1,
-      projectName: "Sample Project",
+      id: 1,
+      name: "Sample Project",
       description: "Sample description",
       managerId: 3,
       managerName: "함건욱",
       managerDepartment: "Backend",
       teamMembers: [
-        { user_id: 1, user_name: "김기현", user_department: "Project Manager" },
-        { user_id: 2, user_name: "김성국", user_department: "Architecture" },
+        { user_id: 1, username: "김기현", user_department: "Project Manager" },
+        { user_id: 2, username: "김성국", user_department: "Architecture" },
       ],
     };
-    setProjectId(mockResponse.projectId);
-    setProjectName(mockResponse.projectName);
+    setProjectId(mockResponse.id);
+    setProjectName(mockResponse.name);
     setDescription(mockResponse.description);
     setTeamMembers(mockResponse.teamMembers);
     setManagerDepartment(mockResponse.managerDepartment);
@@ -132,28 +132,31 @@ const ManageProject: React.FC = () => {
         }
       );
 
+      console.log(JSON.stringify(allMembersResponse, null, "\t"));
+
       const allMembers: TeamMember[] = allMembersResponse.data.map(
         (member: any) => ({
           user_id: member.user_id,
-          user_name: member.user_name,
-          user_department: member.user_department,
+          username: member.username,
+          user_department: member.department,
         })
       );
 
       const projectInfo: ProjectInfo = projectInfoResponse.data;
+      console.log(JSON.stringify(projectInfo, null, "\t"));
       const teamMembers: TeamMember[] = projectInfo.teamMembers.map(
         (member: any) => ({
           user_id: member.user_id,
-          user_name: member.user_name,
-          user_department: member.user_department,
+          username: member.username,
+          user_department: member.department,
         })
       );
 
       setAllMembers(allMembers);
       setTeamMembers(teamMembers);
 
-      setProjectId(projectInfo.projectId);
-      setProjectName(projectInfo.projectName);
+      setProjectId(projectInfo.id);
+      setProjectName(projectInfo.name);
       setDescription(projectInfo.description);
       setManagerDepartment(projectInfo.managerDepartment);
       setManagerId(projectInfo.managerId);
@@ -234,8 +237,10 @@ const ManageProject: React.FC = () => {
     setNewMemberName(inputName);
 
     if (inputName.trim() !== "") {
-      const filteredMembers = allMembers.filter((member) =>
-        member.user_name.toLowerCase().includes(inputName.toLowerCase())
+      const filteredMembers = allMembers.filter(
+        (member) =>
+          member.username &&
+          member.username.toLowerCase().includes(inputName.toLowerCase())
       );
 
       setSuggestedMembers(filteredMembers);
@@ -264,8 +269,8 @@ const ManageProject: React.FC = () => {
       console.log(JSON.stringify(projectData, null, "\t"));
 
       // Send projectData to the backend using axios
-      await axios.post(
-        "http://localhost:8080/api/project/update/",
+      await axios.put(
+        `http://localhost:8080/api/project/update/${projectId}`,
         projectData,
         {
           headers: {
@@ -302,7 +307,7 @@ const ManageProject: React.FC = () => {
           },
         }
       );
-      
+
       // Clear the form fields and team member list
       setProjectName("");
       setDescription("");
@@ -470,7 +475,7 @@ const ManageProject: React.FC = () => {
                       className="mb-2 flex items-center justify-between"
                     >
                       <p className="rounded-2xl bg-gray-50 p-3 font-bold">
-                        {member.user_name}
+                        {member.username}
                       </p>
                       <p className="ml-3 rounded-2xl bg-gray-50 p-3 font-bold">
                         {member.user_department}
@@ -501,7 +506,7 @@ const ManageProject: React.FC = () => {
                       className="mb-2 flex items-center justify-between dark:text-white"
                     >
                       <p className="rounded-2xl bg-gray-50 p-3 font-bold">
-                        {member.user_name}
+                        {member.username}
                       </p>
                       <p className="ml-3 rounded-2xl bg-gray-50 p-3 font-bold">
                         {member.user_department}
