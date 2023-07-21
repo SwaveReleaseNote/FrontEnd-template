@@ -101,14 +101,14 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
           </tr>
         </thead>
       </table>
-      <div className="overflow-auto" style={{ maxHeight: "550px" }}>
+      <div className="overflow-auto h-[70vh]">
         <table>
           <tbody>
             {releaseList.map((release) => (
               // <tr key={member.label}>
               <tr key={release.version}>
-                <td className="py-2">{release.label}</td>
-                <td className="ml-3 flex items-center py-2 pl-[50px]">
+                <td className="py-2 pb-2 pr-4 pt-4 text-start">{release.label}</td>
+                <td className="ml-3 flex items-center py-2 pl-[50px] pb-2 pr-4 pt-4 text-start">
                   {release.version}
                 </td>
               </tr>

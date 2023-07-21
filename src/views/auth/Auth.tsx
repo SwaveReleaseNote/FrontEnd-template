@@ -49,7 +49,7 @@ const Auth = (): JSX.Element => {
             window.localStorage.setItem('email', response.data.email);
             window.localStorage.setItem('info', "");
             window.localStorage.setItem('department', response.data.department);
-            console.log(localStorage.getItem("email"))
+            console.log(localStorage.getItem("email"));
           });
           navigate('/admin');
         } catch (error) {

@@ -26,7 +26,7 @@ enum UserRole {
   Manager = "Manager",
 }
 
-interface Project {
+type Project = {
   id: number;
   role: UserRole;
   name: string;
@@ -80,11 +80,14 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/project/load/all`, {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        });
+        const response = await axios.get(
+          `http://localhost:8080/api/project/load/all`,
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          }
+        );
         const fetchedProjectList = response.data;
         console.log(fetchedProjectList);
 
@@ -270,7 +273,7 @@ const Dashboard = () => {
         </div>
       </div>
       {/* Project Card List */}
-      <div className="flex justify-center rounded-3xl bg-gray-100 pt-5 dark:!bg-navy-700">
+      <div className="flex h-[450px] justify-center rounded-3xl bg-gray-100 pt-5 dark:!bg-navy-700">
         <div className="flex items-center">
           <button
             onClick={() => {
@@ -281,7 +284,7 @@ const Dashboard = () => {
               }
             }}
             type="button"
-            className="ml-5 rounded-full bg-blue-200 bg-blue-700 p-4 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:!bg-navy-600 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="absolute left-[5%] ml-5 rounded-full bg-gray-200 bg-gray-400 p-4 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:!bg-navy-600 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
             <svg
               className="h-4 w-4 rotate-180 transform"
@@ -303,22 +306,28 @@ const Dashboard = () => {
         </div>
 
         {!isSubscribeOpen ? (
-          <div className="ml-10 mr-10 grid h-[50%] w-full grid-cols-1 gap-20 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 3xl:grid-cols-6">
-            {displayedManageDevelopList.map((project) => (
-              <ProjectCard
-                key={project.id}
-                projectId={project.id}
-                projectName={project.name}
-                projectDescription={project.description}
-                projectMemberNumber={project.count}
-                projectRecentRelease={project.recentReleaseVersion}
-                projectCreateDate={project.createDate}
-                projectRole={project.role}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="ml-10 mr-10 grid h-[50%] w-full grid-cols-1 gap-20 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 3xl:grid-cols-6">
+          displayedManageDevelopList.length > 0 ? (
+            <div className="items-center flex h-full w-full justify-center gap-10">
+              {displayedManageDevelopList.map((project) => (
+                <ProjectCard
+                  key={project.id}
+                  projectId={project.id}
+                  projectName={project.name}
+                  projectDescription={project.description}
+                  projectMemberNumber={project.count}
+                  projectRecentRelease={project.recentReleaseVersion}
+                  projectCreateDate={project.createDate}
+                  projectRole={project.role}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-4xl font-bold text-black-400 items-center flex h-full w-full justify-center gap-10">
+              참여한 프로젝트가 없습니다!!👻
+            </div>
+          )
+        ) : displayedSubscribeList.length > 0 ? (
+          <div className="items-center flex h-full w-full justify-center gap-10">
             {displayedSubscribeList.map((project) => (
               <ProjectCard
                 key={project.id}
@@ -332,6 +341,10 @@ const Dashboard = () => {
               />
             ))}
           </div>
+        ) : (
+          <div className="text-4xl font-bold text-red-400 items-center flex h-full w-full justify-center gap-10">
+            구독한 프로젝트가 없습니다!!👻
+          </div>
         )}
 
         <div className="flex items-center">
@@ -344,7 +357,7 @@ const Dashboard = () => {
               }
             }}
             type="button"
-            className="mr-5 rounded-full bg-blue-200 bg-blue-700 p-4 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:!bg-navy-600 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="absolute right-[5%] mr-5 rounded-full bg-gray-400 p-4 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:!bg-navy-600 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
             <svg
               className="h-4 w-4"

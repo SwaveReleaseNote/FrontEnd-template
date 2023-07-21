@@ -9,9 +9,9 @@ import RecentComment from "../components/RecentComment";
 import SearchRelease from "../components/SearchRelease";
 
 enum UserRole {
-  Subscriber = "구독자",
-  Developer = "개발자",
-  Manager = "관리자",
+  Subscriber = "Subscriber",
+  Developer = "Developer",
+  Manager = "Manager",
 }
 
 const ProjectDashboard: React.FC = () => {
@@ -33,7 +33,7 @@ const ProjectDashboard: React.FC = () => {
       })
       .then((response: { data: any }) => {
         const projectId = response.data.id;
-        console.log(response.data);
+        console.log(JSON.stringify(response.data, null, "\t"));
       })
       .catch((error: any) => {
         console.error("Error fetching project dashboard:", error);
@@ -52,15 +52,17 @@ const ProjectDashboard: React.FC = () => {
 
   return (
     <div>
-      <div className="h-100% mt-4 flex w-auto justify-items-center rounded-[20px] bg-white bg-clip-border p-6 text-4xl font-bold shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none sm:overflow-x-auto">
+      <div className="gap-5 h-100% mt-4 flex w-auto justify-items-center rounded-[20px] bg-white bg-clip-border p-6 text-4xl font-bold shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none sm:overflow-x-auto">
+        <p className="w-[95vh] overflow-hidden">
         {projectName}
+        </p>
         {role === UserRole.Manager && (
           <button
             onClick={(event) => {
               event.stopPropagation();
               handleClickManageButton(event, Number(projectId));
             }}
-            className="absolute right-[8%] text-xl"
+            className="text-xl"
           >
             프로젝트 관리⚙️
           </button>
