@@ -3,33 +3,34 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 type Props = {
-    projectId: number;
+  projectId: number;
 };
 
-type CommentList = {
-  releaseVersion: string;
-  content: string;
-  mention: string;
+type Comment = {
+  name: string;
+  context: string;
+  // 추후 Date 형식 변환 필요
+  lastModifiedDate: string;
 };
 
 const RecentCommentList: React.FC<Props> = ({ projectId }) => {
-  const [commentList, setCommentList] = useState<CommentList[]>([]);
+  const [commentList, setCommentList] = useState<Comment[]>([]);
 
   useEffect(() => {
     console.log("Search CommentList by Project id:", projectId);
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `/api/project/${projectId}/release/comment/load_recent`,
+          `http://localhost:8080/api/project/1/release/comment/load_recent`,
           {
             headers: {
               Authorization: localStorage.getItem("token"),
             },
           }
-          // { data: searchComment }
         );
-        const data: CommentList[] = response.data;
-        setCommentList(data);
+        console.log(JSON.stringify(response.data, null, "\t"));
+        setCommentList(response.data.comments);
+        console.log(JSON.stringify(commentList, null, "\t"));
       } catch (error) {
         console.error("Error fetching release comment list:", error);
         console.log("Mocking data");
@@ -42,31 +43,31 @@ const RecentCommentList: React.FC<Props> = ({ projectId }) => {
           return `${x}.${y}.${z}`;
         }
 
-        const mockResponse: CommentList[] = [
+        const mockResponse: Comment[] = [
           {
-            releaseVersion: generateRandomVersion(),
-            content:  `${generateRandomContent()}`,
-            mention: `@${generateRandomName()}`
+            name: "함건욱",
+            context: "11111",
+            lastModifiedDate: "2023-07-21 00:15:59",
           },
           {
-            releaseVersion: generateRandomVersion(),
-            content:  `${generateRandomContent()}`,
-            mention: `@${generateRandomName()}`
+            name: "함건욱",
+            context: "Good ~ !",
+            lastModifiedDate: "2023-07-21 00:14:41",
           },
           {
-            releaseVersion: generateRandomVersion(),
-            content:  `${generateRandomContent()}`,
-            mention: `@${generateRandomName()}`
+            name: "함건욱",
+            context: "Good ~ !",
+            lastModifiedDate: "2023-07-21 00:14:40",
           },
           {
-            releaseVersion: generateRandomVersion(),
-            content:  `${generateRandomContent()}`,
-            mention: ``
+            name: "함건욱",
+            context: "Good ~ !",
+            lastModifiedDate: "2023-07-21 00:14:40",
           },
           {
-            releaseVersion: generateRandomVersion(),
-            content:  `${generateRandomContent()}`,
-            mention: `@${generateRandomName()}`
+            name: "함건욱",
+            context: "Good ~ !",
+            lastModifiedDate: "2023-07-21 00:14:39",
           },
         ];
 
@@ -101,14 +102,18 @@ const RecentCommentList: React.FC<Props> = ({ projectId }) => {
   return (
     <Card extra={"w-full h-full p-3 mt-2"}>
       {/* Header */}
+      {/* 어떤 릴리즈 노트에 대한 코멘트인지 필요하지않나?? */}
       <div className="overflow-y-scroll">
         {commentList.map((comment) => (
-          <div className="mb-8 mt-2 w-full" key={comment.releaseVersion}>
+          <div className="mb-8 mt-2 w-full" key={comment.name}>
             <h4 className="px-2 text-xl font-bold text-navy-700 dark:text-white">
-              Release Note Version {comment.releaseVersion}
+              {comment.name}: {comment.context}
             </h4>
+            {/* <p className="mt-2 px-2 text-base">
+              {comment.context}
+            </p> */}
             <p className="mt-2 px-2 text-base text-gray-600">
-              {comment.mention} {comment.content}
+              {comment.lastModifiedDate}
             </p>
           </div>
         ))}
