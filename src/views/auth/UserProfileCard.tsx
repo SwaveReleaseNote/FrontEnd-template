@@ -3,31 +3,43 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ReactElement } from "react";
 import axios from "axios";
 import "./UserProfileCard.css";
+import { useCookies } from 'react-cookie';
+import {setCookie,getCookie} from './cookie'
+
 function UserProfileCard(): ReactElement {
+
   const navigate = useNavigate();
 
   const [userName, setUserName] = useState(localStorage.getItem("name"));
   const [email, setEmail] = useState(localStorage.getItem("department"));
   const [phone, setPhone] = useState("0001-213-998761");
-  const [department, setDepartment] = useState(localStorage.getItem("department"));
+  const [department, setDepartment] = useState(
+    localStorage.getItem("department")
+  );
   const [mostViewed, setMostViewed] = useState("dolor sit amet.");
   const [showDepartmentRegisterModal, setShowDepartmentRegisterModal] =
     useState(false);
 
   useEffect(() => {
-    console.log(localStorage.getItem("department"));
-    if (localStorage.getItem("department") === "null") {
-      console.log("showdepartment");
-      setShowDepartmentRegisterModal(true);
-    }
-    try {
-      setUserName(localStorage.getItem("name"));
-      setEmail(localStorage.getItem("email"));
-      setDepartment(localStorage.getItem("department"));
-    } catch (error) {
-      alert("재로그인해주세요.");
-      navigate("/auth");
-      console.error(error);
+    if (!localStorage.getItem("token")) {
+      navigate("/auth/sign-in");
+    } else {
+      console.log(localStorage.getItem("department"));
+      const cookieId = getCookie("id");
+      console.log(cookieId);
+      if (localStorage.getItem("department") === "null") {
+        console.log("showdepartment");
+        setShowDepartmentRegisterModal(true);
+      }
+      try {
+        setUserName(localStorage.getItem("name"));
+        setEmail(localStorage.getItem("email"));
+        setDepartment(localStorage.getItem("department"));
+      } catch (error) {
+        alert("재로그인해주세요.");
+        navigate("/auth");
+        console.error(error);
+      }
     }
   }, []);
   const handleUserUpdateFormSubmit = (event: React.FormEvent) => {
@@ -51,9 +63,9 @@ function UserProfileCard(): ReactElement {
       )
       .then((response) => {
         console.log(response.data); // Process the response as needed
-        localStorage.setItem("name",userName);
-        localStorage.setItem("email",email);
-        localStorage.setItem("department",department);
+        localStorage.setItem("name", userName);
+        localStorage.setItem("email", email);
+        localStorage.setItem("department", department);
         setUserName(localStorage.getItem("name"));
         setEmail(localStorage.getItem("email"));
         setDepartment(localStorage.getItem("department"));
@@ -111,7 +123,7 @@ function UserProfileCard(): ReactElement {
       )
       .then((response) => {
         console.log(response.data); // Process the response as needed
-        localStorage.setItem("department",department);
+        localStorage.setItem("department", department);
         setDepartment(localStorage.getItem("department"));
       })
       .catch((error) => {
