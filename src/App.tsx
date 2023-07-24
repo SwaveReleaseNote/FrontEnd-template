@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import {RecoilRoot} from 'recoil';
+import { RecoilRoot } from "recoil";
 
 import AdminLayout from "layouts/admin";
 import AuthLayout from "layouts/auth";
@@ -12,7 +12,7 @@ const App = () => {
     <RecoilRoot>
       <Routes>
         <Route path="auth/*" element={<AuthLayout />} />
-        <Route path="/oauth/callback/:provider" element={<Auth/>} />
+        <Route path="/oauth/callback/:provider" element={<Auth />} />
         <Route path="/admin/*" element={<AdminLayout />} />
         <Route path="/" element={<Navigate to="/auth/sign-in" replace />} />
         <Route path="/user/logout" element={<Logout />} />
