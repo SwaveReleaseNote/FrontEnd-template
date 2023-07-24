@@ -4,8 +4,9 @@ import Navbar from "components/navbar";
 import Sidebar from "components/sidebar";
 import Footer from "components/footer/Footer";
 import routes from "routes";
-
+import axios from "axios";
 import ProjectDashboard from "views/admin/default/pages/ProjectDashboard";
+import { getCookie } from "views/auth/cookie";
 
 export default function Admin(props: { [x: string]: any }) {
   const { ...rest } = props;
@@ -64,11 +65,7 @@ export default function Admin(props: { [x: string]: any }) {
           );
         } else {
           return (
-            <Route
-              path={`/${prop.path}`}
-              element={prop.component}
-              key={key}
-            />
+            <Route path={`/${prop.path}`} element={prop.component} key={key} />
           );
         }
       } else {
@@ -78,6 +75,35 @@ export default function Admin(props: { [x: string]: any }) {
   };
 
   document.documentElement.dir = "ltr";
+
+  window.addEventListener("unload", (event) => {
+    // 페이지가 완전히 떠난 후에 실행되는 작업을 수행할 수 있습니다.
+    try {
+      axios
+        .put(
+          "http://localhost:8080/api/user/update",
+          {
+            loginState: false,
+          },
+          {
+            headers: {
+              Authorization: getCookie("id"),
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response.data); // Process the response as needed
+        })
+        .catch((error) => {
+          console.error(error);
+          // Handle error cases here
+        });
+    } catch (error) {
+      console.error(error);
+    }
+    alert("정말 종료하시겠습니까?");
+  });
+
   return (
     <div className="flex h-full w-full">
       {open ? <Sidebar open={open} onClose={() => setOpen(false)} /> : null}
@@ -100,7 +126,7 @@ export default function Admin(props: { [x: string]: any }) {
             <div className="pt-5s mx-auto mb-auto h-full min-h-[84vh] p-2 md:pr-2">
               <Routes>
                 {/* TODO: routes.tsx에 프로젝트 리스트 선택할 수 있도록 추가
-                     */}
+                 */}
                 {getRoutes(routes)}
 
                 <Route
