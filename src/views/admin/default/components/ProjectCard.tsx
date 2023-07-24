@@ -95,7 +95,7 @@ function ProjectCard({
         />
       )}
       <button
-        className="w-[40vh] h-[60vh] rounded-3xl pl-2 pr-2 hover:bg-gray-500 focus:ring-4 focus:ring-blue-300"
+        className="h-[60vh] w-[40vh] rounded-3xl pl-2 pr-2 hover:bg-gray-500 focus:ring-4 focus:ring-blue-300"
         onClick={() => handleClickProjectCard(projectId, projectRole)}
       >
         <Card extra={"items-center w-auto h-[95%] p-[16px] bg-cover"}>
@@ -151,7 +151,7 @@ function ProjectCard({
 
           {/* 프로젝트 개요 */}
           <div className="mt-4 flex flex-col items-center">
-            <h1 className="h-[10vh] w-[30vh] overflow-hidden text-l font-bold text-navy-700 dark:text-white">
+            <h1 className="text-l h-[10vh] w-[30vh] overflow-hidden font-bold text-navy-700 dark:text-white">
               {projectDescription}
             </h1>
             <p className="text-l font-normal text-gray-600">프로젝트 개요</p>

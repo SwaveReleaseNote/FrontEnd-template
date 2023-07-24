@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
-import CheckboxLabel from "../components/CheckboxLabel";
+import LoadingComponent from "../components/LoadingComponent ";
 
 type TeamMember = {
   user_id: number;
@@ -30,32 +29,38 @@ type SearchResult = {
 
 const SearchProjectList: React.FC = () => {
   const navigate = useNavigate();
-  
+
   const [searchResult, setSearchResult] = useState<SearchResult>();
   const [selectedCheckbox, setSelectedCheckbox] = useState("전체");
   const location = useLocation();
   const searchTerm = location.state.searchTerm.searchTerm;
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    console.log("searchTerm:", searchTerm);
-    console.log("selectedCheckbox:", selectedCheckbox);
-    console.log("Search Result component rendered");
-    axios
-      .get(`http://localhost:8080/api/project/search/${searchTerm}`, {
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
-      })
-      .then((response: { data: SearchResult }) => {
+    const fetchSearchResult = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/project/search/${searchTerm}`,
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          }
+        );
+
         const searchResult = response.data;
         setSearchResult(searchResult);
-      })
-      .catch((error: any) => {
+        setIsLoading(false);
+      } catch (error) {
         console.error("Error fetching search result:", error);
         mockFetchSearchResult();
-      });
-    console.log("searchResult:", searchResult);
-  }, []);
+        setIsLoading(false);
+      }
+    };
+
+    // Call the async function to fetch search result
+    fetchSearchResult();
+  }, [searchTerm]);
 
   useEffect(() => {
     console.log("selectedCheckbox:", selectedCheckbox);
@@ -204,21 +209,24 @@ const SearchProjectList: React.FC = () => {
 
     return (
       <div className="items-top flex">
-        <div className="text-l flex h-[7vh] w-[12vh] rounded-3xl bg-gray-300 p-3 font-bold">
+        <div className="text-l flex h-[7vh] w-auto rounded-2xl bg-gray-100 p-3 font-bold dark:!bg-navy-600">
           {searchType}
           {/* 에 {searchTerm}가 포함된 프로젝트입니다. */}
         </div>
-        <div className="m-3 w-[100vh] rounded-3xl bg-gray-300 p-5">
+        <div className="m-3 w-[100vh] rounded-3xl bg-gray-100 p-5 dark:!bg-navy-600">
           {projects.length > 0 ? (
             projects.map((project) => (
-              <div className="m-3 rounded-xl bg-gray-200 p-3" key={project.id}>
+              <div
+                className="m-3 rounded-xl bg-gray-100 p-3 dark:!bg-navy-900"
+                key={project.id}
+              >
                 <h2 className="text-2xl">
                   {/* 프로젝트 제목: */}
                   <span
                     onClick={() =>
                       handleClickProjectName(project.id, project.name)
                     }
-                    className=" text-blue-600 hover:cursor-pointer"
+                    className="text-blue-600 hover:cursor-pointer dark:text-blue-500"
                     dangerouslySetInnerHTML={{
                       __html:
                         searchType === "제목"
@@ -285,7 +293,7 @@ const SearchProjectList: React.FC = () => {
       </header>
       {/* 검색 분류 */}
       <div className="text-1xl flex justify-center gap-3 font-bold">
-        <label className="text-gray-900">
+        <label className="text-gray-900 dark:text-white">
           <input
             type="checkbox"
             checked={selectedCheckbox === "전체"}
@@ -294,7 +302,7 @@ const SearchProjectList: React.FC = () => {
           />
           전체
         </label>
-        <label className="dark text-gray-900">
+        <label className="text-gray-900 dark:text-white">
           <input
             type="checkbox"
             checked={selectedCheckbox === "제목"}
@@ -303,7 +311,7 @@ const SearchProjectList: React.FC = () => {
           />
           제목
         </label>
-        <label className="dark text-gray-900">
+        <label className="text-gray-900 dark:text-white">
           <input
             type="checkbox"
             checked={selectedCheckbox === "개요"}
@@ -312,7 +320,7 @@ const SearchProjectList: React.FC = () => {
           />
           개요
         </label>
-        <label className="dark text-gray-900">
+        <label className="text-gray-900 dark:text-white">
           <input
             type="checkbox"
             checked={selectedCheckbox === "관리자"}
@@ -321,7 +329,7 @@ const SearchProjectList: React.FC = () => {
           />
           관리자
         </label>
-        <label className="dark text-gray-900">
+        <label className="text-gray-900 dark:text-white">
           <input
             type="checkbox"
             checked={selectedCheckbox === "개발자"}
@@ -332,66 +340,70 @@ const SearchProjectList: React.FC = () => {
         </label>
       </div>
       {/* 검색 분류 표시 */}
-      <div className="m-10 flex justify-center rounded-3xl bg-gray-300 pb-5 pt-5">
+      <div className="m-10 flex justify-center rounded-3xl bg-gray-100 pb-5 pt-5 dark:!bg-navy-600">
         <p className="text-3xl font-bold">
           {selectedCheckbox}를 선택하셨습니다
         </p>
       </div>
       {/* 프로젝트 검색 결과 리스트 */}
-      <div className="flex justify-center">
-        {selectedCheckbox === "전체" && (
-          <div className="">
+      {isLoading ? (
+        <LoadingComponent />
+      ) : (
+        <div className="flex justify-center">
+          {selectedCheckbox === "전체" && (
             <div className="">
-              {renderProjects(
-                searchResult?.titleSearch || [],
-                searchTerm,
-                "제목"
-              )}
+              <div className="">
+                {renderProjects(
+                  searchResult?.titleSearch || [],
+                  searchTerm,
+                  "제목"
+                )}
+              </div>
+              <div>
+                {renderProjects(
+                  searchResult?.descriptionSearch || [],
+                  searchTerm,
+                  "개요"
+                )}
+              </div>
+              <div>
+                {renderProjects(
+                  searchResult?.managerSearch || [],
+                  searchTerm,
+                  `관리자`
+                )}
+              </div>
+              <div>
+                {renderProjects(
+                  searchResult?.developerSearch || [],
+                  searchTerm,
+                  `개발자`
+                )}
+              </div>
             </div>
-            <div>
-              {renderProjects(
-                searchResult?.descriptionSearch || [],
-                searchTerm,
-                "개요"
-              )}
-            </div>
-            <div>
-              {renderProjects(
-                searchResult?.managerSearch || [],
-                searchTerm,
-                `관리자`
-              )}
-            </div>
-            <div>
-              {renderProjects(
-                searchResult?.developerSearch || [],
-                searchTerm,
-                `개발자`
-              )}
-            </div>
-          </div>
-        )}
-        {selectedCheckbox === "제목" &&
-          renderProjects(searchResult?.titleSearch || [], searchTerm, "제목")}
-        {selectedCheckbox === "개요" &&
-          renderProjects(
-            searchResult?.descriptionSearch || [],
-            searchTerm,
-            "개요"
           )}
-        {selectedCheckbox === "관리자" &&
-          renderProjects(
-            searchResult?.managerSearch || [],
-            searchTerm,
-            `관리자`
-          )}
-        {selectedCheckbox === "개발자" &&
-          renderProjects(
-            searchResult?.developerSearch || [],
-            searchTerm,
-            `개발자`
-          )}
-      </div>
+          {selectedCheckbox === "제목" &&
+            renderProjects(searchResult?.titleSearch || [], searchTerm, "제목")}
+          {selectedCheckbox === "개요" &&
+            renderProjects(
+              searchResult?.descriptionSearch || [],
+              searchTerm,
+              "개요"
+            )}
+          {selectedCheckbox === "관리자" &&
+            renderProjects(
+              searchResult?.managerSearch || [],
+              searchTerm,
+              `관리자`
+            )}
+          {selectedCheckbox === "개발자" &&
+            renderProjects(
+              searchResult?.developerSearch || [],
+              searchTerm,
+              `개발자`
+            )}
+        </div>
+      )}
     </div>
   );
 };

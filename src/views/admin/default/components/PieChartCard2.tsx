@@ -5,7 +5,7 @@ import axios from "axios";
 
 type LabelNum = {
   label: string;
-  num: number;
+  count: number;
 };
 
 type Props = {
@@ -33,21 +33,21 @@ const PieChartCard: React.FC<Props> = ({ projectId }) => {
         );
         const data: LabelNum[] = response.data;
         renderChart(data);
-        setDataCount(data.reduce((total, item) => total + item.num, 0));
+        setDataCount(data.reduce((total, item) => total + item.count, 0));
       } catch (error) {
         console.error("Error fetching project Pie Chart:", error);
         console.log("Mocking data");
 
         const mockResponse: LabelNum[] = [
-          { label: "update", num: 2 },
-          { label: "delete", num: 4 },
-          { label: "bugfix", num: 5 },
-          { label: "new", num: 1 },
-          { label: "stop", num: 7 },
+          { label: "update", count: 2 },
+          { label: "delete", count: 4 },
+          { label: "bugfix", count: 5 },
+          { label: "new", count: 1 },
+          { label: "stop", count: 7 },
         ];
 
         renderChart(mockResponse);
-        setDataCount(mockResponse.reduce((total, item) => total + item.num, 0));
+        setDataCount(mockResponse.reduce((total, item) => total + item.count, 0));
       }
     };
 
@@ -61,7 +61,7 @@ const PieChartCard: React.FC<Props> = ({ projectId }) => {
       }
 
       const labels = data.map((item) => item.label);
-      const numbers = data.map((item) => item.num);
+      const numbers = data.map((item) => item.count);
       const colorMapping: { [label: string]: string } = {
         update: "rgb(232, 239, 151)",
         delete: "rgb(164, 101, 241)",

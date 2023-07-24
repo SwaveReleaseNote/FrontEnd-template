@@ -20,6 +20,9 @@ import { useNavigate } from "react-router-dom";
 import RecentRelease from "./components/RecentRelease";
 import ProjectCard from "./components/ProjectCard";
 
+import Skeleton from "react-loading-skeleton";
+import LoadingComponent from "./components/LoadingComponent ";
+
 enum UserRole {
   Subscriber = "Subscriber",
   Developer = "Developer",
@@ -34,7 +37,7 @@ type Project = {
   createDate: string;
   count: number;
   recentReleaseVersion: string;
-}
+};
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -305,47 +308,58 @@ const Dashboard = () => {
           </button>
         </div>
 
-        {!isSubscribeOpen ? (
-          displayedManageDevelopList.length > 0 ? (
-            <div className="items-center flex h-full w-full justify-center gap-10">
-              {displayedManageDevelopList.map((project) => (
-                <ProjectCard
-                  key={project.id}
-                  projectId={project.id}
-                  projectName={project.name}
-                  projectDescription={project.description}
-                  projectMemberNumber={project.count}
-                  projectRecentRelease={project.recentReleaseVersion}
-                  projectCreateDate={project.createDate}
-                  projectRole={project.role}
-                />
-              ))}
+        <div className="flex items-center">
+          {/* Add Skeleton Loading */}
+          {isLoading ? (
+            <div>
+              <LoadingComponent />
             </div>
           ) : (
-            <div className="text-4xl font-bold text-black-400 items-center flex h-full w-full justify-center gap-10">
-              참여한 프로젝트가 없습니다!!👻
+            <div>
+              {!isSubscribeOpen ? (
+                displayedManageDevelopList.length > 0 ? (
+                  <div className="flex h-full w-full items-center justify-center gap-10">
+                    {displayedManageDevelopList.map((project) => (
+                      <ProjectCard
+                        key={project.id}
+                        projectId={project.id}
+                        projectName={project.name}
+                        projectDescription={project.description}
+                        projectMemberNumber={project.count}
+                        projectRecentRelease={project.recentReleaseVersion}
+                        projectCreateDate={project.createDate}
+                        projectRole={project.role}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-black-400 flex h-full w-full items-center justify-center gap-10 text-4xl font-bold">
+                    참여한 프로젝트가 없습니다!!👻
+                  </div>
+                )
+              ) : displayedSubscribeList.length > 0 ? (
+                <div className="flex h-full w-full items-center justify-center gap-10">
+                  {displayedSubscribeList.map((project) => (
+                    <ProjectCard
+                      key={project.id}
+                      projectId={project.id}
+                      projectName={project.name}
+                      projectDescription={project.description}
+                      projectMemberNumber={project.count}
+                      projectRecentRelease={project.recentReleaseVersion}
+                      projectCreateDate={project.createDate}
+                      projectRole={project.role}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex h-full w-full items-center justify-center gap-10 text-4xl font-bold text-red-400">
+                  구독한 프로젝트가 없습니다!!👻
+                </div>
+              )}
             </div>
-          )
-        ) : displayedSubscribeList.length > 0 ? (
-          <div className="items-center flex h-full w-full justify-center gap-10">
-            {displayedSubscribeList.map((project) => (
-              <ProjectCard
-                key={project.id}
-                projectId={project.id}
-                projectName={project.name}
-                projectDescription={project.description}
-                projectMemberNumber={project.count}
-                projectRecentRelease={project.recentReleaseVersion}
-                projectCreateDate={project.createDate}
-                projectRole={project.role}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="text-4xl font-bold text-red-400 items-center flex h-full w-full justify-center gap-10">
-            구독한 프로젝트가 없습니다!!👻
-          </div>
-        )}
+          )}
+        </div>
 
         <div className="flex items-center">
           <button
