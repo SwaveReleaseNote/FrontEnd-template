@@ -5,7 +5,7 @@ import axios from "axios";
 
 type LabelNum = {
   label: string;
-  num: number;
+  count: number;
 };
 
 type Props = {
@@ -24,25 +24,30 @@ const PieChartCard: React.FC<Props> = ({ projectId }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `/api/project/dashboard/pieChart/${projectId.id}`
+          `/api/project/dashboard/pieChart/${projectId.id}`,
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          }
         );
         const data: LabelNum[] = response.data;
         renderChart(data);
-        setDataCount(data.reduce((total, item) => total + item.num, 0));
+        setDataCount(data.reduce((total, item) => total + item.count, 0));
       } catch (error) {
         console.error("Error fetching project Pie Chart:", error);
         console.log("Mocking data");
 
         const mockResponse: LabelNum[] = [
-          { label: "update", num: 2 },
-          { label: "delete", num: 4 },
-          { label: "bugfix", num: 5 },
-          { label: "new", num: 1 },
-          { label: "stop", num: 7 },
+          { label: "update", count: 2 },
+          { label: "delete", count: 4 },
+          { label: "bugfix", count: 5 },
+          { label: "new", count: 1 },
+          { label: "stop", count: 7 },
         ];
 
         renderChart(mockResponse);
-        setDataCount(mockResponse.reduce((total, item) => total + item.num, 0));
+        setDataCount(mockResponse.reduce((total, item) => total + item.count, 0));
       }
     };
 
@@ -56,7 +61,7 @@ const PieChartCard: React.FC<Props> = ({ projectId }) => {
       }
 
       const labels = data.map((item) => item.label);
-      const numbers = data.map((item) => item.num);
+      const numbers = data.map((item) => item.count);
       const colorMapping: { [label: string]: string } = {
         update: "rgb(232, 239, 151)",
         delete: "rgb(164, 101, 241)",
@@ -87,25 +92,20 @@ const PieChartCard: React.FC<Props> = ({ projectId }) => {
 
   return (
     <div
-      className={`!z-5 relative flex h-full w-full flex-col rounded-[20px] bg-white bg-clip-border px-6 pb-6 shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none sm:overflow-x-auto`}
+      className={`!z-5 relative flex h-full w-full flex-col items-center justify-center rounded-[20px] bg-white bg-clip-border px-6 pb-6 shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none sm:overflow-x-auto`}
     >
       <div className="relative flex items-center justify-between pt-4">
         <div className="text-xl font-bold text-navy-700 dark:text-white">
           Pie Chart
         </div>
       </div>
-
-      <div className="mb-auto mt-auto flex h-[220px] w-full items-center justify-center">
-        <canvas
-          className="mt-4"
-          ref={chartRef}
-          style={{ width: "100%", height: "100%" }} // Added style for fixed size
-        ></canvas>
+      <div className="mb-auto mt-auto flex h-[30vh] w-[30vh] items-center justify-center">
+        <canvas className="mt-4" ref={chartRef}></canvas>
       </div>
       <div className="justify-between rounded-2xl px-6 py-3 shadow-2xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
         <div className="flex flex-col items-center justify-center">
           <div className="flex items-center justify-center">
-            <p className="mt-4 ml-1 text-xl font-normal text-gray-600">
+            <p className="ml-1 mt-4 text-xl font-normal text-gray-600">
               Release Note
             </p>
           </div>
