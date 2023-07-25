@@ -26,7 +26,7 @@ const RecentCommentList: React.FC<Props> = ({ projectId }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/project/1/release/comment/load_recent`,
+          `http://localhost:8080/api/project/${projectId}/release/comment/load_recent`,
           {
             headers: {
               Authorization: localStorage.getItem("token"),
@@ -43,7 +43,8 @@ const RecentCommentList: React.FC<Props> = ({ projectId }) => {
         const mockResponse: Comment[] = [
           {
             name: "함건욱",
-            context: "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+            context:
+              "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
             lastModifiedDate: "2023-07-21 00:15:59",
             releaseNoteId: 1,
           },
@@ -97,27 +98,28 @@ const RecentCommentList: React.FC<Props> = ({ projectId }) => {
       ) : (
         <Card extra={"w-full h-full p-3 mt-2"}>
           {/* Header */}
-          {/* 어떤 릴리즈 노트에 대한 코멘트인지 필요하지않나?? */}
           <div className="overflow-y-scroll">
-            {commentList.map((comment) => (
-              <div className="m-1 mr-3 rounded-2xl p-1 text-blue-600 text-start hover:cursor-pointer hover:bg-indigo-500">
-                <div
-                  onClick={() => handleClickComment(comment.releaseNoteId)}
-                  className="rounded-xl bg-white p-2 text-blue-600 text-start hover:cursor-pointer"
-                  key={comment.name}
-                >
-                  <h4 className="overflow-hidden px-2 text-xl font-bold text-navy-700 dark:text-white">
-                    {comment.name}: {comment.context}
-                  </h4>
-                  {/* <p className="mt-2 px-2 text-base">
-              {comment.context}
-            </p> */}
-                  <p className="mt-2 px-2 text-base text-gray-600">
-                    {comment.lastModifiedDate}
-                  </p>
-                </div>
-              </div>
-            ))}
+            {commentList.length > 0
+              ? commentList.map((comment) => (
+                  <div className="m-1 mr-3 rounded-2xl p-1 text-blue-600 text-start hover:cursor-pointer hover:bg-indigo-500">
+                    <div
+                      onClick={() => handleClickComment(comment.releaseNoteId)}
+                      className="rounded-xl bg-white p-2 text-blue-600 text-start hover:cursor-pointer"
+                      key={comment.name}
+                    >
+                      <h4 className="overflow-hidden px-2 text-xl font-bold text-navy-700 dark:text-white">
+                        {comment.name}: {comment.context}
+                      </h4>
+                      <p className="mt-2 px-2 text-base text-gray-600">
+                        {comment.lastModifiedDate}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              : 
+              <div className="dark:text-white text-black-400 flex h-full w-full items-center justify-center gap-10 text-xl font-bold">
+                작성된 댓글이 없습니다
+              </div>}
           </div>
         </Card>
       )}

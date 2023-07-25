@@ -45,7 +45,7 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
       //
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/project/dashboard/searchRelease/${searchRelease.projectId}`,
+          `http://localhost:8080/api/project/${searchRelease.projectId}/release/label/filter`,
           {
             headers: {
               Authorization: localStorage.getItem("token"),
@@ -182,7 +182,12 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
               ) : (
                 filteredReleaseList.map((release) => (
                   <tr key={release.version}>
-                    <div className="m-1 mr-3 rounded-2xl p-1 text-blue-600 text-start hover:cursor-pointer hover:bg-indigo-500">
+                    <div
+                      onClick={() =>
+                        handleClickReleaseNote(release.releaseNoteId)
+                      }
+                      className="m-1 mr-3 rounded-2xl p-1 text-blue-600 text-start hover:cursor-pointer hover:bg-indigo-500"
+                    >
                       <td className="rounded-xl bg-white p-2 text-blue-600 text-start hover:cursor-pointer">
                         <div>
                           <p className="font-bold">
@@ -194,12 +199,7 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
                             className="mb-1 mt-1 h-[5vh] w-[10vh] rounded-xl"
                           />
                         </div>
-                        <div
-                          onClick={() =>
-                            handleClickReleaseNote(release.releaseNoteId)
-                          }
-                          className="h-[6vh] overflow-hidden text-sm"
-                        >
+                        <div className="h-[6vh] overflow-hidden text-sm">
                           {release.context}
                         </div>
                       </td>

@@ -26,7 +26,7 @@ const PieChartCard: React.FC<Props> = ({ projectId }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/project/dashboard/pieChart/${projectId.id}`,
+          `http://localhost:8080/api/project/${projectId.id}/release/label/count`,
           {
             headers: {
               Authorization: localStorage.getItem("token"),
@@ -105,13 +105,19 @@ const PieChartCard: React.FC<Props> = ({ projectId }) => {
           Pie Chart
         </div>
       </div>
-      <div className="mb-auto mt-auto flex h-[30vh] w-[30vh] items-center justify-center">
-        {isLoading ? (
-          <LoadingComponent fontSize="m" />
-        ) : (
-          <canvas className="mt-4" ref={chartRef}></canvas>
-        )}
-      </div>
+      {dataCount > 0 ? (
+        <div className="mb-auto mt-auto flex h-[30vh] w-[30vh] items-center justify-center">
+          {isLoading ? (
+            <LoadingComponent fontSize="m" />
+          ) : (
+            <canvas className="mt-4" ref={chartRef}></canvas>
+          )}
+        </div>
+      ) : (
+        <div className="text-black-400 flex h-full w-full items-center justify-center gap-10 text-xl font-bold dark:text-white">
+          생성된 릴리즈노트가 없습니다!!👻
+        </div>
+      )}
       <div className="justify-between rounded-2xl px-6 py-3 shadow-2xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
         <div className="flex flex-col items-center justify-center">
           <div className="flex items-center justify-center">

@@ -4,14 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { loginState } from "../../../../context/atom";
 import { useRecoilValue } from "recoil";
 import LoadingComponent from "../components/LoadingComponent ";
-// [
-//   {
-//       "username": "함건욱",
-//       "department": null,
-//       "userId": 1
-//   }
-// ]
-type TeamMember = {
+
+type UserRequest = {
+  managerId: number;
+  managerName: string;
+  managerDepartment: string;
+  users: User[];
+}
+
+type User = {
   userId: number;
   username: string;
   userDepartment: string;
@@ -19,13 +20,11 @@ type TeamMember = {
 
 const CreateProject: React.FC = () => {
   const navigate = useNavigate();
-  const login = useRecoilValue(loginState);
-  const userId = login.id;
 
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-  const [allMembers, setAllMembers] = useState<TeamMember[]>([]);
+  const [teamMembers, setTeamMembers] = useState<User[]>([]);
+  const [allMembers, setAllMembers] = useState<User[]>([]);
   const [newMemberName, setNewMemberName] = useState("");
-  const [suggestedMembers, setSuggestedMembers] = useState<TeamMember[]>([]);
+  const [suggestedMembers, setSuggestedMembers] = useState<User[]>([]);
   const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -43,9 +42,10 @@ const CreateProject: React.FC = () => {
         }
       );
       console.log(JSON.stringify(response, null, "\t"));
-      const members: TeamMember[] = response.data
+      const userInfo: UserRequest = response.data
+      const members: User[] = userInfo.users
         .filter(
-          (member: any) => member.userId !== Number(localStorage.getItem("id"))
+          (member: any) => member.userId !== userInfo.managerId
         )
         .map((member: any) => ({
           userId: member.userId,
@@ -55,7 +55,6 @@ const CreateProject: React.FC = () => {
 
       setAllMembers(members);
       console.log(allMembers);
-      console.log(Number(localStorage.getItem("id")));
     } catch (error) {
       console.error("Error fetching members:", error);
       console.log("Mocking");
@@ -65,8 +64,8 @@ const CreateProject: React.FC = () => {
     }
   };
 
-  const handleClickAddMemberButton = (member: TeamMember) => {
-    const updatedMember: TeamMember = {
+  const handleClickAddMemberButton = (member: User) => {
+    const updatedMember: User = {
       ...member,
       userDepartment: member.userDepartment,
     };
@@ -80,7 +79,7 @@ const CreateProject: React.FC = () => {
     );
   };
 
-  const handleClickRemoveMemberButton = (member: TeamMember) => {
+  const handleClickRemoveMemberButton = (member: User) => {
     const updatedMembers = teamMembers.filter(
       (remainMember) => remainMember.userId !== member.userId
     );
@@ -109,7 +108,7 @@ const CreateProject: React.FC = () => {
 
   const mockFetchSuggestions = () => {
     // Simulate API response with mock data
-    const mockResponse: TeamMember[] = [
+    const mockUserResponse: User[] = [
       { userId: 1, username: "김기현", userDepartment: "Project Manager" },
       { userId: 2, username: "김성국", userDepartment: "Architecture" },
       { userId: 3, username: "함건욱", userDepartment: "Backend" },
@@ -117,7 +116,25 @@ const CreateProject: React.FC = () => {
       { userId: 5, username: "이승섭", userDepartment: "OAuth" },
       { userId: 6, username: "전강훈", userDepartment: "Machine Learning" },
     ];
-    setAllMembers(mockResponse);
+
+    const userRequest: UserRequest = {
+      managerId: 3,
+      managerName: "함건욱",
+      managerDepartment: "Backend",
+      users: mockUserResponse
+    }
+    
+    const allUsers: User[] = userRequest.users
+      .filter(
+        (member: any) => member.userId !== userRequest.managerId
+      )
+      .map((member: any) => ({
+        userId: member.userId,
+        username: member.username,
+        userDepartment: member.userDepartment,
+      }));
+
+    setAllMembers(allUsers);
   };
 
   const handleSubmitProject = async (
@@ -132,7 +149,7 @@ const CreateProject: React.FC = () => {
         users,
       };
 
-      console.log(projectData);
+      console.log(JSON.stringify(projectData, null, "\t"));
 
       // Send projectData to the backend using axios
       await axios.post(
