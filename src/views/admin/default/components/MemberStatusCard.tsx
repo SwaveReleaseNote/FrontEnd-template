@@ -80,26 +80,26 @@ const MemberStatusCard: React.FC<Props> = ({ projectId }) => {
         </thead>
       </table>
       <div className="overflow-auto" style={{ maxHeight: "250px" }}>
-      <table>
-        <tbody>
-          {memberStatus.map((member) => (
-            // <tr key={member.memberName}>
-            <tr key={member.memberId}>
-              <td className="py-2">{member.memberName}</td>
-              <td className="flex items-center py-2 pl-[50px]">
-                {member.status ? "온라인" : "오프라인"}
-              </td>
-              <td>
-                <div
-                  className={`ml-5 h-4 w-4 rounded-full ${
-                    member.status ? "bg-green-400" : "bg-red-400"
-                  }`}
-                ></div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        <table>
+          <tbody>
+            {memberStatus.map((member) => (
+              // <tr key={member.memberName}>
+              <tr key={member.memberId}>
+                <td className="py-2">{member.memberName}</td>
+                <td className="flex items-center py-2 pl-[50px]">
+                  {member.status ? "온라인" : "오프라인"}
+                </td>
+                <td>
+                  <div
+                    className={`ml-5 h-4 w-4 rounded-full ${
+                      member.status ? "bg-green-400" : "bg-red-400"
+                    }`}
+                  ></div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

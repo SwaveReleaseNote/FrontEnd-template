@@ -54,7 +54,7 @@ const Auth = (): JSX.Element => {
             }
           )
           .then((response) => {
-            console.log(response.data); // Procesconsole.log(response.data); s the response as needed
+            console.log(response.data); // Process the response as needed
           })
           .catch((error) => {
             console.error(error);

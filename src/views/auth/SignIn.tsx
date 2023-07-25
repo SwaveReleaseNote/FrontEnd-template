@@ -97,7 +97,9 @@ export default function SignIn() {
   };
 
   /*로그인 데이터 변경 감지 및 보내기*/
-  const handleClickLoginFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleClickLoginFormSubmit = (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
     console.log(loginData);
 
@@ -125,12 +127,15 @@ export default function SignIn() {
               //api의 응답을 제대로 받은경우
               console.log(response);
               console.log(response.data);
-              window.localStorage.setItem('state', "true");
-              window.localStorage.setItem('name', response.data.username);
-              window.localStorage.setItem('email', response.data.email);
-              window.localStorage.setItem('info', "");
-              window.localStorage.setItem('department', response.data.department);
-              window.localStorage.setItem('token',String("Bearer " + token));
+              window.localStorage.setItem("state", "true");
+              window.localStorage.setItem("name", response.data.username);
+              window.localStorage.setItem("email", response.data.email);
+              window.localStorage.setItem("info", "");
+              window.localStorage.setItem(
+                "department",
+                response.data.department
+              );
+              window.localStorage.setItem("token", String("Bearer " + token));
             });
           navigate("/admin");
         } catch (error) {
@@ -144,7 +149,9 @@ export default function SignIn() {
       });
     reset(); // Reset the form after submission
   };
-  const handleLoginInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLoginInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { name, value } = event.target;
     setLoginData((prevLoginData) => ({ ...prevLoginData, [name]: value }));
   };
@@ -212,10 +219,9 @@ export default function SignIn() {
     // Handle forgot password form submission
     console.log(forgotPasswordEmail);
     axios
-      .post(
-        "http://localhost:8080/api/login/prelogin/get-temporary-email",{
-        email:forgotPasswordEmail}
-      )
+      .post("http://localhost:8080/api/login/prelogin/get-temporary-email", {
+        email: forgotPasswordEmail,
+      })
       .then((response) => {
         // Handle successful response
         console.log(response.data);
