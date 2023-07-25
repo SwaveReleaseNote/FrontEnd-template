@@ -346,6 +346,7 @@ const SearchProjectList: React.FC = () => {
         </p>
       </div>
       {/* 프로젝트 검색 결과 리스트 */}
+      <div className="flex justify-center">
       {isLoading ? (
         <LoadingComponent />
       ) : (
@@ -404,6 +405,7 @@ const SearchProjectList: React.FC = () => {
             )}
         </div>
       )}
+      </div>
     </div>
   );
 };

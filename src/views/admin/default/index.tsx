@@ -333,7 +333,7 @@ const Dashboard = () => {
                     ))}
                   </div>
                 ) : (
-                  <div className="text-black-400 flex h-full w-full items-center justify-center gap-10 text-4xl font-bold">
+                  <div className="dark:text-white text-black-400 flex h-full w-full items-center justify-center gap-10 text-4xl font-bold">
                     참여한 프로젝트가 없습니다!!👻
                   </div>
                 )
@@ -353,7 +353,7 @@ const Dashboard = () => {
                   ))}
                 </div>
               ) : (
-                <div className="flex h-full w-full items-center justify-center gap-10 text-4xl font-bold text-red-400">
+                <div className="dark:text-white flex h-full w-full items-center justify-center gap-10 text-4xl font-bold">
                   구독한 프로젝트가 없습니다!!👻
                 </div>
               )}

@@ -2,6 +2,7 @@ import Card from "components/card";
 import React, { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
 import axios from "axios";
+import LoadingComponent from "./LoadingComponent ";
 
 type LabelNum = {
   label: string;
@@ -18,13 +19,14 @@ const PieChartCard: React.FC<Props> = ({ projectId }) => {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstance = useRef<Chart<"pie"> | null>(null);
   const [dataCount, setDataCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     console.log("PieChart Project id:", projectId.id);
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `/api/project/dashboard/pieChart/${projectId.id}`,
+          `http://localhost:8080/api/project/dashboard/pieChart/${projectId.id}`,
           {
             headers: {
               Authorization: localStorage.getItem("token"),
@@ -41,18 +43,22 @@ const PieChartCard: React.FC<Props> = ({ projectId }) => {
         const mockResponse: LabelNum[] = [
           { label: "update", count: 2 },
           { label: "delete", count: 4 },
-          { label: "bugfix", count: 5 },
+          { label: "etc", count: 5 },
           { label: "new", count: 1 },
           { label: "stop", count: 7 },
         ];
 
         renderChart(mockResponse);
-        setDataCount(mockResponse.reduce((total, item) => total + item.count, 0));
+        setDataCount(
+          mockResponse.reduce((total, item) => total + item.count, 0)
+        );
+      } finally {
+        setIsLoading(false); // Set loading state to false after fetching
       }
     };
 
     fetchData();
-  }, [projectId]);
+  }, [projectId, isLoading]);
 
   const renderChart = (data: LabelNum[]) => {
     if (chartRef.current) {
@@ -100,7 +106,11 @@ const PieChartCard: React.FC<Props> = ({ projectId }) => {
         </div>
       </div>
       <div className="mb-auto mt-auto flex h-[30vh] w-[30vh] items-center justify-center">
-        <canvas className="mt-4" ref={chartRef}></canvas>
+        {isLoading ? (
+          <LoadingComponent fontSize="m" />
+        ) : (
+          <canvas className="mt-4" ref={chartRef}></canvas>
+        )}
       </div>
       <div className="justify-between rounded-2xl px-6 py-3 shadow-2xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
         <div className="flex flex-col items-center justify-center">
