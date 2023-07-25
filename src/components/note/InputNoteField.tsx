@@ -1,6 +1,5 @@
 import React from 'react'
 import data from './mockData/mockNoteData.json'
-import { type } from 'os';
 
 /**
  * @description 릴리즈노트 작성 컴포넌트

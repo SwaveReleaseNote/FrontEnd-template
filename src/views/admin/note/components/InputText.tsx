@@ -1,8 +1,14 @@
 import React, { useState, useRef, useEffect, Component, KeyboardEvent, ChangeEvent, useLayoutEffect, FormEvent } from 'react'
+import { useRecoilState } from 'recoil';
 import DropdownMenu from './DropdownMenu';
+import { labelState } from 'context/atom';
 
 interface NoteBlock {
   id: number;
+  content: string;
+}
+
+interface LabelImage {
   content: string;
 }
 
@@ -10,6 +16,8 @@ export default function InputText() {
   const [noteBlocks, setNoteBlocks] = useState<NoteBlock[]>([{ id: 1, content: "" },]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [cursorPosition, setCursorPosition] = useState({ top: 0, left: 0 });
+  const [showLabelImage, setShowLabelImage] = useState();
+  const [labelImage, setLabeImage] = useRecoilState(labelState);
   const textRef = useRef<HTMLTextAreaElement>(null);
 
   useLayoutEffect(() => {
@@ -43,7 +51,7 @@ export default function InputText() {
     textRef.current.style.height = textRef.current.scrollHeight + 'px';
   }
 
-  const handleSelectLabelSlashKeyPress = (event: KeyboardEvent<HTMLTextAreaElement>, id: number) => {
+  const handleShowLabelsSlashKeyPress = (event: KeyboardEvent<HTMLTextAreaElement>, id: number) => {
     if (event.key === '/') {
       // '/' 키가 눌렸을 때 드롭다운 메뉴를 표시
       const { selectionStart, offsetLeft, offsetTop, offsetHeight } = event.currentTarget;
@@ -58,6 +66,10 @@ export default function InputText() {
     }
   }
 
+  const handleShowLabel = () => {
+
+  }
+
   return (
     <div className=' ml-10 mt-5 w-full flex-col'>
       {noteBlocks.map((noteBlock) => (
@@ -69,7 +81,7 @@ export default function InputText() {
           value={noteBlock.content}
           onChange={(event) => handleContentChange(event, noteBlock.id)}
           onKeyDown={(event) => {
-            handleSelectLabelSlashKeyPress(event, noteBlock.id)
+            handleShowLabelsSlashKeyPress(event, noteBlock.id)
             handleCreateBlockEnterKeyPress(event, noteBlock.id)
           }}
           onInput={(event) => handleTextAreaHeight(event, noteBlock.id)}

@@ -22,10 +22,10 @@ exports.noteFieldState = recoil_1.atom({
 });
 exports.labelState = recoil_1.atom({
     key: "labelState",
-    "default": {
-        label: "",
-        text: ""
-    }
+    "default": [{
+            label: "",
+            text: ""
+        }]
 });
 exports.commentState = recoil_1.atom({
     key: "commentState",
@@ -55,6 +55,13 @@ exports.sideBarState = recoil_1.atom({
     "default": {
         projectList: [],
         releaseNoteList: []
+    }
+});
+exports.noteBlockState = recoil_1.atom({
+    key: "noteBlockState",
+    "default": {
+        id: 0,
+        content: ''
     }
 });
 

@@ -19,11 +19,15 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
 };
 exports.__esModule = true;
 var react_1 = require("react");
+var recoil_1 = require("recoil");
 var DropdownMenu_1 = require("./DropdownMenu");
+var atom_1 = require("context/atom");
 function InputText() {
     var _a = react_1.useState([{ id: 1, content: "" },]), noteBlocks = _a[0], setNoteBlocks = _a[1];
     var _b = react_1.useState(false), showDropdown = _b[0], setShowDropdown = _b[1];
     var _c = react_1.useState({ top: 0, left: 0 }), cursorPosition = _c[0], setCursorPosition = _c[1];
+    var _d = react_1.useState(), showLabelImage = _d[0], setShowLabelImage = _d[1];
+    var _e = recoil_1.useRecoilState(atom_1.labelState), labelImage = _e[0], setLabeImage = _e[1];
     var textRef = react_1.useRef(null);
     react_1.useLayoutEffect(function () {
         textRef.current.focus();
@@ -49,7 +53,7 @@ function InputText() {
         textRef.current.style.height = 'auto';
         textRef.current.style.height = textRef.current.scrollHeight + 'px';
     };
-    var handleSelectLabelSlashKeyPress = function (event, id) {
+    var handleShowLabelsSlashKeyPress = function (event, id) {
         if (event.key === '/') {
             // '/' 키가 눌렸을 때 드롭다운 메뉴를 표시
             var _a = event.currentTarget, selectionStart = _a.selectionStart, offsetLeft = _a.offsetLeft, offsetTop = _a.offsetTop, offsetHeight = _a.offsetHeight;
@@ -64,9 +68,11 @@ function InputText() {
             setShowDropdown(false);
         }
     };
+    var handleShowLabel = function () {
+    };
     return (react_1["default"].createElement("div", { className: ' ml-10 mt-5 w-full flex-col' },
         noteBlocks.map(function (noteBlock) { return (react_1["default"].createElement("textarea", { rows: 1, ref: textRef, id: "note-block", key: noteBlock.id, value: noteBlock.content, onChange: function (event) { return handleContentChange(event, noteBlock.id); }, onKeyDown: function (event) {
-                handleSelectLabelSlashKeyPress(event, noteBlock.id);
+                handleShowLabelsSlashKeyPress(event, noteBlock.id);
                 handleCreateBlockEnterKeyPress(event, noteBlock.id);
             }, onInput: function (event) { return handleTextAreaHeight(event, noteBlock.id); }, className: 'w-[80%] resize-none bg-lightPrimary outline-none', placeholder: 'text\uB97C \uC785\uB825\uD574\uC8FC\uC138\uC694' })); }),
         showDropdown && (react_1["default"].createElement(DropdownMenu_1["default"], { cursorPosition: cursorPosition, onClose: function () { return setShowDropdown(false); } }))));

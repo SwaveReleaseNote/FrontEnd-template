@@ -22,10 +22,10 @@ export const noteFieldState = atom({
 
 export const labelState = atom({
     key: "labelState",
-    default: {
+    default: [{
         label:"",
         text:""
-    }
+    }]
 })
 
 export const commentState = atom({
@@ -60,3 +60,11 @@ export const sideBarState = atom({
     releaseNoteList: [],
   },
 });
+
+export const noteBlockState = atom({
+    key: "noteBlockState",
+    default: {
+        id: 0,
+        content: '',
+    }
+})
