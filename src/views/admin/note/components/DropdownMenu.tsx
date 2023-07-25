@@ -14,7 +14,7 @@ export default function DropdownMenu(props: DropdownMenuProps) {
     const buttonRef = useRef<HTMLButtonElement>(null);
     const cursorPosition = props.cursorPosition;
 
-    const handleChoiceLabelKeyPress = (event : KeyboardEvent<HTMLDivElement>) => {
+    const handleChoiceLabelKeyPress = (event: KeyboardEvent<HTMLDivElement>) => {
         // if(event.key === 'Home') { // 방향키 왼족
         //     console.log('왼')
         // }
@@ -29,13 +29,30 @@ export default function DropdownMenu(props: DropdownMenuProps) {
         // }
     }
 
-    const handleSelectLavelkeyPress = (event : KeyboardEvent<HTMLDivElement>) => {
-
+    const handleSelectLavelkeyPress = (event: KeyboardEvent<HTMLDivElement>) => {
+        
     }
 
     const handleSelectLavelClickEvent = (event: MouseEvent<HTMLDivElement>) => {
-        console.log(event.target)
-        console.log(buttonRef.current.textContent)
+        switch (buttonRef.current.textContent) {
+            case "new":
+                return(
+                    <div></div>
+                )
+                break;
+            case "update":
+
+                break;
+            case "stop":
+
+                break;
+            case "delete":
+
+                break;
+            case "etc":
+
+                break;
+        }
     }
 
     return (

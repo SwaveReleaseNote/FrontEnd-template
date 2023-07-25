@@ -37,20 +37,7 @@ function SidebarList(props: any) {
 
     return (
         <div className="bg-gray-50 dark:bg-gray-800">
-            <ul className="space-y-2 font-medium">
-                <li>
-                    {/* 프로젝트 리스트 옵션 부분 */}
-                    <select onChange={handleSelectProject}>
-                        {projects}
-                    </select>
-                </li>
-                <li>
-                    {/* TODO: 크기 고정해야합니다 */}
-                    <div className="text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                        {notes}
-                    </div>
-                </li>
-            </ul>
+            test
         </div>
     )
 }

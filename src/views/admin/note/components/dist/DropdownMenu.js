@@ -21,8 +21,19 @@ function DropdownMenu(props) {
     var handleSelectLavelkeyPress = function (event) {
     };
     var handleSelectLavelClickEvent = function (event) {
-        console.log(event.target);
-        console.log(buttonRef.current.textContent);
+        switch (buttonRef.current.textContent) {
+            case "new":
+                return (react_1["default"].createElement("div", null));
+                break;
+            case "update":
+                break;
+            case "stop":
+                break;
+            case "delete":
+                break;
+            case "etc":
+                break;
+        }
     };
     return (react_1["default"].createElement("div", { style: { position: 'absolute', top: cursorPosition.top, left: cursorPosition.left } },
         react_1["default"].createElement("div", { className: ' transition-all ease-in-out flex flex-col z-10 bg-lightPrimary divide-y divide-gray-200 rounded-lg shadow-md w-44 dark:bg-gray-700', onKeyDown: function (event) {

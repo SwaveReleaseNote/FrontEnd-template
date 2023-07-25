@@ -20,12 +20,7 @@ function SidebarList(props) {
     };
     var notes = (_a = releaseNoteList) === null || _a === void 0 ? void 0 : _a.map(function (release) { return react_1["default"].createElement(SidebarNote_1["default"], { myNote: release }); });
     var projects = (_b = myProject) === null || _b === void 0 ? void 0 : _b.map(function (project) { return react_1["default"].createElement(SidebarProject_1["default"], { myProject: project }); });
-    return (react_1["default"].createElement("div", { className: "bg-gray-50 dark:bg-gray-800" },
-        react_1["default"].createElement("ul", { className: "space-y-2 font-medium" },
-            react_1["default"].createElement("li", null,
-                react_1["default"].createElement("select", { onChange: handleSelectProject }, projects)),
-            react_1["default"].createElement("li", null,
-                react_1["default"].createElement("div", { className: "text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" }, notes)))));
+    return (react_1["default"].createElement("div", { className: "bg-gray-50 dark:bg-gray-800" }, "test"));
 }
 exports["default"] = SidebarList;
 
