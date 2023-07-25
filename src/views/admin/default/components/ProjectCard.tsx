@@ -7,9 +7,9 @@ import Card from "components/card";
 import NotificationPopup from "../components/NotificationPopup";
 
 enum UserRole {
-  Subscriber = "구독자",
-  Developer = "개발자",
-  Manager = "관리자",
+  Subscriber = "Subscriber",
+  Developer = "Developer",
+  Manager = "Manager",
 }
 
 interface ProjectCardProps {
@@ -58,7 +58,12 @@ function ProjectCard({
     console.log("Project deletion confirmed");
     try {
       await axios.delete(
-        `http://localhost:8080/api/project/drop/${projectId}`
+        `http://localhost:8080/api/project/drop/${projectId}`,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
       );
     } catch (error) {
       console.error("Error delete project:", error);
@@ -90,7 +95,7 @@ function ProjectCard({
         />
       )}
       <button
-        className="rounded-3xl pl-2 pr-2 hover:bg-gray-500 focus:ring-4 focus:ring-blue-300"
+        className="h-[60vh] w-[40vh] rounded-3xl pl-2 pr-2 hover:bg-gray-500 focus:ring-4 focus:ring-blue-300"
         onClick={() => handleClickProjectCard(projectId, projectRole)}
       >
         <Card extra={"items-center w-auto h-[95%] p-[16px] bg-cover"}>
@@ -146,7 +151,7 @@ function ProjectCard({
 
           {/* 프로젝트 개요 */}
           <div className="mt-4 flex flex-col items-center">
-            <h1 className="text-l font-bold text-navy-700 dark:text-white">
+            <h1 className="text-l h-[10vh] w-[30vh] overflow-hidden font-bold text-navy-700 dark:text-white">
               {projectDescription}
             </h1>
             <p className="text-l font-normal text-gray-600">프로젝트 개요</p>

@@ -3,11 +3,17 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginState } from "../../../../context/atom";
 import { useRecoilValue } from "recoil";
-
+// [
+//   {
+//       "username": "함건욱",
+//       "department": null,
+//       "user_id": 1
+//   }
+// ]
 type TeamMember = {
   user_id: number;
-  user_name: string;
-  department: string;
+  username: string;
+  user_department: string;
 };
 
 const CreateProject: React.FC = () => {
@@ -23,16 +29,28 @@ const CreateProject: React.FC = () => {
   const [description, setDescription] = useState("");
 
   // fetch All Members
+  // 자기 자신은 빼기
   const fetchMembers = async () => {
     try {
-      const response = await axios.get("localhost:8080/api/members");
-      const members: TeamMember[] = response.data.map((member: any) => ({
-        user_id: member.user_id,
-        user_name: member.user_name,
-        user_department: member.user_department,
-      }));
+      const response = await axios.get(
+        "http://localhost:8080/api/user/prelogin/getuserlist",
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+      const members: TeamMember[] = response.data
+        .filter((member: any) => member.user_id !== Number(localStorage.getItem("id")))
+        .map((member: any) => ({
+          user_id: member.user_id,
+          username: member.username,
+          user_department: member.user_department,
+        }));
 
       setAllMembers(members);
+      console.log(allMembers);
+      console.log( Number(localStorage.getItem("id")));
     } catch (error) {
       console.error("Error fetching members:", error);
       console.log("Mocking");
@@ -43,7 +61,7 @@ const CreateProject: React.FC = () => {
   const handleClickAddMemberButton = (member: TeamMember) => {
     const updatedMember: TeamMember = {
       ...member,
-      department: member.department,
+      user_department: member.user_department,
     };
 
     setTeamMembers([...teamMembers, updatedMember]);
@@ -71,7 +89,7 @@ const CreateProject: React.FC = () => {
 
     if (inputName.trim() !== "") {
       const filteredMembers = allMembers.filter((member) =>
-        member.user_name.toLowerCase().includes(inputName.toLowerCase())
+        member.username && member.username.toLowerCase().includes(inputName.toLowerCase())
       );
 
       setSuggestedMembers(filteredMembers);
@@ -83,12 +101,12 @@ const CreateProject: React.FC = () => {
   const mockFetchSuggestions = () => {
     // Simulate API response with mock data
     const mockResponse: TeamMember[] = [
-      { user_id: 1, user_name: "김기현", department: "Project Manager" },
-      { user_id: 2, user_name: "김성국", department: "Architecture" },
-      { user_id: 3, user_name: "함건욱", department: "Backend" },
-      { user_id: 4, user_name: "강준희", department: "Frontend" },
-      { user_id: 5, user_name: "이승섭", department: "OAuth" },
-      { user_id: 6, user_name: "전강훈", department: "Machine Learning" },
+      { user_id: 1, username: "김기현", user_department: "Project Manager" },
+      { user_id: 2, username: "김성국", user_department: "Architecture" },
+      { user_id: 3, username: "함건욱", user_department: "Backend" },
+      { user_id: 4, username: "강준희", user_department: "Frontend" },
+      { user_id: 5, username: "이승섭", user_department: "OAuth" },
+      { user_id: 6, username: "전강훈", user_department: "Machine Learning" },
     ];
     setAllMembers(mockResponse);
   };
@@ -102,20 +120,27 @@ const CreateProject: React.FC = () => {
       const projectData = {
         projectName,
         description,
-        userId,
         users,
       };
 
       console.log(projectData);
 
       // Send projectData to the backend using axios
-      await axios.post("http://localhost:8080/api/project/create", projectData);
+      await axios.post(
+        "http://localhost:8080/api/project/create",
+        projectData,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
 
       // Clear the form fields and team member list
       setProjectName("");
       setDescription("");
       setTeamMembers([]);
-      // navigate("../default");
+      navigate("../");
     } catch (error) {
       console.error("Error submitting project:", error);
       alert("서버 에러 입니다. 다시 시도하세요.");
@@ -152,7 +177,7 @@ const CreateProject: React.FC = () => {
           <div>
             <button
               type="submit"
-              className="border border-black absolute right-[15%] top-[30%] flex rounded bg-gray-100 px-4 py-2 font-bold shadow-3xl shadow-shadow-500 dark:bg-navy-600 dark:text-white"
+              className="border-black absolute right-[15%] top-[30%] flex rounded border bg-gray-100 px-4 py-2 font-bold shadow-3xl shadow-shadow-500 dark:bg-navy-600 dark:text-white"
             >
               프로젝트 생성
             </button>
@@ -203,10 +228,10 @@ const CreateProject: React.FC = () => {
                       className="mb-2 flex items-center justify-between"
                     >
                       <p className="rounded-2xl bg-gray-50 p-3 font-bold">
-                        {member.user_name}
+                        {member.username}
                       </p>
                       <p className="ml-3 rounded-2xl bg-gray-50 p-3 font-bold">
-                        {member.department}
+                        {member.user_department}
                       </p>
                       <button
                         className="ml-5 rounded-xl bg-gray-50 px-2 py-1 font-bold"
@@ -234,13 +259,13 @@ const CreateProject: React.FC = () => {
                       className="mb-2 flex items-center justify-between dark:text-white"
                     >
                       <p className="rounded-2xl bg-gray-50 p-3 font-bold">
-                        {member.user_name}
+                        {member.username}
                       </p>
                       <p className="ml-3 rounded-2xl bg-gray-50 p-3 font-bold">
-                        {member.department}
+                        {member.user_department}
                       </p>
                       <button
-                        className="ml-5 rounded-xl px-2 py-1 font-bold bg-gray-50 text-blue-500 text-3xl"
+                        className="ml-5 rounded-xl bg-gray-50 px-2 py-1 text-3xl font-bold text-blue-500"
                         onClick={() => handleClickAddMemberButton(member)}
                       >
                         +
