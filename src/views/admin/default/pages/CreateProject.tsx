@@ -6,7 +6,7 @@ import { useRecoilValue } from "recoil";
 
 type TeamMember = {
   user_id: number;
-  user_name: string;
+  username: string;
   department: string;
 };
 
@@ -25,14 +25,26 @@ const CreateProject: React.FC = () => {
   // fetch All Members
   const fetchMembers = async () => {
     try {
-      const response = await axios.get("localhost:8080/api/members");
-      const members: TeamMember[] = response.data.map((member: any) => ({
-        user_id: member.user_id,
-        user_name: member.user_name,
-        user_department: member.user_department,
-      }));
+      const response = await axios.get(
+        "http://localhost:8080/api/user/prelogin/getuserlist",
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+      console.log(response.data);
+      const members: TeamMember[] = response.data
+        .filter((member: any) => member.user_id !== Number(localStorage.getItem("id")))
+        .map((member: any) => ({
+          user_id: member.user_id,
+          username: member.username,
+          department: member.department,
+        }));
 
       setAllMembers(members);
+      console.log(allMembers);
+      console.log(Number(localStorage.getItem("id")));
     } catch (error) {
       console.error("Error fetching members:", error);
       console.log("Mocking");
@@ -71,7 +83,7 @@ const CreateProject: React.FC = () => {
 
     if (inputName.trim() !== "") {
       const filteredMembers = allMembers.filter((member) =>
-        member.user_name.toLowerCase().includes(inputName.toLowerCase())
+        member.username.toLowerCase().includes(inputName.toLowerCase())
       );
 
       setSuggestedMembers(filteredMembers);
@@ -83,12 +95,12 @@ const CreateProject: React.FC = () => {
   const mockFetchSuggestions = () => {
     // Simulate API response with mock data
     const mockResponse: TeamMember[] = [
-      { user_id: 1, user_name: "김기현", department: "Project Manager" },
-      { user_id: 2, user_name: "김성국", department: "Architecture" },
-      { user_id: 3, user_name: "함건욱", department: "Backend" },
-      { user_id: 4, user_name: "강준희", department: "Frontend" },
-      { user_id: 5, user_name: "이승섭", department: "OAuth" },
-      { user_id: 6, user_name: "전강훈", department: "Machine Learning" },
+      { user_id: 1, username: "김기현", department: "Project Manager" },
+      { user_id: 2, username: "김성국", department: "Architecture" },
+      { user_id: 3, username: "함건욱", department: "Backend" },
+      { user_id: 4, username: "강준희", department: "Frontend" },
+      { user_id: 5, username: "이승섭", department: "OAuth" },
+      { user_id: 6, username: "전강훈", department: "Machine Learning" },
     ];
     setAllMembers(mockResponse);
   };
@@ -203,7 +215,7 @@ const CreateProject: React.FC = () => {
                       className="mb-2 flex items-center justify-between"
                     >
                       <p className="rounded-2xl bg-gray-50 p-3 font-bold">
-                        {member.user_name}
+                        {member.username}
                       </p>
                       <p className="ml-3 rounded-2xl bg-gray-50 p-3 font-bold">
                         {member.department}
@@ -234,7 +246,7 @@ const CreateProject: React.FC = () => {
                       className="mb-2 flex items-center justify-between dark:text-white"
                     >
                       <p className="rounded-2xl bg-gray-50 p-3 font-bold">
-                        {member.user_name}
+                        {member.username}
                       </p>
                       <p className="ml-3 rounded-2xl bg-gray-50 p-3 font-bold">
                         {member.department}

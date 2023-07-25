@@ -22,9 +22,14 @@ const MemberStatusCard: React.FC<Props> = ({ projectId }) => {
       //
       try {
         const response = await axios.get(
-          `/api/project/dashboard/meberStatus/${projectId.id}`
+          `/api/project/dashboard/meberStatus/${projectId.id}`,
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          }
         );
-
+        console.log(response.data);
         const data: MemberStatus[] = response.data;
         setMemberStatus(data);
       } catch (error) {
