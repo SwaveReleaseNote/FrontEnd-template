@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./css.css";
 
 import { FiSearch } from "react-icons/fi";
+import LoadingComponent from "./LoadingComponent ";
+
+import New from "assets/img/label/NEW.png";
+import Delete from "assets/img/label/DELETE.png";
+import Update from "assets/img/label/UPDATE.png";
+import Stop from "assets/img/label/STOP.png";
+import Etc from "assets/img/label/ETC.png";
 
 type Props = {
   searchRelease: {
@@ -13,11 +21,23 @@ type Props = {
 
 type ReleaseList = {
   label: string;
+  releaseNoteId: number;
+  context: string;
   version: string;
 };
 
 const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
+  const navigate = useNavigate();
   const [releaseList, setReleaseList] = useState<ReleaseList[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const labelToIconMap: { [key: string]: string } = {
+    New: New,
+    Delete: Delete,
+    Update: Update,
+    Stop: Stop,
+    Etc: Etc,
+  };
 
   useEffect(() => {
     console.log("Release Search Project id:", searchRelease.projectId);
@@ -25,13 +45,12 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
       //
       try {
         const response = await axios.get(
-          `/api/project/dashboard/searchRelease`,
+          `http://localhost:8080/api/project/dashboard/searchRelease/${searchRelease.projectId}`,
           {
             headers: {
               Authorization: localStorage.getItem("token"),
             },
-            data: searchRelease,
-          } // Pass searchRelease as data
+          }
         );
 
         const data: ReleaseList[] = response.data;
@@ -48,32 +67,72 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
         }
 
         const mockResponse: ReleaseList[] = [
-          { label: searchRelease.label, version: generateRandomVersion() },
-          { label: searchRelease.label, version: generateRandomVersion() },
-          { label: searchRelease.label, version: generateRandomVersion() },
-          { label: searchRelease.label, version: generateRandomVersion() },
-          { label: searchRelease.label, version: generateRandomVersion() },
-          { label: searchRelease.label, version: generateRandomVersion() },
-          { label: searchRelease.label, version: generateRandomVersion() },
-          { label: searchRelease.label, version: generateRandomVersion() },
-          { label: searchRelease.label, version: generateRandomVersion() },
-          { label: searchRelease.label, version: generateRandomVersion() },
-          { label: searchRelease.label, version: generateRandomVersion() },
-          { label: searchRelease.label, version: generateRandomVersion() },
-          { label: searchRelease.label, version: generateRandomVersion() },
-          { label: searchRelease.label, version: generateRandomVersion() },
-          { label: searchRelease.label, version: generateRandomVersion() },
-          { label: searchRelease.label, version: generateRandomVersion() },
-          { label: searchRelease.label, version: generateRandomVersion() },
-          { label: searchRelease.label, version: generateRandomVersion() },
+          {
+            label: "Delete",
+            version: generateRandomVersion(),
+            releaseNoteId: 1,
+            context:
+              "시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.",
+          },
+          {
+            label: "Delete",
+            version: generateRandomVersion(),
+            releaseNoteId: 2,
+            context: "시스템 내에서 악성 코드를 삭제했습니다.",
+          },
+          {
+            label: "Delete",
+            version: generateRandomVersion(),
+            releaseNoteId: 3,
+            context: "시스템 내에서 악성 코드를 삭제했습니다.",
+          },
+          {
+            label: "Delete",
+            version: generateRandomVersion(),
+            releaseNoteId: 4,
+            context: "시스템 내에서 악성 코드를 삭제했습니다.",
+          },
+          {
+            label: "Delete",
+            version: generateRandomVersion(),
+            releaseNoteId: 5,
+            context: "시스템 내에서 악성 코드를 삭제했습니다.",
+          },
+          {
+            label: "Delete",
+            version: generateRandomVersion(),
+            releaseNoteId: 6,
+            context: "시스템 내에서 악성 코드를 삭제했습니다.",
+          },
+          {
+            label: "Delete",
+            version: generateRandomVersion(),
+            releaseNoteId: 7,
+            context: "시스템 내에서 악성 코드를 삭제했습니다.",
+          },
         ];
 
         setReleaseList(mockResponse);
+      } finally {
+        setIsLoading(false); // Set loading state to false after fetching
       }
     };
 
     fetchData();
   }, [searchRelease]);
+
+  // Filter the releaseList based on the label value
+  const filteredReleaseList = releaseList.filter(
+    (release) => release.label === searchRelease.label
+  );
+
+  function handleClickReleaseNote(releaseNoteId: number) {
+    // 추후 프론트 릴리즈 노트 보여주는 곳으로 맵핑
+    const url = `/admin/project/releaseNote?releaseNoteId=${releaseNoteId}`;
+
+    navigate(url);
+    console.log("handleClickReleaseNote");
+  }
 
   return (
     <div
@@ -89,33 +148,69 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
           className="block h-full w-full rounded-3xl bg-lightPrimary text-sm text-navy-700 outline-none placeholder:!text-gray-400 dark:bg-navy-900 dark:text-white dark:placeholder:!text-white"
         />
       </div>
+
       <table className="mt-2">
         <thead>
           <tr className="!border-px !border-gray-400 text-gray-500">
             <th className="border-b-[1px] border-gray-200 pb-2 pt-4 text-start">
-              Label
-            </th>
-            <th className="border-b-[1px] border-gray-200 pb-2 pr-4 pt-4 text-start">
-              Version
+              Search Result
             </th>
           </tr>
         </thead>
       </table>
-      <div className="overflow-auto h-[70vh]">
-        <table>
-          <tbody>
-            {releaseList.map((release) => (
-              // <tr key={member.label}>
-              <tr key={release.version}>
-                <td className="py-2 pb-2 pr-4 pt-4 text-start">{release.label}</td>
-                <td className="ml-3 flex items-center py-2 pl-[50px] pb-2 pr-4 pt-4 text-start">
-                  {release.version}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+
+      {isLoading ? (
+        <LoadingComponent fontSize="m" />
+      ) : (
+        <div className="h-[70vh] overflow-auto">
+          <table>
+            <tbody>
+              {filteredReleaseList.length === 0 ? (
+                <tr>
+                  <td className="py-2 pb-2 pr-4 pt-4 text-start" colSpan={2}>
+                    <img
+                      src={labelToIconMap[searchRelease.label]}
+                      alt={searchRelease.label}
+                      className="h-[5vh] w-[10vh] rounded-xl"
+                    />
+                    <p className="pl-3">Noting...</p>
+                    {/* <p className="pl-3">
+                      을 포함하는 릴리즈 노트가 없습니다.
+                      </p> */}
+                  </td>
+                </tr>
+              ) : (
+                filteredReleaseList.map((release) => (
+                  <tr key={release.version}>
+                    <div className="m-1 mr-3 rounded-2xl p-1 text-blue-600 text-start hover:cursor-pointer hover:bg-indigo-500">
+                      <td className="rounded-xl bg-white p-2 text-blue-600 text-start hover:cursor-pointer">
+                        <div>
+                          <p className="font-bold">
+                            Version: {release.version}
+                          </p>
+                          <img
+                            src={labelToIconMap[searchRelease.label]}
+                            alt={release.label}
+                            className="mb-1 mt-1 h-[5vh] w-[10vh] rounded-xl"
+                          />
+                        </div>
+                        <div
+                          onClick={() =>
+                            handleClickReleaseNote(release.releaseNoteId)
+                          }
+                          className="h-[6vh] overflow-hidden text-sm"
+                        >
+                          {release.context}
+                        </div>
+                      </td>
+                    </div>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };

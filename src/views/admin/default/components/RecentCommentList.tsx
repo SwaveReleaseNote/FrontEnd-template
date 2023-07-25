@@ -1,6 +1,8 @@
 import Card from "../../../../components/card";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import LoadingComponent from "./LoadingComponent ";
 
 type Props = {
   projectId: number;
@@ -11,10 +13,13 @@ type Comment = {
   context: string;
   // 추후 Date 형식 변환 필요
   lastModifiedDate: string;
+  releaseNoteId: number;
 };
 
 const RecentCommentList: React.FC<Props> = ({ projectId }) => {
   const [commentList, setCommentList] = useState<Comment[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log("Search CommentList by Project id:", projectId);
@@ -35,90 +40,88 @@ const RecentCommentList: React.FC<Props> = ({ projectId }) => {
         console.error("Error fetching release comment list:", error);
         console.log("Mocking data");
 
-        // Mock comment list
-        function generateRandomVersion() {
-          const x = Math.floor(Math.random() * 10);
-          const y = Math.floor(Math.random() * 10);
-          const z = Math.floor(Math.random() * 10);
-          return `${x}.${y}.${z}`;
-        }
-
         const mockResponse: Comment[] = [
           {
             name: "함건욱",
-            context: "11111",
+            context: "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
             lastModifiedDate: "2023-07-21 00:15:59",
+            releaseNoteId: 1,
           },
           {
             name: "함건욱",
-            context: "Good ~ !",
+            context: "Good ~ !5",
             lastModifiedDate: "2023-07-21 00:14:41",
+            releaseNoteId: 5,
           },
           {
             name: "함건욱",
-            context: "Good ~ !",
+            context: "Good ~ !4",
             lastModifiedDate: "2023-07-21 00:14:40",
+            releaseNoteId: 4,
           },
           {
             name: "함건욱",
-            context: "Good ~ !",
+            context: "Good ~ !3",
             lastModifiedDate: "2023-07-21 00:14:40",
+            releaseNoteId: 3,
           },
           {
             name: "함건욱",
-            context: "Good ~ !",
+            context: "Good ~ !2",
             lastModifiedDate: "2023-07-21 00:14:39",
+            releaseNoteId: 2,
           },
         ];
 
         setCommentList(mockResponse);
+      } finally {
+        setIsLoading(false); // Set loading state to false after fetching
       }
     };
 
     fetchData();
   }, [projectId]);
 
-  function generateRandomName() {
-    // List of random names or usernames
-    const names = ["함건욱", "김기현", "김성국", "전강훈", "이승섭", "강준희"];
-    const randomIndex = Math.floor(Math.random() * names.length);
-    return names[randomIndex];
-  }
+  function handleClickComment(releaseNoteId: number) {
+    // 추후 프론트 릴리즈 노트 보여주는 곳으로 맵핑
+    const url = `/admin/project/releaseNote?releaseNoteId=${releaseNoteId}`;
 
-  function generateRandomContent() {
-    // List of random comments or content phrases
-    const comments = [
-      "최신 업데이트에 대한 훌륭한 작업입니다. 정말 인상적입니다!",
-      "최근 변경 사항이 흥미로워요. 잘 하셨습니다!",
-      "프로젝트에서 멋진 일을 해냈습니다. 새로운 기능들이 환상적입니다!",
-      "당신의 노고와 헌신이 이 업데이트에 반영되어 있습니다. 계속해서 잘 하세요!",
-      "이번 릴리스에 대한 팀의 뛰어난 작업입니다. 정말 놀랍습니다!",
-      "말할 수 밖에 없는 훌륭한 노력입니다. 관련된 모든 분들에게 박수를 보냅니다!",
-    ];
-    const randomIndex = Math.floor(Math.random() * comments.length);
-    return comments[randomIndex];
+    navigate(url);
+    console.log("handleClickComment");
   }
 
   return (
-    <Card extra={"w-full h-full p-3 mt-2"}>
-      {/* Header */}
-      {/* 어떤 릴리즈 노트에 대한 코멘트인지 필요하지않나?? */}
-      <div className="overflow-y-scroll">
-        {commentList.map((comment) => (
-          <div className="mb-8 mt-2 w-full" key={comment.name}>
-            <h4 className="px-2 text-xl font-bold text-navy-700 dark:text-white">
-              {comment.name}: {comment.context}
-            </h4>
-            {/* <p className="mt-2 px-2 text-base">
+    <>
+      {isLoading ? (
+        <LoadingComponent fontSize="m" />
+      ) : (
+        <Card extra={"w-full h-full p-3 mt-2"}>
+          {/* Header */}
+          {/* 어떤 릴리즈 노트에 대한 코멘트인지 필요하지않나?? */}
+          <div className="overflow-y-scroll">
+            {commentList.map((comment) => (
+              <div className="m-1 mr-3 rounded-2xl p-1 text-blue-600 text-start hover:cursor-pointer hover:bg-indigo-500">
+                <div
+                  onClick={() => handleClickComment(comment.releaseNoteId)}
+                  className="rounded-xl bg-white p-2 text-blue-600 text-start hover:cursor-pointer"
+                  key={comment.name}
+                >
+                  <h4 className="overflow-hidden px-2 text-xl font-bold text-navy-700 dark:text-white">
+                    {comment.name}: {comment.context}
+                  </h4>
+                  {/* <p className="mt-2 px-2 text-base">
               {comment.context}
             </p> */}
-            <p className="mt-2 px-2 text-base text-gray-600">
-              {comment.lastModifiedDate}
-            </p>
+                  <p className="mt-2 px-2 text-base text-gray-600">
+                    {comment.lastModifiedDate}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-    </Card>
+        </Card>
+      )}
+    </>
   );
 };
 
