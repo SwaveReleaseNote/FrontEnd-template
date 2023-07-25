@@ -457,7 +457,7 @@ export default function SignIn() {
                   })}
                 />
                 {errors.password && (
-                  <div className="text-danger">{errors.password.message}</div>
+                  <div className="text-danger text-red-500">{errors.password.message}</div>
                 )}
               </div>
               {/* Repeat Password */}
@@ -479,7 +479,7 @@ export default function SignIn() {
                   })}
                 />
                 {errors.confirmPassword && (
-                  <div className="text-danger">
+                  <div className="text-danger text-red-500">
                     {errors.confirmPassword.message}
                   </div>
                 )}

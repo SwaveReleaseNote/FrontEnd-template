@@ -80,8 +80,8 @@ export default function Admin(props: { [x: string]: any }) {
     // 페이지가 완전히 떠난 후에 실행되는 작업을 수행할 수 있습니다.
     try {
       axios
-        .put(
-          "http://localhost:8080/api/user/update",
+        .patch(
+          "http://localhost:8080/api/user/updateStatus",
           {
             loginState: false,
           },

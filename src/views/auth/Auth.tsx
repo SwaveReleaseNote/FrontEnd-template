@@ -42,8 +42,8 @@ const Auth = (): JSX.Element => {
           secure: true,
         });
         axios
-          .put(
-            "http://localhost:8080/api/user/update",
+          .patch(
+            "http://localhost:8080/api/user/updateStatus",
             {
               loginState:true,
             },
@@ -54,7 +54,7 @@ const Auth = (): JSX.Element => {
             }
           )
           .then((response) => {
-            console.log(response.data); // Process the response as needed
+            console.log(response.data); // Procesconsole.log(response.data); s the response as needed
           })
           .catch((error) => {
             console.error(error);
