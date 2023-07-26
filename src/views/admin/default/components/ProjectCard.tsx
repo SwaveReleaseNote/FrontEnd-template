@@ -95,7 +95,7 @@ function ProjectCard({
         />
       )}
       <button
-        className="h-[60vh] w-[40vh] rounded-3xl pl-2 pr-2 hover:bg-gray-500 focus:ring-4 focus:ring-blue-300"
+        className="h-[60vh] w-[40vh] rounded-3xl pl-2 pr-2 hover:bg-gray-500 focus:ring-1 focus:ring-blue-300"
         onClick={() => handleClickProjectCard(projectId, projectRole)}
       >
         <Card extra={"items-center w-auto h-[95%] p-[16px] bg-cover"}>
@@ -159,10 +159,17 @@ function ProjectCard({
 
           {/* 프로젝트의 최신 릴리즈 노트 버전 */}
           <div className="mt-4 flex flex-col items-center">
-            <h1 className="text-2xl font-bold text-navy-700 dark:text-white">
-              {projectRecentRelease}
-            </h1>
-            <p className="text-l font-normal text-gray-600">최신 릴리즈 버전</p>
+            {projectRecentRelease ? (
+              <h1 className="text-2xl font-bold text-navy-700 dark:text-white">
+                {projectRecentRelease}
+              </h1>
+            ) : (
+              <div className="flex items-center justify-center text-sm font-bold">
+                작성된 릴리즈 노트가 없습니다😭
+              </div>
+            )}
+
+            <p className="text-l font-normal text-gray-600">최신 릴리즈노트 버전</p>
           </div>
 
           {/* 프로젝트의 생성 날짜 */}

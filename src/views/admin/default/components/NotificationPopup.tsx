@@ -15,7 +15,7 @@ function NotificationPopup({
 }: NotificationPopupProps): ReactElement {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="border border-red-500 bg-white p-4 rounded-lg">
+      <div className="border-4 font-bold border-red-500 bg-white p-4 rounded-lg">
         <p className="text-lg">❌ {message}</p>
         <p className="text-l text-red-500">({subMessage})</p>
         <div className="mt-4 flex justify-end">

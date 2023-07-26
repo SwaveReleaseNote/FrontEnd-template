@@ -5,9 +5,9 @@ import axios from "axios";
 import LoadingComponent from "../components/LoadingComponent ";
 
 type TeamMember = {
-  user_id: number;
+  userId: number;
   username: string;
-  user_department: string;
+  userDepartment: string;
 };
 
 type ProjectInfo = {
@@ -40,7 +40,7 @@ const SearchProjectList: React.FC = () => {
     const fetchSearchResult = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/project/search/${searchTerm}`,
+          `http://localhost:8080/api/project/search?keyword=${searchTerm}`,
           {
             headers: {
               Authorization: localStorage.getItem("token"),
@@ -79,8 +79,8 @@ const SearchProjectList: React.FC = () => {
           managerName: "김기현",
           managerDepartment: "Project Manager",
           teamMembers: [
-            { user_id: 2, username: "김성국", user_department: "Architecture" },
-            { user_id: 3, username: "함건욱", user_department: "Backend" },
+            { userId: 2, username: "김성국", userDepartment: "Architecture" },
+            { userId: 3, username: "함건욱", userDepartment: "Backend" },
           ],
         },
         {
@@ -91,11 +91,11 @@ const SearchProjectList: React.FC = () => {
           managerName: "함건욱",
           managerDepartment: "Backend",
           teamMembers: [
-            { user_id: 2, username: "김성국", user_department: "Architecture" },
+            { userId: 2, username: "김성국", userDepartment: "Architecture" },
             {
-              user_id: 3,
+              userId: 3,
               username: "김기현",
-              user_department: "Project Manager",
+              userDepartment: "Project Manager",
             },
           ],
         },
@@ -107,11 +107,11 @@ const SearchProjectList: React.FC = () => {
           managerName: "함건욱",
           managerDepartment: "Backend",
           teamMembers: [
-            { user_id: 2, username: "김성국", user_department: "Architecture" },
+            { userId: 2, username: "김성국", userDepartment: "Architecture" },
             {
-              user_id: 3,
+              userId: 3,
               username: "김기현",
-              user_department: "Project Manager",
+              userDepartment: "Project Manager",
             },
           ],
         },
@@ -125,8 +125,8 @@ const SearchProjectList: React.FC = () => {
           managerName: "멍멍이",
           managerDepartment: "Project Manager",
           teamMembers: [
-            { user_id: 2, username: "김성국", user_department: "Architecture" },
-            { user_id: 3, username: "함건욱", user_department: "Backend" },
+            { userId: 2, username: "김성국", userDepartment: "Architecture" },
+            { userId: 3, username: "함건욱", userDepartment: "Backend" },
           ],
         },
       ],
@@ -139,8 +139,8 @@ const SearchProjectList: React.FC = () => {
           managerName: "김기현",
           managerDepartment: "Project Manager",
           teamMembers: [
-            { user_id: 2, username: "멍멍이", user_department: "Architecture" },
-            { user_id: 3, username: "함건욱", user_department: "Backend" },
+            { userId: 2, username: "멍멍이", userDepartment: "Architecture" },
+            { userId: 3, username: "함건욱", userDepartment: "Backend" },
           ],
         },
         {
@@ -151,11 +151,11 @@ const SearchProjectList: React.FC = () => {
           managerName: "함건욱",
           managerDepartment: "Backend",
           teamMembers: [
-            { user_id: 2, username: "김성국", user_department: "Architecture" },
+            { userId: 2, username: "김성국", userDepartment: "Architecture" },
             {
-              user_id: 3,
+              userId: 3,
               username: "멍멍이",
-              user_department: "Project Manager",
+              userDepartment: "Project Manager",
             },
           ],
         },
@@ -167,11 +167,11 @@ const SearchProjectList: React.FC = () => {
           managerName: "함건욱",
           managerDepartment: "Backend",
           teamMembers: [
-            { user_id: 2, username: "멍멍이", user_department: "Architecture" },
+            { userId: 2, username: "멍멍이", userDepartment: "Architecture" },
             {
-              user_id: 3,
+              userId: 3,
               username: "김기현",
-              user_department: "Project Manager",
+              userDepartment: "Project Manager",
             },
           ],
         },
@@ -262,7 +262,7 @@ const SearchProjectList: React.FC = () => {
                   {project.teamMembers.map((member) => (
                     <span
                       className="p-1"
-                      key={member.user_id}
+                      key={member.userId}
                       dangerouslySetInnerHTML={{
                         __html:
                           searchType === "개발자"

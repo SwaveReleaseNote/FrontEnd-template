@@ -45,7 +45,7 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
       //
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/project/${searchRelease.projectId}/release/label/filter`,
+          `http://localhost:8080/api/project/${searchRelease.projectId}/release-note/label/filter`,
           {
             headers: {
               Authorization: localStorage.getItem("token"),
@@ -167,28 +167,26 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
             <tbody>
               {filteredReleaseList.length === 0 ? (
                 <tr>
-                  <td className="py-2 pb-2 pr-4 pt-4 text-start" colSpan={2}>
+                  <td className="dark:bg-navy-700 py-2 pb-2 pr-4 pt-4 text-start" colSpan={2}>
                     <img
                       src={labelToIconMap[searchRelease.label]}
                       alt={searchRelease.label}
                       className="h-[5vh] w-[10vh] rounded-xl"
                     />
-                    <p className="pl-3">Noting...</p>
-                    {/* <p className="pl-3">
-                      을 포함하는 릴리즈 노트가 없습니다.
-                      </p> */}
+                    <p className="pl-3 mt-3">
+                      작성된 릴리즈 노트가 없습니다.
+                      </p>
                   </td>
                 </tr>
               ) : (
                 filteredReleaseList.map((release) => (
-                  <tr key={release.version}>
-                    <div
+                  <tr key={release.version}
                       onClick={() =>
                         handleClickReleaseNote(release.releaseNoteId)
                       }
-                      className="m-1 mr-3 rounded-2xl p-1 text-blue-600 text-start hover:cursor-pointer hover:bg-indigo-500"
+                      className="hover:underline m-1 mr-3 rounded-2xl p-1 text-blue-600 text-start hover:cursor-pointer"
                     >
-                      <td className="rounded-xl bg-white p-2 text-blue-600 text-start hover:cursor-pointer">
+                      <td className="dark:bg-navy-700 rounded-xl bg-white p-2 text-blue-600 text-start hover:cursor-pointer">
                         <div>
                           <p className="font-bold">
                             Version: {release.version}
@@ -203,7 +201,6 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
                           {release.context}
                         </div>
                       </td>
-                    </div>
                   </tr>
                 ))
               )}

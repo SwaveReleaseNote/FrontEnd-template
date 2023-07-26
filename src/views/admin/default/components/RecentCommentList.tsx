@@ -14,6 +14,7 @@ type Comment = {
   // 추후 Date 형식 변환 필요
   lastModifiedDate: string;
   releaseNoteId: number;
+  version: string;
 };
 
 const RecentCommentList: React.FC<Props> = ({ projectId }) => {
@@ -26,7 +27,7 @@ const RecentCommentList: React.FC<Props> = ({ projectId }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/project/${projectId}/release/comment/load_recent`,
+          `http://localhost:8080/api/project/${projectId}/release-note/recent-comments`,
           {
             headers: {
               Authorization: localStorage.getItem("token"),
@@ -42,35 +43,46 @@ const RecentCommentList: React.FC<Props> = ({ projectId }) => {
 
         const mockResponse: Comment[] = [
           {
-            name: "함건욱",
-            context:
-              "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
-            lastModifiedDate: "2023-07-21 00:15:59",
-            releaseNoteId: 1,
+            "context": "ASUS도 너프 해야한다.",
+            "lastModifiedDate": "2023-07-08",
+            "name": "김성국",
+            "releaseNoteId": 1,
+            "version": "1.0.0"
           },
           {
-            name: "함건욱",
-            context: "Good ~ !5",
-            lastModifiedDate: "2023-07-21 00:14:41",
-            releaseNoteId: 5,
+            "context": "ASUS도 너프 해야한다.",
+            "lastModifiedDate": "2023-07-08",
+            "name": "김성국",
+            "releaseNoteId": 2,
+            "version": "1.0.0"
           },
           {
-            name: "함건욱",
-            context: "Good ~ !4",
-            lastModifiedDate: "2023-07-21 00:14:40",
-            releaseNoteId: 4,
+            "context": "ASUS도 너프 해야한다.",
+            "lastModifiedDate": "2023-07-08",
+            "name": "김성국",
+            "releaseNoteId": 3,
+            "version": "1.0.0"
           },
           {
-            name: "함건욱",
-            context: "Good ~ !3",
-            lastModifiedDate: "2023-07-21 00:14:40",
-            releaseNoteId: 3,
+            "context": "ASUS도 너프 해야한다.",
+            "lastModifiedDate": "2023-07-08",
+            "name": "김성국",
+            "releaseNoteId": 4,
+            "version": "1.0.0"
           },
           {
-            name: "함건욱",
-            context: "Good ~ !2",
-            lastModifiedDate: "2023-07-21 00:14:39",
-            releaseNoteId: 2,
+            "context": "ASUS도 너프 해야한다.",
+            "lastModifiedDate": "2023-07-08",
+            "name": "김성국",
+            "releaseNoteId": 5,
+            "version": "1.0.0"
+          },
+          {
+            "context": "ASUS도 너프 해야한다.",
+            "lastModifiedDate": "2023-07-08",
+            "name": "김성국",
+            "releaseNoteId": 6,
+            "version": "1.0.0"
           },
         ];
 
@@ -101,20 +113,19 @@ const RecentCommentList: React.FC<Props> = ({ projectId }) => {
           <div className="overflow-y-scroll">
             {commentList.length > 0
               ? commentList.map((comment) => (
-                  <div className="m-1 mr-3 rounded-2xl p-1 text-blue-600 text-start hover:cursor-pointer hover:bg-indigo-500">
                     <div
                       onClick={() => handleClickComment(comment.releaseNoteId)}
-                      className="rounded-xl bg-white p-2 text-blue-600 text-start hover:cursor-pointer"
+                      className="dark:bg-navy-700 rounded-xl hover:underline bg-white p-2 font-bold text-blue-600 text-start hover:cursor-pointer"
                       key={comment.name}
                     >
-                      <h4 className="overflow-hidden px-2 text-xl font-bold text-navy-700 dark:text-white">
+                      <h2 className="text-xl">Version: {comment.version}</h2>
+                      <h4 className="overflow-hidden px-2 text-l text-navy-700 dark:text-white">
                         {comment.name}: {comment.context}
                       </h4>
                       <p className="mt-2 px-2 text-base text-gray-600">
                         {comment.lastModifiedDate}
                       </p>
                     </div>
-                  </div>
                 ))
               : 
               <div className="dark:text-white text-black-400 flex h-full w-full items-center justify-center gap-10 text-xl font-bold">

@@ -33,14 +33,14 @@ const CreateProject: React.FC = () => {
   const fetchMembers = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/user/prelogin/getuserlist",
+        "http://localhost:8080/api/users",
         {
           headers: {
             Authorization: localStorage.getItem("token"),
           },
         }
       );
-      console.log(JSON.stringify(response, null, "\t"));
+      console.log(JSON.stringify(response.data, null, "\t"));
       const userRequest: UserRequest = response.data
       setUseRequest(userRequest);
       const members: User[] = userRequest.users
@@ -155,7 +155,7 @@ const CreateProject: React.FC = () => {
 
       // Send projectData to the backend using axios
       await axios.post(
-        "http://localhost:8080/api/project/create",
+        "http://localhost:8080/api/project",
         projectData,
         {
           headers: {

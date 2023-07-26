@@ -34,7 +34,7 @@ const RecentRelease = () => {
   const fetchRecentReleaseNote = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/project/release/load_recent`,
+        `http://localhost:8080/api/project/release-note/recent-release-note`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -101,12 +101,11 @@ const RecentRelease = () => {
             <h4 className="px-2 text-xl font-bold text-navy-700 dark:text-white">
               <p className="text-4xl">🆕</p>Recent Release Note
             </h4>
-            {/* Conditional rendering based on whether recentReleaseNote is defined */}
             {recentReleaseNote ? (
               <>
                 <h4
                   onClick={() => handleClickRecentRelease(recentReleaseNote.releaseNoteId)}
-                  className="hover:cursor-pointer text-5xl px-2 font-bold text-blue-600 dark:text-white"
+                  className="hover:cursor-pointer hover:underline text-5xl px-2 font-bold text-blue-600 dark:text-white"
                 >
                   version: {recentReleaseNote.version}
                 </h4>
@@ -149,7 +148,7 @@ const RecentRelease = () => {
                 </div>
               </>
             ) : (
-              <p>Loading recent release note...</p>
+              <div className="items-center justify-center flex text-4xl font-bold">작성된 릴리즈 노트가 없습니다..😭</div>
             )}
           </div>
         </Card>

@@ -116,7 +116,7 @@ const ManageProject: React.FC = () => {
   const fetchData = async () => {
     try {
       const allMembersResponse = await axios.get(
-        "http://localhost:8080/api/user/prelogin/getuserlist",
+        "http://localhost:8080/api/users",
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -124,7 +124,7 @@ const ManageProject: React.FC = () => {
         }
       );
       const projectInfoResponse = await axios.get(
-        `http://localhost:8080/api/project/manage/${projectId}`,
+        `http://localhost:8080/api/project/${projectId}/manage`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -270,7 +270,7 @@ const ManageProject: React.FC = () => {
 
       // Send projectData to the backend using axios
       await axios.put(
-        `http://localhost:8080/api/project/update/${projectId}`,
+        `http://localhost:8080/api/project/${projectId}`,
         projectData,
         {
           headers: {
@@ -300,7 +300,7 @@ const ManageProject: React.FC = () => {
     console.log("Project deletion confirmed");
     try {
       await axios.delete(
-        `http://localhost:8080/api/project/delete/${projectId}`,
+        `http://localhost:8080/api/project/${projectId}`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
