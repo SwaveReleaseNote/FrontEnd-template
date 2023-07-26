@@ -11,6 +11,7 @@ import Delete from "assets/img/label/DELETE.png";
 import Update from "assets/img/label/UPDATE.png";
 import Stop from "assets/img/label/STOP.png";
 import Etc from "assets/img/label/ETC.png";
+import api from "context/api";
 
 type Props = {
   searchRelease: {
@@ -44,13 +45,8 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
     const fetchData = async () => {
       //
       try {
-        const response = await axios.get(
-          `http://localhost:8080/api/project/${searchRelease.projectId}/release-note/label/filter`,
-          {
-            headers: {
-              Authorization: localStorage.getItem("token"),
-            },
-          }
+        const response = await api.get(
+          `project/${searchRelease.projectId}/release-note/label/filter`
         );
 
         const data: ReleaseList[] = response.data;
@@ -167,40 +163,40 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
             <tbody>
               {filteredReleaseList.length === 0 ? (
                 <tr>
-                  <td className="dark:bg-navy-700 py-2 pb-2 pr-4 pt-4 text-start" colSpan={2}>
+                  <td
+                    className="py-2 pb-2 pr-4 pt-4 text-start dark:bg-navy-700"
+                    colSpan={2}
+                  >
                     <img
                       src={labelToIconMap[searchRelease.label]}
                       alt={searchRelease.label}
                       className="h-[5vh] w-[10vh] rounded-xl"
                     />
-                    <p className="pl-3 mt-3">
-                      작성된 릴리즈 노트가 없습니다.
-                      </p>
+                    <p className="mt-3 pl-3">작성된 릴리즈 노트가 없습니다.</p>
                   </td>
                 </tr>
               ) : (
                 filteredReleaseList.map((release) => (
-                  <tr key={release.version}
-                      onClick={() =>
-                        handleClickReleaseNote(release.releaseNoteId)
-                      }
-                      className="hover:underline m-1 mr-3 rounded-2xl p-1 text-blue-600 text-start hover:cursor-pointer"
-                    >
-                      <td className="dark:bg-navy-700 rounded-xl bg-white p-2 text-blue-600 text-start hover:cursor-pointer">
-                        <div>
-                          <p className="font-bold">
-                            Version: {release.version}
-                          </p>
-                          <img
-                            src={labelToIconMap[searchRelease.label]}
-                            alt={release.label}
-                            className="mb-1 mt-1 h-[5vh] w-[10vh] rounded-xl"
-                          />
-                        </div>
-                        <div className="h-[6vh] overflow-hidden text-sm">
-                          {release.context}
-                        </div>
-                      </td>
+                  <tr
+                    key={release.version}
+                    onClick={() =>
+                      handleClickReleaseNote(release.releaseNoteId)
+                    }
+                    className="m-1 mr-3 rounded-2xl p-1 text-blue-600 text-start hover:cursor-pointer hover:underline"
+                  >
+                    <td className="rounded-xl bg-white p-2 text-blue-600 text-start hover:cursor-pointer dark:bg-navy-700">
+                      <div>
+                        <p className="font-bold">Version: {release.version}</p>
+                        <img
+                          src={labelToIconMap[searchRelease.label]}
+                          alt={release.label}
+                          className="mb-1 mt-1 h-[5vh] w-[10vh] rounded-xl"
+                        />
+                      </div>
+                      <div className="h-[6vh] overflow-hidden text-sm">
+                        {release.context}
+                      </div>
+                    </td>
                   </tr>
                 ))
               )}

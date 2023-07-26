@@ -21,6 +21,7 @@ import RecentRelease from "./components/RecentRelease";
 import ProjectCard from "./components/ProjectCard";
 
 import LoadingComponent from "./components/LoadingComponent ";
+import api from "context/api";
 
 enum UserRole {
   Subscriber = "Subscriber",
@@ -82,14 +83,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8080/api/projects`,
-          {
-            headers: {
-              Authorization: localStorage.getItem("token"),
-            },
-          }
-        );
+        const response = await api.get(`projects`);
         const fetchedProjectList = response.data;
         console.log(fetchedProjectList);
 
@@ -244,19 +238,19 @@ const Dashboard = () => {
         <div>
           <button
             onClick={handleClickListTabButton}
-            className={`ml-10 font-bold rounded-t-3xl ${
+            className={`ml-10 rounded-t-3xl font-bold ${
               isSubscribeOpen
                 ? "bg-white-200  dark:!bg-navy-600"
-                : "bg-gray-100  dark:!bg-navy-700 border-t-4 border-l-4 border-r-4 border-indigo-200"
+                : "border-l-4  border-r-4 border-t-4 border-indigo-200 bg-gray-100 dark:!bg-navy-700"
             } p-2`}
           >
             Develop
           </button>
           <button
             onClick={handleClickListTabButton}
-            className={`ml-4 font-bold rounded-t-3xl ${
+            className={`ml-4 rounded-t-3xl font-bold ${
               isSubscribeOpen
-                ? "bg-gray-100  dark:!bg-navy-700 border-t-4 border-l-4 border-r-4 border-indigo-200"
+                ? "border-l-4  border-r-4 border-t-4 border-indigo-200 bg-gray-100 dark:!bg-navy-700"
                 : "bg-white-200  dark:!bg-navy-600"
             } p-2`}
           >
@@ -268,7 +262,7 @@ const Dashboard = () => {
           <button
             onClick={handleClickProjectCreateButton}
             type="button"
-            className="dark:bg-navy-400 dark:text-white mb-2 mr-2 rounded-3xl bg-gray-200 px-5 py-2.5 text-sm font-bold text-black hover:bg-gray-300 focus:ring-4 focus:ring-blue-300"
+            className="text-black mb-2 mr-2 rounded-3xl bg-gray-200 px-5 py-2.5 text-sm font-bold hover:bg-gray-300 focus:ring-4 focus:ring-blue-300 dark:bg-navy-400 dark:text-white"
           >
             만들기
           </button>
@@ -332,7 +326,7 @@ const Dashboard = () => {
                     ))}
                   </div>
                 ) : (
-                  <div className="dark:text-white text-black-400 flex h-full w-full items-center justify-center gap-10 text-4xl font-bold">
+                  <div className="text-black-400 flex h-full w-full items-center justify-center gap-10 text-4xl font-bold dark:text-white">
                     참여한 프로젝트가 없습니다!!👻
                   </div>
                 )
@@ -352,7 +346,7 @@ const Dashboard = () => {
                   ))}
                 </div>
               ) : (
-                <div className="dark:text-white flex h-full w-full items-center justify-center gap-10 text-4xl font-bold">
+                <div className="flex h-full w-full items-center justify-center gap-10 text-4xl font-bold dark:text-white">
                   구독한 프로젝트가 없습니다!!👻
                 </div>
               )}

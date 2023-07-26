@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 import PieChartCard from "../components/PieChartCard2";
 import MemberStatusCard from "../components/MemberStatusCard";
 import RecentComment from "../components/RecentComment";
 import SearchRelease from "../components/SearchRelease";
+
+import api from "context/api";
 
 enum UserRole {
   Subscriber = "Subscriber",
@@ -32,14 +33,7 @@ const ProjectDashboard: React.FC = () => {
 
     const fetchProjectData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8080/api/project/${projectId}`,
-          {
-            headers: {
-              Authorization: localStorage.getItem("token"),
-            },
-          }
-        );
+        const response = await api.get(`project/${projectId}`);
 
         const projectData = response.data;
         setIsProjectDeleted(projectData.isDeleted);
@@ -64,7 +58,9 @@ const ProjectDashboard: React.FC = () => {
   return (
     <>
       {isProjectDeleted ? (
-        <div className="text-4xl text-red-600 font-bold flex justify-center mt-40">Oops! This project has been deleted.</div>
+        <div className="mt-40 flex justify-center text-4xl font-bold text-red-600">
+          Oops! This project has been deleted.
+        </div>
       ) : (
         <div>
           <div className="h-100% mt-4 flex w-auto justify-items-center gap-5 rounded-[20px] bg-white bg-clip-border p-6 text-4xl font-bold shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none sm:overflow-x-auto">

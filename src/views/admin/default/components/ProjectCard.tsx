@@ -5,6 +5,7 @@ import axios from "axios";
 import banner from "assets/img/profile/banner2.png";
 import Card from "components/card";
 import NotificationPopup from "../components/NotificationPopup";
+import api from "context/api";
 
 enum UserRole {
   Subscriber = "Subscriber",
@@ -57,14 +58,7 @@ function ProjectCard({
     // Perform the project deletion logic
     console.log("Project deletion confirmed");
     try {
-      await axios.delete(
-        `http://localhost:8080/api/project/drop/${projectId}`,
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
-      );
+      await api.delete(`project/drop/${projectId}`);
     } catch (error) {
       console.error("Error delete project:", error);
       alert("서버 에러 입니다. 다시 시도하세요.");
@@ -169,7 +163,9 @@ function ProjectCard({
               </div>
             )}
 
-            <p className="text-l font-normal text-gray-600">최신 릴리즈노트 버전</p>
+            <p className="text-l font-normal text-gray-600">
+              최신 릴리즈노트 버전
+            </p>
           </div>
 
           {/* 프로젝트의 생성 날짜 */}

@@ -1,10 +1,10 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { loginState } from "../../../../context/atom";
 import { useRecoilValue } from "recoil";
 import NotificationPopup from "../components/NotificationPopup";
 import LoadingComponent from "../components/LoadingComponent ";
+import api from "context/api";
 
 type User = {
   userId: number;
@@ -115,32 +115,16 @@ const ManageProject: React.FC = () => {
 
   const fetchData = async () => {
     try {
-      const allMembersResponse = await axios.get(
-        "http://localhost:8080/api/users",
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
-      );
-      const projectInfoResponse = await axios.get(
-        `http://localhost:8080/api/project/${projectId}/manage`,
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
-      );
+      const allMembersResponse = await api.get("users");
+      const projectInfoResponse = await api.get(`project/${projectId}/manage`);
 
       console.log(JSON.stringify(allMembersResponse, null, "\t"));
 
-      const allMembers: User[] = allMembersResponse.data.map(
-        (member: any) => ({
-          userId: member.userId,
-          username: member.username,
-          userDepartment: member.department,
-        })
-      );
+      const allMembers: User[] = allMembersResponse.data.map((member: any) => ({
+        userId: member.userId,
+        username: member.username,
+        userDepartment: member.department,
+      }));
 
       const projectInfo: ProjectInfo = projectInfoResponse.data;
       console.log(JSON.stringify(projectInfo, null, "\t"));
@@ -269,15 +253,7 @@ const ManageProject: React.FC = () => {
       console.log(JSON.stringify(projectData, null, "\t"));
 
       // Send projectData to the backend using axios
-      await axios.put(
-        `http://localhost:8080/api/project/${projectId}`,
-        projectData,
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
-      );
+      await api.put(`project/${projectId}`, projectData);
 
       // Clear the form fields and team member list
       setProjectName("");
@@ -299,14 +275,7 @@ const ManageProject: React.FC = () => {
     // Perform the project deletion logic
     console.log("Project deletion confirmed");
     try {
-      await axios.delete(
-        `http://localhost:8080/api/project/${projectId}`,
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
-      );
+      await api.delete(`project/${projectId}`);
 
       // Clear the form fields and team member list
       setProjectName("");

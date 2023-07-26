@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoadingComponent from "./LoadingComponent ";
+import api from "context/api";
 
 type Comment = {
   context: string;
@@ -33,13 +34,8 @@ const RecentRelease = () => {
   // fetch All Members
   const fetchRecentReleaseNote = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8080/api/project/release-note/recent-release-note`,
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
+      const response = await api.get(
+        `project/release-note/recent-release-note`
       );
 
       console.log(JSON.stringify(response.data, null, "\t"));
@@ -104,8 +100,10 @@ const RecentRelease = () => {
             {recentReleaseNote ? (
               <>
                 <h4
-                  onClick={() => handleClickRecentRelease(recentReleaseNote.releaseNoteId)}
-                  className="hover:cursor-pointer hover:underline text-5xl px-2 font-bold text-blue-600 dark:text-white"
+                  onClick={() =>
+                    handleClickRecentRelease(recentReleaseNote.releaseNoteId)
+                  }
+                  className="px-2 text-5xl font-bold text-blue-600 hover:cursor-pointer hover:underline dark:text-white"
                 >
                   version: {recentReleaseNote.version}
                 </h4>
@@ -148,7 +146,9 @@ const RecentRelease = () => {
                 </div>
               </>
             ) : (
-              <div className="items-center justify-center flex text-4xl font-bold">작성된 릴리즈 노트가 없습니다..😭</div>
+              <div className="flex items-center justify-center text-4xl font-bold">
+                작성된 릴리즈 노트가 없습니다..😭
+              </div>
             )}
           </div>
         </Card>

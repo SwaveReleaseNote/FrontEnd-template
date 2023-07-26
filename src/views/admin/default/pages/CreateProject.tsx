@@ -2,13 +2,14 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoadingComponent from "../components/LoadingComponent ";
+import api from "context/api";
 
 type UserRequest = {
   managerId: number;
   managerName: string;
   managerDepartment: string;
   users: User[];
-}
+};
 
 type User = {
   userId: number;
@@ -32,21 +33,12 @@ const CreateProject: React.FC = () => {
   // 자기 자신은 빼기
   const fetchMembers = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/users",
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
-      );
+      const response = await api.get("users");
       console.log(JSON.stringify(response.data, null, "\t"));
-      const userRequest: UserRequest = response.data
+      const userRequest: UserRequest = response.data;
       setUseRequest(userRequest);
       const members: User[] = userRequest.users
-        .filter(
-          (member: any) => member.userId !== userRequest.managerId
-        )
+        .filter((member: any) => member.userId !== userRequest.managerId)
         .map((member: any) => ({
           userId: member.userId,
           username: member.username,
@@ -121,15 +113,13 @@ const CreateProject: React.FC = () => {
       managerId: 3,
       managerName: "함건욱",
       managerDepartment: "Backend",
-      users: mockUserResponse
-    }
+      users: mockUserResponse,
+    };
 
     setUseRequest(userRequest);
-    
+
     const allUsers: User[] = userRequest.users
-      .filter(
-        (member: any) => member.userId !== userRequest.managerId
-      )
+      .filter((member: any) => member.userId !== userRequest.managerId)
       .map((member: any) => ({
         userId: member.userId,
         username: member.username,
@@ -154,15 +144,7 @@ const CreateProject: React.FC = () => {
       console.log(JSON.stringify(projectData, null, "\t"));
 
       // Send projectData to the backend using axios
-      await axios.post(
-        "http://localhost:8080/api/project",
-        projectData,
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
-      );
+      await api.post("project", projectData);
 
       // Clear the form fields and team member list
       setProjectName("");
@@ -232,35 +214,34 @@ const CreateProject: React.FC = () => {
                 />
               </div>
 
-              
-            <div className="m-5 ml-10 mt-10 flex">
-              <div>
-                <h3 className="text-black mb-4 text-2xl font-bold dark:text-white">
-                  👑 프로젝트 관리자
-                </h3>
-                <div className="mb-4 flex">
-                  {/* <input
+              <div className="m-5 ml-10 mt-10 flex">
+                <div>
+                  <h3 className="text-black mb-4 text-2xl font-bold dark:text-white">
+                    👑 프로젝트 관리자
+                  </h3>
+                  <div className="mb-4 flex">
+                    {/* <input
                   type="text"
                   className="text-black w-64 rounded border border-gray-300 bg-gray-50 p-2 text-sm dark:text-white"
                   placeholder="관리자 이름을 입력해주세요"
                 /> */}
-                </div>
-                <ul className="dark:text-white">
-                  <li className="mb-2 flex items-center justify-between">
-                    <p className="rounded-2xl bg-gray-50 p-3 font-bold">
-                      {userRequest.managerName}
-                    </p>
-                    <p className="ml-3 rounded-2xl bg-gray-50 p-3 font-bold">
-                      {userRequest.managerDepartment}
-                    </p>
-                    {/* 추후에 관리자 변경을 위해 보류 */}
-                    {/* <button className="ml-5 rounded-xl bg-gray-50 px-2 py-1 font-bold">
+                  </div>
+                  <ul className="dark:text-white">
+                    <li className="mb-2 flex items-center justify-between">
+                      <p className="rounded-2xl bg-gray-50 p-3 font-bold">
+                        {userRequest.managerName}
+                      </p>
+                      <p className="ml-3 rounded-2xl bg-gray-50 p-3 font-bold">
+                        {userRequest.managerDepartment}
+                      </p>
+                      {/* 추후에 관리자 변경을 위해 보류 */}
+                      {/* <button className="ml-5 rounded-xl bg-gray-50 px-2 py-1 font-bold">
                     ❌
                   </button> */}
-                  </li>
-                </ul>
+                    </li>
+                  </ul>
+                </div>
               </div>
-            </div>
 
               <div className="m-5 ml-10 mt-10 flex">
                 <div>

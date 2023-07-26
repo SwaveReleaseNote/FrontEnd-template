@@ -1,8 +1,7 @@
-import Card from "components/card";
 import React, { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
-import axios from "axios";
 import LoadingComponent from "./LoadingComponent ";
+import api from "context/api";
 
 type LabelNum = {
   label: string;
@@ -25,13 +24,8 @@ const PieChartCard: React.FC<Props> = ({ projectId }) => {
     console.log("PieChart Project id:", projectId.id);
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8080/api/project/${projectId.id}/release-note/label/count`,
-          {
-            headers: {
-              Authorization: localStorage.getItem("token"),
-            },
-          }
+        const response = await api.get(
+          `project/${projectId.id}/release-note/label/count`
         );
         const data: LabelNum[] = response.data;
         renderChart(data);
