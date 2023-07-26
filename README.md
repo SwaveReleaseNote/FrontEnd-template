@@ -1,5 +1,25 @@
 # SWAVE Project - URINURI
+<div align="center">
 
+ <p>📖Tech Stack📖</p>
+
+ <p>🚉Platforms & Languages🚉</p>
+   <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"/> 
+
+   <img src="https://img.shields.io/badge/typescript-#3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
+<p>🔋Tools🔋</p>
+
+ <img src="https://img.shields.io/badge/visualstudiocode-#007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white" />
+
+ <img src="https://img.shields.io/badge/pnpm-#F69220?style=for-the-badge&logo=pnpm&logoColor=white" />
+
+ <img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=GitHub&logoColor=white" />
+
+ <img src="https://img.shields.io/badge/Jenkins-D24939?style=flat&logo=Jenkins&logoColor=white" />
+
+
+ </div>
+</br>
 ---
 
 ### Introduction
