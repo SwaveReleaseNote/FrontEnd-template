@@ -20,6 +20,8 @@
 
  </div>
 </br>
+
+
 ---
 
 ### Introduction
@@ -41,6 +43,26 @@ URINURI supports rich formatting options, allowing you to create visually appeal
 
 #### Versioning and Issue History
 Keep track of the different versions of your release notes and control the complete Issue history of changes.
+
+---
+### Quick Start
+Clone the repository with the following command:
+
+```bash
+git clone https://github.com/SwaveReleaseNote/FrontEnd-template.git
+```
+
+Run in terminal this command:
+
+```bash
+pnpm install
+```
+
+Then run this command to start your local server
+
+```bash
+pnpm start
+```
 
 ---
 
