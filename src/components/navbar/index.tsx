@@ -177,7 +177,15 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
 
             {/* Profile & Dropdown */}
             <Dropdown
-               button={<div className="flex w-full flex-col gap-2 rounded-[20px]">{/* ... nested children ... */}</div>}
+               button={
+                  <div className="flex w-full flex-col gap-2 rounded-[20px]">
+                     <div className="flex w-full flex-col gap-2 rounded-[20px]">
+                        <p className="cursor-pointer overflow-break dark:text-white">
+                           Hello <b>{localStorage.getItem('name')}</b> 👻⚙️
+                        </p>
+                     </div>
+                  </div>
+               }
                classNames={'py-2 top-8 -left-[180px] w-max'}>
                <div className="ml-40 flex h-[135px] w-[135px] flex-col justify-start rounded-[20px] bg-white bg-cover bg-no-repeat shadow-xl shadow-shadow-500 dark:!bg-navy-700 dark:text-white dark:shadow-none">
                   <div className="ml-5 mt-3">
