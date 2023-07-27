@@ -27,7 +27,7 @@ const Navbar = (props: {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDownSearchInput = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       navigate("/admin/project/searchResult", {
         state: {
@@ -38,7 +38,7 @@ const Navbar = (props: {
     }
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeSearchInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
@@ -80,8 +80,8 @@ const Navbar = (props: {
           </p>
           <input
             value={searchTerm}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
+            onChange={handleChangeSearchInput}
+            onKeyDown={handleKeyDownSearchInput}
             type="text"
             placeholder="프로젝트 검색..."
             className="block h-full w-full rounded-full bg-lightPrimary text-sm font-medium text-navy-700 outline-none placeholder:!text-gray-400 dark:bg-navy-900 dark:text-white dark:placeholder:!text-white sm:w-fit"

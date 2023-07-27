@@ -28,10 +28,6 @@ type SearchResult = {
   developerSearch: ProjectInfo[];
 };
 
-type keyword = {
-  keyword: string;
-};
-
 const SearchProjectList: React.FC = () => {
   const navigate = useNavigate();
 

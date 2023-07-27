@@ -31,6 +31,22 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
   const navigate = useNavigate();
   const [releaseList, setReleaseList] = useState<ReleaseList[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleChangeSearchInput = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      navigate("/admin/release/searchResult", {
+        state: {
+          searchTerm: { searchTerm },
+        },
+      });
+      setSearchTerm("");
+    }
+  };
+
+  const handleKeyDownSearchInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
 
   const labelToIconMap: { [key: string]: string } = {
     New: New,
@@ -139,6 +155,9 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
           <FiSearch className="h-4 w-4 text-gray-400 dark:text-white" />
         </p>
         <input
+          value={searchTerm}
+          onChange={handleKeyDownSearchInput}
+          onKeyDown={handleChangeSearchInput}
           type="text"
           placeholder="릴리즈 노트 검색"
           className="block h-full w-full rounded-3xl bg-lightPrimary text-sm text-navy-700 outline-none placeholder:!text-gray-400 dark:bg-navy-900 dark:text-white dark:placeholder:!text-white"
