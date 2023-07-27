@@ -1,8 +1,6 @@
 import React from "react";
 import CardMenu from "components/card/CardMenu";
-import { DiApple } from "react-icons/di";
-import { DiAndroid } from "react-icons/di";
-import { DiWindows } from "react-icons/di";
+import { DiApple , DiAndroid , DiWindows } from "react-icons/di";
 import Card from "components/card";
 import Progress from "components/progress";
 
@@ -11,21 +9,21 @@ import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
-  SortingState,
+  type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
 
-type RowObj = {
+interface RowObj {
   name: string;
   tech: any;
   date: string;
   progress: number;
-};
+}
 
-function CheckTable(props: { tableData: any }) {
+function CheckTable(props: { tableData: any }):JSX.Element {
   const { tableData } = props;
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  let defaultData = tableData;
+  const defaultData = tableData;
   const columns = [
     columnHelper.accessor("name", {
       id: "name",

@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 
-type releaseNote = {
+interface releaseNote {
     id: number;
     version: string;
-};
+}
 
 // TODO: 제대로 안담기는 문제 해결 필요
 // TODO: Major, Minor, Patch 에 따라 분리과정 필요
 
-export default function SidebarNote(props: any) {
-    const [releaseNote, setReleaseNote] = useState<releaseNote>(props.myNote);
+export default function SidebarNote(props: any): JSX.Element {
+    const [releaseNote] = useState<releaseNote>(props.myNote);
 
     console.log(releaseNote);
 

@@ -2,8 +2,9 @@ import CardMenu from "components/card/CardMenu";
 import Checkbox from "components/checkbox";
 import { MdDragIndicator, MdCheckCircle } from "react-icons/md";
 import Card from "components/card";
+import React from "react";
 
-const TaskCard = () => {
+const TaskCard = ():JSX.Element => {
   return (
     <Card extra="pb-7 p-[20px]">
       {/* task header */}

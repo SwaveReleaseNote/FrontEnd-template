@@ -1,9 +1,9 @@
-type RowObj = {
+interface RowObj {
 	name: [string, boolean];
 	progress: string;
 	quantity: number;
 	date: string; 
-};
+}
 
 const tableDataCheck: RowObj[] = [
 	{

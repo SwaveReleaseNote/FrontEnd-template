@@ -8,21 +8,21 @@ import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
-  SortingState,
+  type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
 
-type RowObj = {
+interface RowObj {
   name: [string, boolean];
   progress: string;
   quantity: number;
   date: string;
-};
+}
 
-function CheckTable(props: { tableData: any }) {
+function CheckTable(props: { tableData: any }): JSX.Element {
   const { tableData } = props;
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  let defaultData = tableData;
+  const defaultData = tableData;
   const columns = [
     columnHelper.accessor("name", {
       id: "name",

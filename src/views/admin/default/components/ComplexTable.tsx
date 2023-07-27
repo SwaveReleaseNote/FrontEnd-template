@@ -9,24 +9,24 @@ import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
-  SortingState,
+  type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
 
-type RowObj = {
+interface RowObj {
   name: string;
   status: string;
   date: string;
   progress: number;
-};
+}
 
 const columnHelper = createColumnHelper<RowObj>();
 
 // const columns = columnsDataCheck;
-export default function ComplexTable(props: { tableData: any }) {
+export default function ComplexTable(props: { tableData: any }): JSX.Element {
   const { tableData } = props;
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  let defaultData = tableData;
+  const defaultData = tableData;
   const columns = [
     columnHelper.accessor("name", {
       id: "name",

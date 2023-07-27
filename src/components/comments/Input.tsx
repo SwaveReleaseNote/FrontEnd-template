@@ -2,7 +2,7 @@ import React from 'react'
 import tmpImage from '../../assets/img/avatars/avatar5.png'
 import Card from 'components/card'
 
-export default function Input() {
+export default function Input(): JSX.Element {
     // 작성 내용
 
     // 등록 버튼
