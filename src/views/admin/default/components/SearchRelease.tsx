@@ -34,8 +34,8 @@ const SearchRelease: React.FC<Props> = ({ projectId }) => {
             <option value="New">New</option>
             <option value="Update">Update</option>
             <option value="Stop">Stop</option>
-            <option value="BugFix">BugFix</option>
             <option value="Delete">Delete</option>
+            <option value="Etc">Etc</option>
           </select>
         </div>
       </div>
