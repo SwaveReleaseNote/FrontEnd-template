@@ -1,12 +1,12 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { loginState } from "../../../../context/atom";
 import { useRecoilValue } from "recoil";
 import NotificationPopup from "../components/NotificationPopup";
 import LoadingComponent from "../components/LoadingComponent ";
+import api from "context/api";
 
-type TeamMember = {
+type User = {
   userId: number;
   username: string;
   userDepartment: string;
@@ -19,7 +19,7 @@ type ProjectInfo = {
   managerId: number;
   managerName: string;
   managerDepartment: string;
-  teamMembers: TeamMember[];
+  teamMembers: User[];
 };
 
 type ProjectUpdate = {
@@ -31,21 +31,19 @@ type ProjectUpdate = {
 };
 
 const ManageProject: React.FC = () => {
-  const login = useRecoilValue(loginState);
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const [projectId, setProjectId] = useState(
     Number(searchParams.get("projectId"))
   );
-  const userId = login.id;
 
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-  const [allMembers, setAllMembers] = useState<TeamMember[]>([]);
-  const [deleteMembers, setDeleteMembers] = useState<TeamMember[]>([]);
-  const [addMembers, setAddMembers] = useState<TeamMember[]>([]);
+  const [teamMembers, setTeamMembers] = useState<User[]>([]);
+  const [allMembers, setAllMembers] = useState<User[]>([]);
+  const [deleteMembers, setDeleteMembers] = useState<User[]>([]);
+  const [addMembers, setAddMembers] = useState<User[]>([]);
   const [newMemberName, setNewMemberName] = useState("");
-  const [suggestedMembers, setSuggestedMembers] = useState<TeamMember[]>([]);
+  const [suggestedMembers, setSuggestedMembers] = useState<User[]>([]);
 
   const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
@@ -117,36 +115,20 @@ const ManageProject: React.FC = () => {
 
   const fetchData = async () => {
     try {
-      const allMembersResponse = await axios.get(
-        "http://localhost:8080/api/user/prelogin/getuserlist",
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
-      );
-      const projectInfoResponse = await axios.get(
-        `http://localhost:8080/api/project/manage/${projectId}`,
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
-      );
+      const allMembersResponse = await api.get("users");
+      const projectInfoResponse = await api.get(`project/${projectId}/manage`);
 
       console.log(JSON.stringify(allMembersResponse, null, "\t"));
 
-      const allMembers: TeamMember[] = allMembersResponse.data.map(
-        (member: any) => ({
-          userId: member.userId,
-          username: member.username,
-          userDepartment: member.department,
-        })
-      );
+      const allMembers: User[] = allMembersResponse.data.map((member: any) => ({
+        userId: member.userId,
+        username: member.username,
+        userDepartment: member.department,
+      }));
 
       const projectInfo: ProjectInfo = projectInfoResponse.data;
       console.log(JSON.stringify(projectInfo, null, "\t"));
-      const teamMembers: TeamMember[] = projectInfo.teamMembers.map(
+      const teamMembers: User[] = projectInfo.teamMembers.map(
         (member: any) => ({
           userId: member.userId,
           username: member.username,
@@ -186,8 +168,8 @@ const ManageProject: React.FC = () => {
     );
   };
 
-  const handleClickAddMemberButton = (member: TeamMember) => {
-    const addMember: TeamMember = {
+  const handleClickAddMemberButton = (member: User) => {
+    const addMember: User = {
       ...member,
       userDepartment: member.userDepartment,
     };
@@ -214,7 +196,7 @@ const ManageProject: React.FC = () => {
     }
   };
 
-  const handleClickRemoveMemberButton = (member: TeamMember) => {
+  const handleClickRemoveMemberButton = (member: User) => {
     const updatedMembers = teamMembers.filter(
       (remainMember) => remainMember.userId !== member.userId
     );
@@ -271,15 +253,7 @@ const ManageProject: React.FC = () => {
       console.log(JSON.stringify(projectData, null, "\t"));
 
       // Send projectData to the backend using axios
-      await axios.put(
-        `http://localhost:8080/api/project/update/${projectId}`,
-        projectData,
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
-      );
+      await api.put(`project/${projectId}`, projectData);
 
       // Clear the form fields and team member list
       setProjectName("");
@@ -301,14 +275,7 @@ const ManageProject: React.FC = () => {
     // Perform the project deletion logic
     console.log("Project deletion confirmed");
     try {
-      await axios.delete(
-        `http://localhost:8080/api/project/delete/${projectId}`,
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
-      );
+      await api.delete(`project/${projectId}`);
 
       // Clear the form fields and team member list
       setProjectName("");

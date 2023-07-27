@@ -1,17 +1,17 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginState } from "../../../../context/atom";
-import { useRecoilValue } from "recoil";
 import LoadingComponent from "../components/LoadingComponent ";
-// [
-//   {
-//       "username": "함건욱",
-//       "department": null,
-//       "userId": 1
-//   }
-// ]
-type TeamMember = {
+import api from "context/api";
+
+type UserRequest = {
+  managerId: number;
+  managerName: string;
+  managerDepartment: string;
+  users: User[];
+};
+
+type User = {
   userId: number;
   username: string;
   userDepartment: string;
@@ -19,34 +19,26 @@ type TeamMember = {
 
 const CreateProject: React.FC = () => {
   const navigate = useNavigate();
-  const login = useRecoilValue(loginState);
-  const userId = login.id;
 
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-  const [allMembers, setAllMembers] = useState<TeamMember[]>([]);
+  const [teamMembers, setTeamMembers] = useState<User[]>([]);
+  const [allMembers, setAllMembers] = useState<User[]>([]);
   const [newMemberName, setNewMemberName] = useState("");
-  const [suggestedMembers, setSuggestedMembers] = useState<TeamMember[]>([]);
+  const [suggestedMembers, setSuggestedMembers] = useState<User[]>([]);
   const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [userRequest, setUseRequest] = useState<UserRequest>();
 
   // fetch All Members
   // 자기 자신은 빼기
   const fetchMembers = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/user/prelogin/getuserlist",
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
-      );
-      console.log(JSON.stringify(response, null, "\t"));
-      const members: TeamMember[] = response.data
-        .filter(
-          (member: any) => member.userId !== Number(localStorage.getItem("id"))
-        )
+      const response = await api.get("users");
+      console.log(JSON.stringify(response.data, null, "\t"));
+      const userRequest: UserRequest = response.data;
+      setUseRequest(userRequest);
+      const members: User[] = userRequest.users
+        .filter((member: any) => member.userId !== userRequest.managerId)
         .map((member: any) => ({
           userId: member.userId,
           username: member.username,
@@ -55,7 +47,6 @@ const CreateProject: React.FC = () => {
 
       setAllMembers(members);
       console.log(allMembers);
-      console.log(Number(localStorage.getItem("id")));
     } catch (error) {
       console.error("Error fetching members:", error);
       console.log("Mocking");
@@ -65,8 +56,8 @@ const CreateProject: React.FC = () => {
     }
   };
 
-  const handleClickAddMemberButton = (member: TeamMember) => {
-    const updatedMember: TeamMember = {
+  const handleClickAddMemberButton = (member: User) => {
+    const updatedMember: User = {
       ...member,
       userDepartment: member.userDepartment,
     };
@@ -80,7 +71,7 @@ const CreateProject: React.FC = () => {
     );
   };
 
-  const handleClickRemoveMemberButton = (member: TeamMember) => {
+  const handleClickRemoveMemberButton = (member: User) => {
     const updatedMembers = teamMembers.filter(
       (remainMember) => remainMember.userId !== member.userId
     );
@@ -109,7 +100,7 @@ const CreateProject: React.FC = () => {
 
   const mockFetchSuggestions = () => {
     // Simulate API response with mock data
-    const mockResponse: TeamMember[] = [
+    const mockUserResponse: User[] = [
       { userId: 1, username: "김기현", userDepartment: "Project Manager" },
       { userId: 2, username: "김성국", userDepartment: "Architecture" },
       { userId: 3, username: "함건욱", userDepartment: "Backend" },
@@ -117,7 +108,25 @@ const CreateProject: React.FC = () => {
       { userId: 5, username: "이승섭", userDepartment: "OAuth" },
       { userId: 6, username: "전강훈", userDepartment: "Machine Learning" },
     ];
-    setAllMembers(mockResponse);
+
+    const userRequest: UserRequest = {
+      managerId: 3,
+      managerName: "함건욱",
+      managerDepartment: "Backend",
+      users: mockUserResponse,
+    };
+
+    setUseRequest(userRequest);
+
+    const allUsers: User[] = userRequest.users
+      .filter((member: any) => member.userId !== userRequest.managerId)
+      .map((member: any) => ({
+        userId: member.userId,
+        username: member.username,
+        userDepartment: member.userDepartment,
+      }));
+
+    setAllMembers(allUsers);
   };
 
   const handleSubmitProject = async (
@@ -132,18 +141,10 @@ const CreateProject: React.FC = () => {
         users,
       };
 
-      console.log(projectData);
+      console.log(JSON.stringify(projectData, null, "\t"));
 
       // Send projectData to the backend using axios
-      await axios.post(
-        "http://localhost:8080/api/project/create",
-        projectData,
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
-      );
+      await api.post("project", projectData);
 
       // Clear the form fields and team member list
       setProjectName("");
@@ -211,6 +212,35 @@ const CreateProject: React.FC = () => {
                   onChange={(event) => setDescription(event.target.value)}
                   required
                 />
+              </div>
+
+              <div className="m-5 ml-10 mt-10 flex">
+                <div>
+                  <h3 className="text-black mb-4 text-2xl font-bold dark:text-white">
+                    👑 프로젝트 관리자
+                  </h3>
+                  <div className="mb-4 flex">
+                    {/* <input
+                  type="text"
+                  className="text-black w-64 rounded border border-gray-300 bg-gray-50 p-2 text-sm dark:text-white"
+                  placeholder="관리자 이름을 입력해주세요"
+                /> */}
+                  </div>
+                  <ul className="dark:text-white">
+                    <li className="mb-2 flex items-center justify-between">
+                      <p className="rounded-2xl bg-gray-50 p-3 font-bold">
+                        {userRequest.managerName}
+                      </p>
+                      <p className="ml-3 rounded-2xl bg-gray-50 p-3 font-bold">
+                        {userRequest.managerDepartment}
+                      </p>
+                      {/* 추후에 관리자 변경을 위해 보류 */}
+                      {/* <button className="ml-5 rounded-xl bg-gray-50 px-2 py-1 font-bold">
+                    ❌
+                  </button> */}
+                    </li>
+                  </ul>
+                </div>
               </div>
 
               <div className="m-5 ml-10 mt-10 flex">
