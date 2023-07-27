@@ -133,6 +133,9 @@ devDependencies:
   eslint-plugin-import:
     specifier: ^2.25.2
     version: 2.27.5(@typescript-eslint/parser@5.62.0)(eslint@8.44.0)
+  eslint-plugin-jest-dom:
+    specifier: ^5.0.1
+    version: 5.0.1(@testing-library/dom@9.3.1)(eslint@8.44.0)
   eslint-plugin-n:
     specifier: '^15.0.0 || ^16.0.0 '
     version: 16.0.1(eslint@8.44.0)
@@ -3175,7 +3178,6 @@ packages:
       dom-accessibility-api: 0.5.16
       lz-string: 1.5.0
       pretty-format: 27.5.1
-    dev: false
 
   /@testing-library/jest-dom@5.16.5:
     resolution: {integrity: sha512-N5ixQ2qKpi5OLYfwQmUb/5mSV9LneAcaUfp32pn4yCnpb8r/Yz0pXFPck21dIicKmi+ta5WRAknkZCfA8refMA==}
@@ -5701,6 +5703,19 @@ packages:
       - eslint-import-resolver-typescript
       - eslint-import-resolver-webpack
       - supports-color
+
+  /eslint-plugin-jest-dom@5.0.1(@testing-library/dom@9.3.1)(eslint@8.44.0):
+    resolution: {integrity: sha512-zD/BjNk12R5R9cxIu8oa2HfNeDSknI3ewtN8nygIUMQuieWDnTY9Np//6a1Z3G7Y3dx3l45hCUR4EphsgRmUtA==}
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0, npm: '>=6', yarn: '>=1'}
+    peerDependencies:
+      '@testing-library/dom': ^8.0.0 || ^9.0.0
+      eslint: ^6.8.0 || ^7.0.0 || ^8.0.0
+    dependencies:
+      '@babel/runtime': 7.22.6
+      '@testing-library/dom': 9.3.1
+      eslint: 8.44.0
+      requireindex: 1.2.0
+    dev: true
 
   /eslint-plugin-jest@25.7.0(@typescript-eslint/eslint-plugin@5.62.0)(eslint@8.44.0)(jest@27.5.1)(typescript@4.9.5):
     resolution: {integrity: sha512-PWLUEXeeF7C9QGKqvdSbzLOiLTx+bno7/HC9eefePfEb257QFHg7ye3dh80AZVkaa/RQsBB1Q/ORQvg2X7F0NQ==}
@@ -10161,6 +10176,11 @@ packages:
     resolution: {integrity: sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==}
     engines: {node: '>=0.10.0'}
     dev: false
+
+  /requireindex@1.2.0:
+    resolution: {integrity: sha512-L9jEkOi3ASd9PYit2cwRfyppc9NoABujTP8/5gFcbERmo5jUoAKovIC3fsF17pkTnGsrByysqX+Kxd2OTNI1ww==}
+    engines: {node: '>=0.10.5'}
+    dev: true
 
   /requires-port@1.0.0:
     resolution: {integrity: sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==}

@@ -73,6 +73,7 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-standard-with-typescript": "^37.0.0",
     "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jest-dom": "^5.0.1",
     "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.33.0",
