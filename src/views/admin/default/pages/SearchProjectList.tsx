@@ -3,11 +3,12 @@ import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import LoadingComponent from "../components/LoadingComponent ";
+import api from "context/api";
 
 type TeamMember = {
-  user_id: number;
+  userId: number;
   username: string;
-  user_department: string;
+  userDepartment: string;
 };
 
 type ProjectInfo = {
@@ -27,6 +28,10 @@ type SearchResult = {
   developerSearch: ProjectInfo[];
 };
 
+type keyword = {
+  keyword: string;
+};
+
 const SearchProjectList: React.FC = () => {
   const navigate = useNavigate();
 
@@ -39,14 +44,9 @@ const SearchProjectList: React.FC = () => {
   useEffect(() => {
     const fetchSearchResult = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8080/api/project/search/${searchTerm}`,
-          {
-            headers: {
-              Authorization: localStorage.getItem("token"),
-            },
-          }
-        );
+        const response = await api.post("project/search", {
+          keyword: searchTerm,
+        });
 
         const searchResult = response.data;
         setSearchResult(searchResult);
@@ -79,8 +79,8 @@ const SearchProjectList: React.FC = () => {
           managerName: "김기현",
           managerDepartment: "Project Manager",
           teamMembers: [
-            { user_id: 2, username: "김성국", user_department: "Architecture" },
-            { user_id: 3, username: "함건욱", user_department: "Backend" },
+            { userId: 2, username: "김성국", userDepartment: "Architecture" },
+            { userId: 3, username: "함건욱", userDepartment: "Backend" },
           ],
         },
         {
@@ -91,11 +91,11 @@ const SearchProjectList: React.FC = () => {
           managerName: "함건욱",
           managerDepartment: "Backend",
           teamMembers: [
-            { user_id: 2, username: "김성국", user_department: "Architecture" },
+            { userId: 2, username: "김성국", userDepartment: "Architecture" },
             {
-              user_id: 3,
+              userId: 3,
               username: "김기현",
-              user_department: "Project Manager",
+              userDepartment: "Project Manager",
             },
           ],
         },
@@ -107,11 +107,11 @@ const SearchProjectList: React.FC = () => {
           managerName: "함건욱",
           managerDepartment: "Backend",
           teamMembers: [
-            { user_id: 2, username: "김성국", user_department: "Architecture" },
+            { userId: 2, username: "김성국", userDepartment: "Architecture" },
             {
-              user_id: 3,
+              userId: 3,
               username: "김기현",
-              user_department: "Project Manager",
+              userDepartment: "Project Manager",
             },
           ],
         },
@@ -125,8 +125,8 @@ const SearchProjectList: React.FC = () => {
           managerName: "멍멍이",
           managerDepartment: "Project Manager",
           teamMembers: [
-            { user_id: 2, username: "김성국", user_department: "Architecture" },
-            { user_id: 3, username: "함건욱", user_department: "Backend" },
+            { userId: 2, username: "김성국", userDepartment: "Architecture" },
+            { userId: 3, username: "함건욱", userDepartment: "Backend" },
           ],
         },
       ],
@@ -139,8 +139,8 @@ const SearchProjectList: React.FC = () => {
           managerName: "김기현",
           managerDepartment: "Project Manager",
           teamMembers: [
-            { user_id: 2, username: "멍멍이", user_department: "Architecture" },
-            { user_id: 3, username: "함건욱", user_department: "Backend" },
+            { userId: 2, username: "멍멍이", userDepartment: "Architecture" },
+            { userId: 3, username: "함건욱", userDepartment: "Backend" },
           ],
         },
         {
@@ -151,11 +151,11 @@ const SearchProjectList: React.FC = () => {
           managerName: "함건욱",
           managerDepartment: "Backend",
           teamMembers: [
-            { user_id: 2, username: "김성국", user_department: "Architecture" },
+            { userId: 2, username: "김성국", userDepartment: "Architecture" },
             {
-              user_id: 3,
+              userId: 3,
               username: "멍멍이",
-              user_department: "Project Manager",
+              userDepartment: "Project Manager",
             },
           ],
         },
@@ -167,11 +167,11 @@ const SearchProjectList: React.FC = () => {
           managerName: "함건욱",
           managerDepartment: "Backend",
           teamMembers: [
-            { user_id: 2, username: "멍멍이", user_department: "Architecture" },
+            { userId: 2, username: "멍멍이", userDepartment: "Architecture" },
             {
-              user_id: 3,
+              userId: 3,
               username: "김기현",
-              user_department: "Project Manager",
+              userDepartment: "Project Manager",
             },
           ],
         },
@@ -262,7 +262,7 @@ const SearchProjectList: React.FC = () => {
                   {project.teamMembers.map((member) => (
                     <span
                       className="p-1"
-                      key={member.user_id}
+                      key={member.userId}
                       dangerouslySetInnerHTML={{
                         __html:
                           searchType === "개발자"
@@ -347,64 +347,68 @@ const SearchProjectList: React.FC = () => {
       </div>
       {/* 프로젝트 검색 결과 리스트 */}
       <div className="flex justify-center">
-      {isLoading ? (
-        <LoadingComponent />
-      ) : (
-        <div className="flex justify-center">
-          {selectedCheckbox === "전체" && (
-            <div className="">
+        {isLoading ? (
+          <LoadingComponent />
+        ) : (
+          <div className="flex justify-center">
+            {selectedCheckbox === "전체" && (
               <div className="">
-                {renderProjects(
-                  searchResult?.titleSearch || [],
-                  searchTerm,
-                  "제목"
-                )}
+                <div className="">
+                  {renderProjects(
+                    searchResult?.titleSearch || [],
+                    searchTerm,
+                    "제목"
+                  )}
+                </div>
+                <div>
+                  {renderProjects(
+                    searchResult?.descriptionSearch || [],
+                    searchTerm,
+                    "개요"
+                  )}
+                </div>
+                <div>
+                  {renderProjects(
+                    searchResult?.managerSearch || [],
+                    searchTerm,
+                    `관리자`
+                  )}
+                </div>
+                <div>
+                  {renderProjects(
+                    searchResult?.developerSearch || [],
+                    searchTerm,
+                    `개발자`
+                  )}
+                </div>
               </div>
-              <div>
-                {renderProjects(
-                  searchResult?.descriptionSearch || [],
-                  searchTerm,
-                  "개요"
-                )}
-              </div>
-              <div>
-                {renderProjects(
-                  searchResult?.managerSearch || [],
-                  searchTerm,
-                  `관리자`
-                )}
-              </div>
-              <div>
-                {renderProjects(
-                  searchResult?.developerSearch || [],
-                  searchTerm,
-                  `개발자`
-                )}
-              </div>
-            </div>
-          )}
-          {selectedCheckbox === "제목" &&
-            renderProjects(searchResult?.titleSearch || [], searchTerm, "제목")}
-          {selectedCheckbox === "개요" &&
-            renderProjects(
-              searchResult?.descriptionSearch || [],
-              searchTerm,
-              "개요"
             )}
-          {selectedCheckbox === "관리자" &&
-            renderProjects(
-              searchResult?.managerSearch || [],
-              searchTerm,
-              `관리자`
-            )}
-          {selectedCheckbox === "개발자" &&
-            renderProjects(
-              searchResult?.developerSearch || [],
-              searchTerm,
-              `개발자`
-            )}
-        </div>
-      )}
+            {selectedCheckbox === "제목" &&
+              renderProjects(
+                searchResult?.titleSearch || [],
+                searchTerm,
+                "제목"
+              )}
+            {selectedCheckbox === "개요" &&
+              renderProjects(
+                searchResult?.descriptionSearch || [],
+                searchTerm,
+                "개요"
+              )}
+            {selectedCheckbox === "관리자" &&
+              renderProjects(
+                searchResult?.managerSearch || [],
+                searchTerm,
+                `관리자`
+              )}
+            {selectedCheckbox === "개발자" &&
+              renderProjects(
+                searchResult?.developerSearch || [],
+                searchTerm,
+                `개발자`
+              )}
+          </div>
+        )}
       </div>
     </div>
   );
