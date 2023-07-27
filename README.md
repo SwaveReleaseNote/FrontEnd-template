@@ -2,6 +2,13 @@
 <div align="center">
 
  <p>📖Tech Stack📖</p>
+  <img src="https://img.shields.io/badge/jest-C21325?style=for-the-badge&logo=jest&logoColor=white"/>
+  
+  <img src="https://img.shields.io/badge/tailwind-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white"/>
+  
+  <img src="https://img.shields.io/badge/ReactQuery-FF4154?style=for-the-badge&logo=reactquery&logoColor=white"/>
+  
+  <img src="https://img.shields.io/badge/Recoil-3578E5?style=for-the-badge&logo=recoil&logoColor=white"/>
 
  <p>🚉Platforms & Languages🚉</p>
    <img src="https://img.shields.io/badge/react-61DAFB?style=flat&logo=react&logoColor=black"/> 
