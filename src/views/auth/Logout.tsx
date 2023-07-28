@@ -16,7 +16,7 @@ const Logout = (): JSX.Element => {
     try {
       axios
         .patch(
-          "http://localhost:8080/api/user/updateStatus",
+          "http://localhost:8080/api/user/status",
           {
             loginState: false,
           },

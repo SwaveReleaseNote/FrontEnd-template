@@ -23,7 +23,7 @@ const Auth = (): JSX.Element => {
       //url의 인가코드
       try {
         const res = await axios.post(
-          `http://localhost:8080/api/user/prelogin/login-by-oauth?code=${code}&provider=${provider}`
+          `http://localhost:8080/api/user/login-by-oauth?code=${code}&provider=${provider}`
         );
         //인가코드를 백엔드로 보내고 헤더에서 엑세스 토큰 받아옴
         const token = res.headers.authorization;
@@ -43,7 +43,7 @@ const Auth = (): JSX.Element => {
         });
         axios
           .patch(
-            "http://localhost:8080/api/user/updateStatus",
+            "http://localhost:8080/api/user/status",
             {
               loginState:true,
             },
@@ -63,7 +63,7 @@ const Auth = (): JSX.Element => {
 
         try {
           axios
-            .get(`http://localhost:8080/api/user/getuser`, {
+            .get(`http://localhost:8080/api/user`, {
               headers: {
                 Authorization: token,
               },

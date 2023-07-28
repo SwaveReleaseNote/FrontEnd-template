@@ -3,13 +3,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ReactElement } from "react";
 import axios from "axios";
 import "./UserProfileCard.css";
-import { useCookies } from 'react-cookie';
 import {setCookie,getCookie} from './cookie'
+import api from "context/api";
 
 function UserProfileCard(): ReactElement {
 
   const navigate = useNavigate();
-
   const [userName, setUserName] = useState(localStorage.getItem("name"));
   const [email, setEmail] = useState(localStorage.getItem("department"));
   const [phone, setPhone] = useState("0001-213-998761");
@@ -47,7 +46,7 @@ function UserProfileCard(): ReactElement {
     console.log(userName, email, phone, department, mostViewed);
     axios
       .put(
-        "http://localhost:8080/api/user/update",
+        "http://localhost:8080/api/user",
         {
           name: userName,
           email: email,
@@ -111,7 +110,7 @@ function UserProfileCard(): ReactElement {
   const handleClickSaveChangeButton = () => {
     axios
       .patch(
-        "http://localhost:8080/api/user/updateDepartment",
+        "http://localhost:8080/api/user",
         {
           department: department,
         },
@@ -141,7 +140,7 @@ function UserProfileCard(): ReactElement {
   const handleClickButtonDeleteUser = () => {
     console.log(localStorage.getItem("token"));
     axios
-      .delete("http://localhost:8080/api/user/delete", {
+      .delete("http://localhost:8080/api/user", {
         headers: {
           Authorization: localStorage.getItem("token"),
         },
@@ -244,31 +243,6 @@ function UserProfileCard(): ReactElement {
           </div>
         </div>
       </form>
-      {showDepartmentRegisterModal && (
-        <div className="userprofileCard-modal-overlay">
-          <div className="userprofileCard-modal-content">
-            <span className="userprofileCard-close" onClick={handleModalClose}>
-              &times;
-            </span>
-            <h2>Select Department</h2>
-            {/* Department selection options */}
-            <div className="modal-body">
-              <select
-                name="department"
-                value={department}
-                onChange={handleSelectUserDepartmentChange}
-              >
-                <option value="Department 1">Department 1</option>
-                <option value="Department 2">Department 2</option>
-                <option value="Department 3">Department 3</option>
-              </select>
-            </div>
-            <button type="button" onClick={handleClickSaveChangeButton}>
-              Save
-            </button>
-          </div>
-        </div>
-      )}
     </>
   );
 }

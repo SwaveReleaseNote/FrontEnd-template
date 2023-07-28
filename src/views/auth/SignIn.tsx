@@ -4,6 +4,7 @@ import { FcGoogle, FcComments } from "react-icons/fc";
 import Checkbox from "components/checkbox";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
+import { setCookie, getCookie } from "./cookie";
 import axios from "axios";
 import "./SignIn.css";
 
@@ -70,7 +71,7 @@ export default function SignIn() {
       register_confirmPassword,
     });
     axios
-      .post("http://localhost:8080/api/user/prelogin/create", {
+      .post("http://localhost:8080/api/user", {
         name: register_name,
         email: register_email,
         password: register_password,
@@ -104,7 +105,7 @@ export default function SignIn() {
     console.log(loginData);
 
     axios
-      .post("http://localhost:8080/api/user/prelogin/login-by-server", {
+      .post("http://localhost:8080/api/user/login-by-email", {
         email: loginData.login_email,
         password: loginData.login_password,
       })
@@ -118,7 +119,7 @@ export default function SignIn() {
         }
         try {
           axios
-            .get(`http://localhost:8080/api/user/getuser`, {
+            .get(`http://localhost:8080/api/user`, {
               headers: {
                 Authorization: "Bearer " + token,
               },
@@ -136,6 +137,34 @@ export default function SignIn() {
                 response.data.department
               );
               window.localStorage.setItem("token", String("Bearer " + token));
+              axios
+                .patch(
+                  "http://localhost:8080/api/user/status",
+                  {
+                    loginState: true,
+                  },
+                  {
+                    headers: {
+                      Authorization: localStorage.getItem("token"),
+                    },
+                  }
+                )
+                .then((response) => {
+                  console.log(response.data); // Process the response as needed
+                  const expirationTime = new Date();
+                  expirationTime.setTime(expirationTime.getTime() + 30 * 60 * 1000);
+                  setCookie("id", String("Bearer " + token), {
+                    path: "/",
+                    sameSite: "strict",
+                    expires: expirationTime,
+                    HttpOnly: true,
+                    secure: true,
+                  });
+                })
+                .catch((error) => {
+                  console.error(error);
+                  // Handle error cases here
+                });
             });
           navigate("/admin");
         } catch (error) {
@@ -174,7 +203,7 @@ export default function SignIn() {
   const handleValidationButtonClick = () => {
     setShowAuthInput(true);
     axios
-      .post("http://localhost:8080/api/user/prelogin/sendmail", {
+      .post("http://localhost:8080/api/user/validation", {
         email: register_email,
       })
       .then((response) => {
@@ -219,7 +248,7 @@ export default function SignIn() {
     // Handle forgot password form submission
     console.log(forgotPasswordEmail);
     axios
-      .post("http://localhost:8080/api/login/prelogin/get-temporary-email", {
+      .post("http://localhost:8080/api/user/temporary-password", {
         email: forgotPasswordEmail,
       })
       .then((response) => {
@@ -404,7 +433,7 @@ export default function SignIn() {
                   onClick={handleValidationButtonClick}
                   className="w-1/4 rounded-md bg-blue-500 px-4 py-2 font-medium text-white hover:bg-blue-600 focus:bg-blue-600 focus:outline-none"
                 >
-                  유효성검사
+                  e-mail 확인
                 </button>
               </div>
               {/* Authentication number input */}
@@ -463,7 +492,9 @@ export default function SignIn() {
                   })}
                 />
                 {errors.password && (
-                  <div className="text-danger text-red-500">{errors.password.message}</div>
+                  <div className="text-danger text-red-500">
+                    {errors.password.message}
+                  </div>
                 )}
               </div>
               {/* Repeat Password */}
