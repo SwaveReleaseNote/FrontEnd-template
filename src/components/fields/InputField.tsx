@@ -1,4 +1,3 @@
-// Custom components
 import React from "react";
 
 function InputField(props: {
@@ -12,8 +11,8 @@ function InputField(props: {
   type?: string;
   name?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}) {
-  const { label, id, extra, type, placeholder, variant, state, disabled, name, onChange, } =
+}): JSX.Element {
+  const { label, id, extra, type, placeholder, variant, state, disabled, name, onChange } =
     props;
 
   return (

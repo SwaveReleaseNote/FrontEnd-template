@@ -1,4 +1,33 @@
 # SWAVE Project - URINURI
+<div align="center">
+
+ <p>📖Tech Stack📖</p>
+  <img src="https://img.shields.io/badge/jest-C21325?style=for-the-badge&logo=jest&logoColor=white"/>
+  
+  <img src="https://img.shields.io/badge/tailwind-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white"/>
+  
+  <img src="https://img.shields.io/badge/ReactQuery-FF4154?style=for-the-badge&logo=reactquery&logoColor=white"/>
+  
+  <img src="https://img.shields.io/badge/Recoil-3578E5?style=for-the-badge&logo=recoil&logoColor=white"/>
+
+ <p>🚉Platforms & Languages🚉</p>
+   <img src="https://img.shields.io/badge/react-61DAFB?style=flat&logo=react&logoColor=black"/> 
+
+   <img src="https://img.shields.io/badge/typescript-3178C6?style=flat&logo=typescript&logoColor=white" />
+<p>🔋Tools🔋</p>
+
+ <img src="https://img.shields.io/badge/visualstudiocode-007ACC?style=flat&logo=visualstudiocode&logoColor=white" />
+
+ <img src="https://img.shields.io/badge/pnpm-F69220?style=flat&logo=pnpm&logoColor=white" />
+
+ <img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=GitHub&logoColor=white" />
+
+ <img src="https://img.shields.io/badge/Jenkins-D24939?style=flat&logo=Jenkins&logoColor=white" />
+
+
+ </div>
+</br>
+
 
 ---
 
@@ -21,6 +50,26 @@ URINURI supports rich formatting options, allowing you to create visually appeal
 
 #### Versioning and Issue History
 Keep track of the different versions of your release notes and control the complete Issue history of changes.
+
+---
+### Quick Start
+Clone the repository with the following command:
+
+```bash
+git clone https://github.com/SwaveReleaseNote/FrontEnd-template.git
+```
+
+Run in terminal this command:
+
+```bash
+pnpm install
+```
+
+Then run this command to start your local server
+
+```bash
+pnpm start
+```
 
 ---
 

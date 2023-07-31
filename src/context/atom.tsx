@@ -7,12 +7,14 @@ export const noteFieldState = atom({
         version:"",
         block: [
             {
+                id:0,
                 label:"",
                 text:""
             }
         ],
         comment: [
             {
+                id:0,
                 writer:"",
                 content:""
             }
@@ -32,7 +34,8 @@ export const commentState = atom({
     key: "commentState",
     default: [{
         writer:"",
-        content:""
+        content:"",
+        id:""
     }]
 })
 

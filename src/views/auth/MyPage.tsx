@@ -1,7 +1,6 @@
-import React, { useState, useCallback, useEffect, ReactElement } from 'react';
+import { type ReactElement } from 'react';
 import UserProfileCard from './UserProfileCard';
-import NotificationComponent from "./NotificationComponent";
-import axios from 'axios';
+import React from 'react';
 
 function MyPage(): ReactElement {
 

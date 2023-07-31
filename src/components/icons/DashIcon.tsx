@@ -1,4 +1,6 @@
-const DashIcon = () => {
+import React from "react";
+
+const DashIcon: React.FC = () => {
   return (
     <svg
       width="20"

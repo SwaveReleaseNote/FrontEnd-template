@@ -2,7 +2,7 @@ import React from 'react'
 import Input from './Input'
 import List from './List'
 
-export default function CommentIndex(props: any) {
+export default function CommentIndex(props: any): JSX.Element {
   const comment = props.NoteFieldComment
   console.log(comment.content)
   return (
