@@ -1,20 +1,16 @@
-import React, { KeyboardEvent, useRef, MouseEvent } from 'react'
-import Dropdown from 'components/dropdown';
-import { IoMdInformationCircleOutline, IoMdNotificationsOutline } from 'react-icons/io';
-import navbarimage from "assets/img/layout/Navbar.png";
-import { BsArrowBarUp } from 'react-icons/bs';
-import { ENETDOWN } from 'constants';
+import { type KeyboardEvent, useRef, type MouseEvent } from 'react'
+import React from 'react';
 
 interface DropdownMenuProps {
     cursorPosition: { top: number; left: number };
     onClose: () => void;
 }
 
-export default function DropdownMenu(props: DropdownMenuProps) {
+export default function DropdownMenu(props: DropdownMenuProps):JSX.Element {
     const buttonRef = useRef<HTMLButtonElement>(null);
     const cursorPosition = props.cursorPosition;
 
-    const handleChoiceLabelKeyPress = (event: KeyboardEvent<HTMLDivElement>) => {
+    const handleChoiceLabelKeyPress = (event: KeyboardEvent<HTMLDivElement>):void => {
         // if(event.key === 'Home') { // 방향키 왼족
         //     console.log('왼')
         // }
@@ -29,16 +25,17 @@ export default function DropdownMenu(props: DropdownMenuProps) {
         // }
     }
 
-    const handleSelectLavelkeyPress = (event: KeyboardEvent<HTMLDivElement>) => {
-        
+    const handleSelectLavelkeyPress = (event: KeyboardEvent<HTMLDivElement>): void => {
+        console.log("빈 함수여서 에러 생겨서 콘솔 로그");    
     }
 
-    const handleSelectLavelClickEvent = (event: MouseEvent<HTMLDivElement>) => {
-        switch (buttonRef.current.textContent) {
+    const handleSelectLavelClickEvent = (event: MouseEvent<HTMLDivElement>): void => {
+        switch (buttonRef.current?.textContent) {
             case "new":
-                return(
-                    <div></div>
-                )
+                // 리턴 타입 오류
+                // return(
+                //     <div></div>
+                // )
                 break;
             case "update":
 

@@ -1,19 +1,10 @@
-import React, { useState, useRef, useEffect, Component, KeyboardEvent, ChangeEvent, useLayoutEffect, FormEvent } from 'react'
-import NoteField from 'components/note/NoteField'
-import tableDataDevelopment from "../tables/variables/tableDataDevelopment";
-import tableDataCheck from "../tables/variables/tableDataCheck";
-import CheckTable from "../tables/components/CheckTable";
-import tableDataColumns from "../tables/variables/tableDataColumns";
-import tableDataComplex from "../tables/variables/tableDataComplex";
-import DevelopmentTable from "../tables/components/DevelopmentTable";
-import ColumnsTable from "../tables/components/ColumnsTable";
-import ComplexTable from "../tables/components/ComplexTable";
 import Version from './components/Version';
 import Date from './components/Date';
 import SideMenubar from './components/SideMenubar';
 import InputText from './components/InputText';
+import React from 'react';
 
-export default function Index() {
+export default function Index():JSX.Element {
 
   const mockLatestVersion = "3.6.5";
 

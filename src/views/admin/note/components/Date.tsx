@@ -2,7 +2,7 @@ import Card from 'components/card'
 import React from 'react'
 import MiniCalendar from 'components/calendar/MiniCalendar'
 
-export default function Date() {
+export default function Date():JSX.Element {
   return (
     <Card extra={"w-full p-4 h-full"}>
       <div className=' flex flex-col items-center'>

@@ -1,16 +1,15 @@
 import Card from 'components/card';
-import CardMenu from 'components/card/CardMenu';
 import React, { useEffect, useState } from 'react'
-import { createColumnHelper, useReactTable } from '@tanstack/react-table';
 
-type RowObj = {
-  name: string;
-  tech: any;
-  date: string;
-  progress: number;
-};
+// 선언하고 사용안한 오류
+// interface RowObj {
+//   name: string;
+//   tech: any;
+//   date: string;
+//   progress: number;
+// }
 
-export default function Version(props: { latestVersion: string }) {
+export default function Version(props: { latestVersion: string }): JSX.Element {
   // 최신 버전 받아오기
   const { latestVersion } = props;
 
@@ -28,7 +27,7 @@ export default function Version(props: { latestVersion: string }) {
     setPatch(+split[2]);
   }, []);
 
-  const handleClickType = () => {
+  const handleClickType = ():void => {
     // 색상 진하게
 
     // Version 저장
@@ -68,13 +67,14 @@ export default function Version(props: { latestVersion: string }) {
           </div>
           <div className=' text-gray-400 grid-cols-2'>
             <div>
-              <span>{major + 1}.0.1</span>
+            <span>{(major != null) ? major + 1 : 0}.0.1</span>
+
             </div>
             <div>
-              <span>{major}.{minor + 1}.1</span>
+              <span>{major}.{(major != null) ? major + 1 : 0}.1</span>
             </div>
             <div>
-              <span>{major}.{minor}.{patch + 1}</span>
+              <span>{major}.{minor}.{(patch != null) ? patch + 1 : 0}</span>
             </div>
           </div>
         </div> 
