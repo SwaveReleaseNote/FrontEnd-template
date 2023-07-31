@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { ReactElement } from "react";
+import React, { useState, useEffect, type ReactElement } from 'react';
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./UserProfileCard.css";
-import {setCookie,getCookie} from './cookie'
-import api from "context/api";
+import {getCookie} from './cookie'
 
 function UserProfileCard(): ReactElement {
 
@@ -16,11 +14,9 @@ function UserProfileCard(): ReactElement {
     localStorage.getItem("department")
   );
   const [mostViewed, setMostViewed] = useState("dolor sit amet.");
-  const [showDepartmentRegisterModal, setShowDepartmentRegisterModal] =
-    useState(false);
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
+    if (localStorage.getItem("token") == null) {
       navigate("/auth/sign-in");
     } else {
       console.log(localStorage.getItem("department"));
@@ -28,7 +24,6 @@ function UserProfileCard(): ReactElement {
       console.log(cookieId);
       if (localStorage.getItem("department") === "null") {
         console.log("showdepartment");
-        setShowDepartmentRegisterModal(true);
       }
       try {
         setUserName(localStorage.getItem("name"));
@@ -41,7 +36,7 @@ function UserProfileCard(): ReactElement {
       }
     }
   }, []);
-  const handleUserUpdateFormSubmit = (event: React.FormEvent) => {
+  const handleUserUpdateFormSubmit = (event: React.FormEvent):void => {
     event.preventDefault();
     console.log(userName, email, phone, department, mostViewed);
     axios
@@ -62,9 +57,9 @@ function UserProfileCard(): ReactElement {
       )
       .then((response) => {
         console.log(response.data); // Process the response as needed
-        localStorage.setItem("name", userName);
-        localStorage.setItem("email", email);
-        localStorage.setItem("department", department);
+        localStorage.setItem("name", userName ?? "");
+        localStorage.setItem("email", email ?? "");
+        localStorage.setItem("department", department ?? "");
         setUserName(localStorage.getItem("name"));
         setEmail(localStorage.getItem("email"));
         setDepartment(localStorage.getItem("department"));
@@ -78,7 +73,7 @@ function UserProfileCard(): ReactElement {
 
   const handleChangeUserInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  ):void => {
     const { name, value } = event.target;
 
     switch (name) {
@@ -100,44 +95,14 @@ function UserProfileCard(): ReactElement {
   };
   const handleSelectUserDepartmentChange = (
     event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const { name, value } = event.target;
+  ):void => {
+    const { value } = event.target;
     setDepartment(value);
   };
 
-  const [isDepartment, setIsDepartment] = useState(false);
-
-  const handleClickSaveChangeButton = () => {
-    axios
-      .patch(
-        "http://localhost:8080/api/user",
-        {
-          department: department,
-        },
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response.data); // Process the response as needed
-        localStorage.setItem("department", department);
-        setDepartment(localStorage.getItem("department"));
-      })
-      .catch((error) => {
-        console.error(error);
-        // Handle error cases here
-      });
-    setShowDepartmentRegisterModal(false);
-  };
-
-  const handleModalClose = () => {
-    setIsDepartment(false);
-  };
 
   /* 유저 삭제 */
-  const handleClickButtonDeleteUser = () => {
+  const handleClickButtonDeleteUser = ():void => {
     console.log(localStorage.getItem("token"));
     axios
       .delete("http://localhost:8080/api/user", {
@@ -166,7 +131,7 @@ function UserProfileCard(): ReactElement {
             <input
               type="text"
               name="name"
-              value={userName}
+              value={userName ?? ""}
               onChange={handleChangeUserInputChange}
               style={{
                 background: "#01dbdf",
@@ -183,7 +148,7 @@ function UserProfileCard(): ReactElement {
                   <input
                     type="text"
                     name="email"
-                    value={email}
+                    value={email ?? ""}
                     onChange={handleChangeUserInputChange}
                     size={30}
                   />
@@ -193,7 +158,7 @@ function UserProfileCard(): ReactElement {
                   <input
                     type="text"
                     name="phone"
-                    value={phone}
+                    value={phone ?? ""}
                     onChange={handleChangeUserInputChange}
                   />
                 </div>
@@ -207,7 +172,7 @@ function UserProfileCard(): ReactElement {
                   <h4>Department</h4>
                   <select
                     name="department"
-                    value={department}
+                    value={department ?? ""}
                     onChange={handleSelectUserDepartmentChange}
                   >
                     <option value="Department 1">Department 1</option>

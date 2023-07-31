@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import api from "context/api";
-type Props = {
+
+interface Props {
   projectId: {
     id: number;
   };
-};
+}
 
-type MemberStatus = {
+interface MemberStatus {
   memberId: number;
   memberName: string;
-  online: Boolean;
+  online: boolean;
 };
 
 const MemberStatusCard: React.FC<Props> = ({ projectId }) => {
@@ -18,7 +18,7 @@ const MemberStatusCard: React.FC<Props> = ({ projectId }) => {
 
   useEffect(() => {
     console.log("Members Status Project id:", projectId.id);
-    const fetchData = async () => {
+    const fetchData = async (): Promise<void> => {
       //
       try {
         const response = await api.get(
@@ -50,7 +50,9 @@ const MemberStatusCard: React.FC<Props> = ({ projectId }) => {
       }
     };
 
-    fetchData();
+    fetchData().catch((error) => {
+      console.error("Error fetching data:", error);
+    });
   }, [projectId]);
 
   return (

@@ -1,9 +1,10 @@
 import BarChart from "components/charts/BarChart";
-import { barChartDataDailyTraffic } from "variables/charts";
-import { barChartOptionsDailyTraffic } from "variables/charts";
+import { barChartDataDailyTraffic, barChartOptionsDailyTraffic } from "variables/charts";
 import { MdArrowDropUp } from "react-icons/md";
+import React from "react";
+
 import Card from "components/card";
-const DailyTraffic = () => {
+const DailyTraffic = ():JSX.Element => {
   return (
     <Card extra="pb-7 p-[20px]">
       <div className="flex flex-row justify-between">

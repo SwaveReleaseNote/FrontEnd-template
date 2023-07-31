@@ -1,8 +1,9 @@
 import PieChart from "components/charts/PieChart";
 import { pieChartData, pieChartOptions } from "variables/charts";
 import Card from "components/card";
+import React from "react";
 
-const PieChartCard = () => {
+const PieChartCard = ():JSX.Element => {
   return (
     <Card extra="rounded-[20px] p-3 h-full">
       <div className="flex flex-row justify-between px-3 pt-2">

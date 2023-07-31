@@ -3,17 +3,24 @@ import { RecoilRoot } from "recoil";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import { CookiesProvider } from "react-cookie";
+import React from "react";
 
 import App from "./App";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const rootElement = document.getElementById("root");
 
-root.render(
-  <BrowserRouter>
-    <RecoilRoot>
-      <CookiesProvider>
-        <App />
-      </CookiesProvider>
-    </RecoilRoot>
-  </BrowserRouter>
-);
+if (rootElement != null) {
+  const root = ReactDOM.createRoot(rootElement);
+
+  root.render(
+    <BrowserRouter>
+      <RecoilRoot>
+        <CookiesProvider>
+          <App />
+        </CookiesProvider>
+      </RecoilRoot>
+    </BrowserRouter>
+  );
+} else {
+  console.error("Root element with id 'root' not found.");
+}

@@ -1,13 +1,13 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { RecoilRoot } from "recoil";
+import React from "react";
 
 import AdminLayout from "layouts/admin";
 import AuthLayout from "layouts/auth";
 import Auth from "views/auth/Auth";
-import MyPage from "views/auth/MyPage";
 import Logout from "views/auth/Logout";
 
-const App = () => {
+const App: React.FC = () => {
   return (
     <RecoilRoot>
       <Routes>

@@ -1,4 +1,6 @@
-const Checkbox = (props: {
+import React from 'react';
+
+interface CheckboxProps {
   extra?: string;
   color?:
     | "red"
@@ -16,8 +18,10 @@ const Checkbox = (props: {
     | "indigo"
     | "gray";
   [x: string]: any;
-}) => {
-  const { extra, color, ...rest } = props;
+}
+
+const Checkbox = (props: CheckboxProps): JSX.Element => {
+  const { extra = '', color, ...rest } = props;
   return (
     <input
       type="checkbox"

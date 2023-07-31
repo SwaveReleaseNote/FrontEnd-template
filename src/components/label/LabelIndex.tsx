@@ -2,15 +2,13 @@
  * @description 라벨 컴포넌트 : 라벨과 Text를 보여준다
  */
 import React from 'react'
-import { useRecoilState } from 'recoil'
-import { labelState } from '../../context/atom'
 import newLabel from '../../assets/img/label/NEW.png'
 import updateLabel from '../../assets/img/label/UPDATE.png'
 import deleteLabel from '../../assets/img/label/DELETE.png'
 import stopLabel from '../../assets/img/label/STOP.png'
 import etcLabel from '../../assets/img/label/ETC.png'
 
-export default function LabelIndex(props: any) {
+export default function LabelIndex(props: any):JSX.Element {
     const block = props.NoteFieldBlock;
 
     switch (block.label) {

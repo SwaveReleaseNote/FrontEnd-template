@@ -1,10 +1,9 @@
 import InputField from "components/fields/InputField";
 import React, { useState } from "react";
-import { FcGoogle, FcComments } from "react-icons/fc";
-import Checkbox from "components/checkbox";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
-import { setCookie, getCookie } from "./cookie";
+import { FcComments } from "react-icons/fc";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { setCookie } from "./cookie";
 import axios from "axios";
 import "./SignIn.css";
 
@@ -19,14 +18,13 @@ interface LoginFormData {
   login_password: string;
 }
 
-export default function SignIn() {
+const SignIn: React.FC = () => {
   const navigate = useNavigate();
   const host = "http://localhost:3000";
   const KAKAO_REST_API_KEY = "4646a32b25c060e42407ceb8c13ef14a";
   const KAKAO_REDIRECT_URI = host + "/oauth/callback/kakao";
   const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
   const {
-    handleSubmit,
     register,
     formState: { errors },
     reset,
@@ -44,37 +42,37 @@ export default function SignIn() {
     login_password: "",
   });
 
-  /*회원가입 모달창 띄우기*/
-  const handleRegisterModalButton = () => {
+  /* 회원가입 모달창 띄우기 */
+  const handleRegisterModalButton = ():void => {
     setShowRegisterModal(!showRegisterModal);
   };
 
-  /*회원가입 변경 감지 및 보내기*/
-  const register_name = watch("name");
-  const register_password = watch("password");
-  const register_email = watch("email");
-  const register_confirmPassword = watch("confirmPassword");
+  /* 회원가입 변경 감지 및 보내기 */
+  const registeName = watch("name");
+  const registerPassword = watch("password");
+  const registerEmail = watch("email");
+  const registerConfirmPassword = watch("confirmPassword");
   const handleClickRegisterFormSubmit = (
     event: React.FormEvent<HTMLFormElement>
-  ) => {
+  ):void => {
     event.preventDefault();
     setRegisterData({
-      name: register_name,
-      email: register_email,
-      password: register_password,
-      confirmPassword: register_confirmPassword,
+      name: registeName,
+      email: registerEmail,
+      password: registerPassword,
+      confirmPassword: registerConfirmPassword,
     });
     console.log({
-      register_name,
-      register_email,
-      register_password,
-      register_confirmPassword,
+      registeName,
+      registerEmail,
+      registerPassword,
+      registerConfirmPassword,
     });
     axios
       .post("http://localhost:8080/api/user", {
-        name: register_name,
-        email: register_email,
-        password: register_password,
+        name: registeName,
+        email: registerEmail,
+        password: registerPassword,
       })
       .then((response) => {
         // Handle successful response
@@ -97,10 +95,10 @@ export default function SignIn() {
     reset(); // Reset the form after submission
   };
 
-  /*로그인 데이터 변경 감지 및 보내기*/
+  /* 로그인 데이터 변경 감지 및 보내기 */
   const handleClickLoginFormSubmit = (
     event: React.FormEvent<HTMLFormElement>
-  ) => {
+  ):void => {
     event.preventDefault();
     console.log(loginData);
 
@@ -115,28 +113,26 @@ export default function SignIn() {
         const token = response.data;
         if (response.data === "Information Not valid") {
           alert("Information Not valid");
-          return console.error("error");
+          console.error('error');
+          return;
         }
         try {
-          axios
+          void axios
             .get(`http://localhost:8080/api/user`, {
               headers: {
-                Authorization: "Bearer " + token,
+                Authorization: `Bearer ${String(token)}`,
               },
             })
             .then((response) => {
-              //api의 응답을 제대로 받은경우
+              // api의 응답을 제대로 받은경우
               console.log(response);
               console.log(response.data);
               window.localStorage.setItem("state", "true");
               window.localStorage.setItem("name", response.data.username);
               window.localStorage.setItem("email", response.data.email);
               window.localStorage.setItem("info", "");
-              window.localStorage.setItem(
-                "department",
-                response.data.department
-              );
-              window.localStorage.setItem("token", String("Bearer " + token));
+              window.localStorage.setItem("department",response.data.department);
+              window.localStorage.setItem("token", `Bearer ${String(token)}`);
               axios
                 .patch(
                   "http://localhost:8080/api/user/status",
@@ -147,13 +143,13 @@ export default function SignIn() {
                     headers: {
                       Authorization: localStorage.getItem("token"),
                     },
-                  }
+                  },
                 )
                 .then((response) => {
                   console.log(response.data); // Process the response as needed
                   const expirationTime = new Date();
                   expirationTime.setTime(expirationTime.getTime() + 30 * 60 * 1000);
-                  setCookie("id", String("Bearer " + token), {
+                  setCookie("id", `Bearer ${String(token)}`, {
                     path: "/",
                     sameSite: "strict",
                     expires: expirationTime,
@@ -180,13 +176,13 @@ export default function SignIn() {
   };
   const handleLoginInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  ):void => {
     const { name, value } = event.target;
     setLoginData((prevLoginData) => ({ ...prevLoginData, [name]: value }));
   };
 
-  /*비밀 번호 인증 파트*/
-  const validatePassword = (value: string) => {
+  /* 비밀 번호 인증 파트 */
+  const validatePassword = (value: string): boolean | string => {
     const regex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return (
@@ -195,16 +191,16 @@ export default function SignIn() {
     );
   };
 
-  /*이메일 유효성검사 인증 파트*/
-  const [showAuthInput, setShowAuthInput] = useState(false); //인증번호 넣는칸 보여주기
-  const [frontAuthNumber, setFrontAuthNumber] = useState(""); //front에서 입력한 인증번호
-  const [backAuthNumber, setBackAuthNumber] = useState(""); //back에서 받은 인증번호
-  const [isAuthenticated, setIsAuthenticated] = useState(false); //인증이 맞는지 체크
-  const handleValidationButtonClick = () => {
+  /* 이메일 유효성검사 인증 파트 */
+  const [showAuthInput, setShowAuthInput] = useState(false); // 인증번호 넣는칸 보여주기
+  const [frontAuthNumber, setFrontAuthNumber] = useState(""); // front에서 입력한 인증번호
+  const [backAuthNumber, setBackAuthNumber] = useState(""); // back에서 받은 인증번호
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // 인증이 맞는지 체크
+  const handleValidationButtonClick = ():void => {
     setShowAuthInput(true);
     axios
       .post("http://localhost:8080/api/user/validation", {
-        email: register_email,
+        email: registerEmail,
       })
       .then((response) => {
         // Handle successful response
@@ -218,10 +214,10 @@ export default function SignIn() {
   };
   const handleAuthInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  ):void => {
     setFrontAuthNumber(event.target.value);
   };
-  const handleValidationSubmit = () => {
+  const handleValidationSubmit = ():void => {
     // Perform validation logic with the frontAuthNumber
     // ...
     console.log(frontAuthNumber);
@@ -238,12 +234,12 @@ export default function SignIn() {
   /* 패스워드 찾기 */
   const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
   const [forgotPasswordMessage, setForgotPasswordMessage] = useState("");
-  const handleForgotPasswordModalButton = () => {
+  const handleForgotPasswordModalButton = ():void => {
     setShowForgotPasswordModal(!showForgotPasswordModal);
   };
   const handleClickForgotPasswordFormSubmit = (
     event: React.FormEvent<HTMLFormElement>
-  ) => {
+  ):void => {
     event.preventDefault();
     // Handle forgot password form submission
     console.log(forgotPasswordEmail);
@@ -267,15 +263,15 @@ export default function SignIn() {
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
   const handleForgotPasswordInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  ):void => {
     setForgotPasswordEmail(event.target.value);
   };
 
-  /*Register 오류 검사*/
+  /* Register 오류 검사 */
   const isFormValid = isAuthenticated && Object.keys(errors).length === 0;
 
   return (
-    <>
+    <div>
       <div
         className={`mb-16 mt-16 flex h-full w-full items-center justify-center px-2 md:mx-0 md:px-0 lg:mb-10 lg:items-center lg:justify-start ${
           showForgotPasswordModal || showRegisterModal ? "blur-background" : ""
@@ -396,12 +392,10 @@ export default function SignIn() {
                   id="register_form1"
                   type="text"
                   className="w-full rounded-md border px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  defaultValue={registerData.email}
+                  defaultValue={registerData?.email ?? ""}
                   {...register("name", { required: true })}
                 />
-                {errors.name && (
-                  <span className="text-danger">Name is required</span>
-                )}
+                {errors.name != null && (<span className="text-danger">Name is required</span>)}
               </div>
               <div className="mb-4 flex items-center justify-between">
                 <div className="w-1/2 me-2">
@@ -424,7 +418,7 @@ export default function SignIn() {
                       },
                     })}
                   />
-                  {errors.email && (
+                  {errors.email!=null && (
                     <p className="text-danger">{errors.email.message}</p>
                   )}
                 </div>
@@ -491,7 +485,7 @@ export default function SignIn() {
                     validate: validatePassword,
                   })}
                 />
-                {errors.password && (
+                {errors.password!=null && (
                   <div className="text-danger text-red-500">
                     {errors.password.message}
                   </div>
@@ -512,10 +506,10 @@ export default function SignIn() {
                   {...register("confirmPassword", {
                     required: true,
                     validate: (value) =>
-                      value === register_password || "Passwords do not match", // Use password variable
+                      value === registerPassword || "Passwords do not match", // Use password variable
                   })}
                 />
-                {errors.confirmPassword && (
+                {errors.confirmPassword!=null && (
                   <div className="text-danger text-red-500">
                     {errors.confirmPassword.message}
                   </div>
@@ -585,7 +579,7 @@ export default function SignIn() {
                   Submit
                 </button>
               </div>
-              {forgotPasswordMessage && (
+              {forgotPasswordMessage!=="" && (
                 <p className="mt-4 text-sm text-red-500">
                   {forgotPasswordMessage}
                 </p>
@@ -594,6 +588,8 @@ export default function SignIn() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
+
+export default SignIn;

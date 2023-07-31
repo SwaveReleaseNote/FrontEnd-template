@@ -1,4 +1,6 @@
-type Props = {
+import React from "react";
+
+interface Props {
   fontSize?: string;
 };
 
