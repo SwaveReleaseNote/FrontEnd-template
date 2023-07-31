@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoadingComponent from '../components/LoadingComponent ';
-import api from 'context/api';
+import api from '../../../../context/api';
 
 interface UserRequest {
    managerId: number;
@@ -269,7 +269,7 @@ const CreateProject: React.FC = () => {
                 </button> */}
                            </div>
                            {teamMembers.length > 0 ? (
-                              <ul className="dark:text-white">
+                              <ul className="dark:text-white" data-testid="team-members-list">
                                  {teamMembers.map(member => (
                                     <li key={member.userId} className="mb-2 flex items-center justify-between">
                                        <p className="rounded-2xl bg-gray-50 p-3 font-bold">{member.username}</p>
