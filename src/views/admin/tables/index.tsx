@@ -6,8 +6,9 @@ import tableDataComplex from "./variables/tableDataComplex";
 import DevelopmentTable from "./components/DevelopmentTable";
 import ColumnsTable from "./components/ColumnsTable";
 import ComplexTable from "./components/ComplexTable";
+import React from "react";
 
-const Tables = () => {
+const Tables = ():JSX.Element => {
   return (
     <div>
       <div className="mt-5 grid h-full grid-cols-1 gap-5 md:grid-cols-2">

@@ -1,14 +1,11 @@
 import React from "react";
 import Chart from "react-apexcharts";
 
-type ChartProps = {
-  // using `interface` is also ok
-  [x: string]: any;
-};
-type ChartState = {
+type ChartProps = Record<string, any>;
+interface ChartState {
   chartData: any[];
   chartOptions: any;
-};
+}
 
 class ColumnChart extends React.Component<ChartProps, ChartState> {
   constructor(props: { chartData: any[]; chartOptions: any }) {
@@ -19,14 +16,14 @@ class ColumnChart extends React.Component<ChartProps, ChartState> {
     };
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     this.setState({
       chartData: this.props.chartData,
       chartOptions: this.props.chartOptions,
     });
   }
 
-  render() {
+  render(): JSX.Element {
     return (
       <Chart
         options={this.state.chartOptions}

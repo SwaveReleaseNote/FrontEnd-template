@@ -9,17 +9,17 @@ import { noteFieldState } from '../../context/atom'
 import CommentIndex from '../comments/CommentIndex'
 
 // 노트 필드안에 라벨 블록들과 댓글을 작성할 수 있도록 만들기
-export default function NoteField() {
+export default function NoteField(): JSX.Element {
 
     // 백에서 라벨과 블록을 받는다.
     const [noteField, setNoteField] = useRecoilState(noteFieldState);
     setNoteField(data.mock.releaseNote);
 
     // block 부분 받기
-    const noteFieldBlock = noteField.block?.map((block) => <LabelIndex NoteFieldBlock={block} />);
+    const noteFieldBlock = noteField.block?.map((block) => <LabelIndex key={block.id} NoteFieldBlock={block} />);
 
     // comment 부분 받기
-    const noteFieldComment = noteField.comment?.map((comment) => <CommentIndex NoteFieldComment={comment} />);
+    const noteFieldComment = noteField.comment?.map((comment) => <CommentIndex key={comment.id} NoteFieldComment={comment} />);
 
     return (
         <div className='mt-2 mb-8'>
@@ -58,6 +58,7 @@ export default function NoteField() {
             {/* 댓글 보여주는 부분 */}
             <div>
                 <CommentIndex NoteFieldComment={noteField.comment} />
+                {noteFieldComment}
             </div>
         </div>
     )

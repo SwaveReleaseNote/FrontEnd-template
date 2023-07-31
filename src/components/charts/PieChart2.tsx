@@ -1,17 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 import axios from "axios";
 
-type LabelNum = {
+interface LabelNum {
   label: string;
   num: number;
-};
+}
 
-type Props = {
+interface Props {
   projectId: {
     id: number;
   };
-};
+}
 
 const PieChart: React.FC<Props> = ({ projectId }) => {
   const chartRef = useRef<HTMLCanvasElement>(null);
@@ -51,14 +51,14 @@ const PieChart: React.FC<Props> = ({ projectId }) => {
   }, [projectId]);
 
   const renderChart = (data: LabelNum[]) => {
-    if (chartRef.current) {
-      if (chartInstance.current) {
+    if (chartRef.current != null) {
+      if (chartInstance.current != null) {
         chartInstance.current.destroy();
       }
 
       const labels = data.map((item) => item.label);
       const numbers = data.map((item) => item.num);
-      const colorMapping: { [label: string]: string } = {
+      const colorMapping: Record<string, string> = {
         update: "rgb(232, 239, 151)",
         delete: "rgb(164, 101, 241)",
         bugfix: "rgb(101, 143, 241)",

@@ -1,9 +1,9 @@
-type RowObj = {
+interface RowObj {
 	name: string;
 	progress: string;
 	quantity: number;
 	date: string; 
-};
+}
 
 const tableDataColumns: RowObj[] = [
 	{

@@ -1,10 +1,11 @@
 import Card from "components/card";
+import React from "react";
 
 const Widget = (props: {
   icon: JSX.Element;
   title: string;
   subtitle: string;
-}) => {
+}):JSX.Element => {
   const { icon, title, subtitle } = props;
   return (
     <Card extra="!flex-row flex-grow items-center rounded-[20px]">
