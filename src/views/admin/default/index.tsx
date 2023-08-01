@@ -258,7 +258,7 @@ const Dashboard = (): JSX.Element => {
                      }
                   }}
                   type="button"
-                  className="absolute left-[5%] ml-5 rounded-full bg-gray-400 p-4 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:!bg-navy-600 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                  className="absolute left-[5%] ml-5 rounded-full bg-gray-400 p-4 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:!bg-navy-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                   <svg
                      className="h-4 w-4 rotate-180 transform"
                      aria-hidden="true"
@@ -340,7 +340,7 @@ const Dashboard = (): JSX.Element => {
                      }
                   }}
                   type="button"
-                  className="absolute right-[5%] mr-5 rounded-full bg-gray-400 p-4 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:!bg-navy-600 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                  className="absolute right-[5%] mr-5 rounded-full bg-gray-400 p-4 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:!bg-navy-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                   <svg
                      className="h-4 w-4"
                      aria-hidden="true"

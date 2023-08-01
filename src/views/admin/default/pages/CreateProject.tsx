@@ -49,8 +49,8 @@ const CreateProject: React.FC = () => {
          const userRequest: UserRequest = response.data;
          setUseRequest(userRequest);
          const members: User[] = userRequest.users
-            .filter((member: any) => member.userId !== userRequest.managerId)
-            .map((member: any) => ({
+            .filter((member: User) => member.userId !== userRequest.managerId)
+            .map((member: User) => ({
                userId: member.userId,
                username: member.username,
                userDepartment: member.userDepartment,
@@ -124,8 +124,8 @@ const CreateProject: React.FC = () => {
       setUseRequest(userRequest);
 
       const allUsers: User[] = userRequest.users
-         .filter((member: any) => member.userId !== userRequest.managerId)
-         .map((member: any) => ({
+         .filter((member: User) => member.userId !== userRequest.managerId)
+         .map((member: User) => ({
             userId: member.userId,
             username: member.username,
             userDepartment: member.userDepartment,
