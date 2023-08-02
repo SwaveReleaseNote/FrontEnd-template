@@ -94,36 +94,36 @@ const RecentRelease = (): JSX.Element => {
                   <h4 className="px-2 text-xl font-bold text-navy-700 dark:text-white">
                      <p className="text-4xl">🆕</p>Recent Release Note
                   </h4>
-                  {recentReleaseNote != null ? (
+                  {recentReleaseNote !== undefined ? (
                      <>
                         <h4
                            onClick={() => {
-                              handleClickRecentRelease(recentReleaseNote.releaseNoteId);
+                              handleClickRecentRelease(recentReleaseNote?.releaseNoteId);
                            }}
                            className="px-2 text-5xl font-bold text-blue-600 hover:cursor-pointer hover:underline dark:text-white">
-                           version: {recentReleaseNote.version}
+                           version: {recentReleaseNote?.version}
                         </h4>
                         <h4 className="text-l px-2 font-bold text-navy-700 dark:text-white">
-                           lastModified: {recentReleaseNote.lastModified}
+                           lastModified: {recentReleaseNote?.lastModified}
                         </h4>
                         <h4 className="text-l px-2 font-bold text-navy-700 dark:text-white">
-                           releaseDate: {recentReleaseNote.releaseDate}
+                           releaseDate: {recentReleaseNote?.releaseDate}
                         </h4>
                         <h4 className="text-l px-2 font-bold text-navy-700 dark:text-white">
-                           summary: {recentReleaseNote.summary}
+                           summary: {recentReleaseNote?.summary}
                         </h4>
                         <h4 className="text-l px-2 font-bold text-navy-700 dark:text-white">
                            liked: {recentReleaseNote.liked}
                         </h4>
                         <h4 className="text-l px-2 font-bold text-navy-700 dark:text-white">
-                           creator: {recentReleaseNote.creator}
+                           creator: {recentReleaseNote?.creator}
                         </h4>
                         <h4 className="text-l px-2 font-bold text-navy-700 dark:text-white">
-                           content: {recentReleaseNote.content}
+                           content: {recentReleaseNote?.content}
                         </h4>
                         <div className="overflow-y-scroll">
-                           {recentReleaseNote.comment.length > 0 ? (
-                              recentReleaseNote.comment.map(comment => (
+                           {recentReleaseNote?.comment?.length > 0 ? (
+                              recentReleaseNote?.comment?.map(comment => (
                                  <div className="mb-8 mt-2 w-full" key={comment.name}>
                                     <h4 className="text-l px-2 font-bold text-navy-700 dark:text-white">
                                        {comment.name}: {comment.context}
