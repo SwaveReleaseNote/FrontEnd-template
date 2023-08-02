@@ -116,9 +116,9 @@ const ManageProject: React.FC = () => {
          const allMembersResponse = await api.get('users');
          const projectInfoResponse = await api.get(`project/${projectId}/manage`);
 
-         console.log(JSON.stringify(allMembersResponse.data, null, '\t'));
+         console.log(JSON.stringify(allMembersResponse, null, '\t'));
 
-         const allMembers: User[] = allMembersResponse.data.users.map((member: any) => ({
+         const allMembers: User[] = allMembersResponse.data.map((member: any) => ({
             userId: member.userId,
             username: member.username,
             userDepartment: member.department,
@@ -420,7 +420,7 @@ const ManageProject: React.FC = () => {
 
                      <div className="ml-8">
                         <h3 className="mb-4 text-xl font-medium dark:text-white">추천하는 팀원</h3>
-                        {suggestedMembers?.length > 0 ? (
+                        {suggestedMembers.length > 0 ? (
                            <ul>
                               {suggestedMembers.map(member => (
                                  <li
