@@ -258,6 +258,45 @@ const Dashboard = (): JSX.Element => {
                      }
                   }}
                   type="button"
+                  className="absolute left-[5%] ml-5 rounded-full bg-gray-400 p-4 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:!bg-navy-600 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                  <svg
+                     className="h-4 w-4 rotate-180 transform"
+                     aria-hidden="true"
+                     xmlns="http://www.w3.org/2000/svg"
+                     fill="none"
+                     viewBox="0 0 14 10">
+                     <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M1 5h12m0 0L9 1m4 4L9 9"
+                     />
+                  </svg>
+                  <span className="sr-only">Icon description</span>
+               </button>
+            </div>
+            <div className="items-right absolute right-[4.5%] top-[15.5%]">
+               <button
+                  onClick={handleClickProjectCreateButton}
+                  type="button"
+                  className="text-black mb-2 mr-2 rounded-3xl bg-gray-200 px-5 py-2.5 text-sm font-bold hover:bg-gray-300 focus:ring-4 focus:ring-blue-300 dark:bg-navy-400 dark:text-white">
+                  만들기
+               </button>
+            </div>
+         </div>
+         {/* Project Card List */}
+         <div className="flex h-[450px] justify-center rounded-3xl bg-gray-100 pt-5 dark:!bg-navy-700">
+            <div className="flex items-center">
+               <button
+                  onClick={() => {
+                     if (isSubscribeOpen) {
+                        setSubscribePage(subscribePage - FIRST_PAGE);
+                     } else {
+                        setManageDevelopPage(manageDevelopPage - FIRST_PAGE);
+                     }
+                  }}
+                  type="button"
                   className="absolute left-[5%] ml-5 rounded-full bg-gray-400 p-4 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:!bg-navy-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                   <svg
                      className="h-4 w-4 rotate-180 transform"

@@ -8,7 +8,7 @@ const Auth = (): JSX.Element => {
    const navigate = useNavigate();
 
    /* 로그인 페이지에서 Auth로 넘어오는지 log 확인 */
-   const {provider} = useParams<{ provider?: string }>();
+   const { provider } = useParams<{ provider?: string }>();
 
    useEffect(() => {
       (async () => {
@@ -26,7 +26,7 @@ const Auth = (): JSX.Element => {
          // url의 인가코드
          try {
             const res = await axios.post(
-               `http://localhost:8080/api/user/prelogin/login-by-oauth?code=${code}&provider=${provider?.toString() ?? ""}`,
+               `http://localhost:8080/api/user/login-by-oauth?code=${code}&provider=${provider?.toString() ?? ''}`,
             );
             // 인가코드를 백엔드로 보내고 헤더에서 엑세스 토큰 받아옴
             const token = res.headers.authorization;
@@ -44,10 +44,9 @@ const Auth = (): JSX.Element => {
                HttpOnly: true,
                secure: true,
             });
-
             axios
-               .put(
-                  'http://localhost:8080/api/user/update',
+               .patch(
+                  'http://localhost:8080/api/user/status',
                   {
                      loginState: true,
                   },
@@ -67,7 +66,7 @@ const Auth = (): JSX.Element => {
 
             try {
                axios
-                  .get(`http://localhost:8080/api/user/getuser`, {
+                  .get(`http://localhost:8080/api/user`, {
                      headers: {
                         Authorization: token,
                      },
@@ -83,9 +82,10 @@ const Auth = (): JSX.Element => {
                      window.localStorage.setItem('department', response.data.department);
                      console.log(localStorage.getItem('email'));
                   });
-               navigate('/admin');
+                  navigate('/admin');
             } catch (error) {
                console.error(error);
+               navigate('/');
             }
          } catch (error) {
             console.error(error);

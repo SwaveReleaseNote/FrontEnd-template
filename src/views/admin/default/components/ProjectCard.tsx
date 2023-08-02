@@ -147,7 +147,7 @@ function ProjectCard({
 
                {/* 프로젝트의 최신 릴리즈 노트 버전 */}
                <div className="mt-4 flex flex-col items-center">
-                  {(projectRecentRelease.length > 0) ? (
+                  {(projectRecentRelease?.length > 0) ? (
                      <h1 className="text-2xl font-bold text-navy-700 dark:text-white">{projectRecentRelease}</h1>
                   ) : (
                      <div className="flex items-center justify-center text-sm font-bold">

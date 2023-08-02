@@ -5,6 +5,7 @@ var react_1 = require("react");
 var default_1 = require("views/admin/default");
 var marketplace_1 = require("views/admin/marketplace");
 var tables_1 = require("views/admin/tables");
+var note_1 = require("views/admin/note");
 // Auth Imports
 var SignIn_1 = require("views/auth/SignIn");
 // Icon Imports
@@ -84,6 +85,13 @@ var routes = [
         path: "release-note",
         icon: react_1["default"].createElement(md_1.MdOutlineShoppingCart, { className: "h-6 w-6" }),
         component: react_1["default"].createElement(marketplace_1["default"], null)
+    },
+    {
+        name: "Create Release Note",
+        layout: "/admin",
+        path: "create-note",
+        icon: react_1["default"].createElement(md_1.MdOutlineShoppingCart, { className: "h-6 w-6" }),
+        component: react_1["default"].createElement(note_1["default"], null)
     }
 ];
 exports["default"] = routes;
