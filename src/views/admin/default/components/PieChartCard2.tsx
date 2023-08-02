@@ -90,18 +90,22 @@ const PieChartCard: React.FC<Props> = ({ projectId }) => {
 
    return (
       <div
-         className={`!z-5 relative flex h-full w-full flex-col items-center justify-center rounded-[20px] bg-white bg-clip-border px-6 pb-6 shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none sm:overflow-x-auto`}>
+         className={`overflow-hidden !z-5 relative flex h-full w-full flex-col items-center justify-center rounded-[20px] bg-white bg-clip-border px-6 pb-6 shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none`}>
          <div className="relative flex items-center justify-between pt-4">
             <div className="text-xl font-bold text-navy-700 dark:text-white">Pie Chart</div>
          </div>
-         {dataCount > 0 ? (
+         {!isLoading ? (
             <div className="mb-auto mt-auto flex h-[30vh] w-[30vh] items-center justify-center">
-               {isLoading ? <LoadingComponent fontSize="m" /> : <canvas className="mt-4" ref={chartRef}></canvas>}
+               {dataCount <= 0 ? (
+                  <div className="text-black-400 flex h-full w-full items-center justify-center gap-10 text-xl font-bold dark:text-white">
+                     생성된 릴리즈노트가 없습니다!!👻
+                  </div>
+               ) : (
+                  <canvas className="mt-4" ref={chartRef}></canvas>
+               )}
             </div>
          ) : (
-            <div className="text-black-400 flex h-full w-full items-center justify-center gap-10 text-xl font-bold dark:text-white">
-               생성된 릴리즈노트가 없습니다!!👻
-            </div>
+            <LoadingComponent fontSize="m" />
          )}
          <div className="justify-between rounded-2xl px-6 py-3 shadow-2xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
             <div className="flex flex-col items-center justify-center">

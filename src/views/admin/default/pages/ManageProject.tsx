@@ -118,18 +118,18 @@ const ManageProject: React.FC = () => {
 
          console.log(JSON.stringify(allMembersResponse, null, '\t'));
 
-         const allMembers: User[] = allMembersResponse.data.map((member: any) => ({
+         const allMembers: User[] = allMembersResponse.data.users.map((member: any) => ({
             userId: member.userId,
             username: member.username,
-            userDepartment: member.department,
+            userDepartment: member.userDepartment,
          }));
 
          const projectInfo: ProjectInfo = projectInfoResponse.data;
          console.log(JSON.stringify(projectInfo, null, '\t'));
-         const teamMembers: User[] = projectInfo.teamMembers.map((member: any) => ({
+         const teamMembers: User[] = projectInfo.teamMembers.map((member: User) => ({
             userId: member.userId,
             username: member.username,
-            userDepartment: member.department,
+            userDepartment: member.userDepartment,
          }));
 
          setAllMembers(allMembers);
@@ -270,7 +270,7 @@ const ManageProject: React.FC = () => {
             <div className="mt-10 h-full w-full items-center overflow-auto rounded-3xl bg-white bg-clip-border px-6 pb-6 shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none sm:overflow-x-auto">
                <button
                   onClick={handleClickProjectDeleteButton}
-                  className="border-black absolute right-[15%] top-[30%] flex rounded border bg-gray-100 px-4 py-2 font-bold text-red-500 shadow-3xl shadow-shadow-500 dark:bg-navy-600 dark:text-white">
+                  className="hover:bg-red-300 border-black absolute right-[15%] top-[30%] flex rounded border bg-gray-100 px-4 py-2 font-bold text-red-500 shadow-3xl shadow-shadow-500 dark:bg-navy-600 dark:text-white">
                   프로젝트 삭제
                </button>
                {showConfirmation && (
@@ -306,7 +306,7 @@ const ManageProject: React.FC = () => {
                   <div>
                      <button
                         type="submit"
-                        className="border-black absolute right-[15%] top-[50%] flex rounded border bg-gray-100 px-4 py-2 font-bold shadow-3xl shadow-shadow-500 dark:bg-navy-600 dark:text-white">
+                        className="hover:bg-gray-300 border-black absolute right-[15%] top-[50%] flex rounded border bg-gray-100 px-4 py-2 font-bold shadow-3xl shadow-shadow-500 dark:bg-navy-600 dark:text-white">
                         변경사항 저장
                      </button>
                   </div>
@@ -406,7 +406,7 @@ const ManageProject: React.FC = () => {
                                     <p className="rounded-2xl bg-gray-50 p-3 font-bold">{member.username}</p>
                                     <p className="ml-3 rounded-2xl bg-gray-50 p-3 font-bold">{member.userDepartment}</p>
                                     <button
-                                       className="ml-5 rounded-xl bg-gray-50 px-2 py-1 font-bold"
+                                       className="hover:bg-gray-300 ml-5 rounded-xl bg-gray-50 px-2 py-1 font-bold"
                                        onClick={() => { handleClickRemoveMemberButton(member); }}>
                                        ❌
                                     </button>
@@ -418,8 +418,8 @@ const ManageProject: React.FC = () => {
                         )}
                      </div>
 
-                     <div className="ml-8">
-                        <h3 className="mb-4 text-xl font-medium dark:text-white">추천하는 팀원</h3>
+                     <div className="ml-40">
+                        <h3 className="mb-4 text-xl font-bold dark:text-white">추천하는 팀원</h3>
                         {suggestedMembers.length > 0 ? (
                            <ul>
                               {suggestedMembers.map(member => (
@@ -429,7 +429,7 @@ const ManageProject: React.FC = () => {
                                     <p className="rounded-2xl bg-gray-50 p-3 font-bold">{member.username}</p>
                                     <p className="ml-3 rounded-2xl bg-gray-50 p-3 font-bold">{member.userDepartment}</p>
                                     <button
-                                       className="ml-5 rounded-xl bg-gray-50 px-2 py-1 text-3xl font-bold text-blue-500"
+                                       className="hover:bg-gray-300 ml-5 rounded-xl bg-gray-50 px-2 py-1 text-3xl font-bold text-blue-500"
                                        onClick={() => { handleClickAddMemberButton(member); }}>
                                        +
                                     </button>

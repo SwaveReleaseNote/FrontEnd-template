@@ -87,7 +87,7 @@ function ProjectCard({
             />
          )}
          <button
-            className="h-[60vh] w-[40vh] rounded-3xl pl-2 pr-2 hover:bg-gray-500 focus:ring-1 focus:ring-blue-300"
+            className="h-[60vh] w-[40vh] rounded-3xl pl-2 pr-2 hover:bg-indigo-100 focus:ring-1 focus:ring-blue-300"
             onClick={() => {
                handleClickProjectCard(projectId, projectRole);
             }}>

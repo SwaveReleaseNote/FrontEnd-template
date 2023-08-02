@@ -182,7 +182,9 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
                                  alt={searchRelease.label}
                                  className="h-[5vh] w-[10vh] rounded-xl"
                               />
-                              <p className="mt-3 pl-3">작성된 릴리즈 노트가 없습니다.</p>
+                              <div className="mt-2 text-black-400 flex h-full w-full items-center justify-center gap-10 text-xl font-bold dark:text-white">
+                                 생성된 릴리즈노트가 없습니다!!👻
+                              </div>
                            </td>
                         </tr>
                      ) : (
@@ -202,7 +204,7 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
                                        className="mb-1 mt-1 h-[5vh] w-[10vh] rounded-xl"
                                     />
                                  </div>
-                                 <div className="h-[6vh] overflow-hidden text-sm">{release.context}</div>
+                                 <div className="h-[6vh] overflow-hidden text-sm text-gray-800">{release.context}</div>
                               </td>
                            </tr>
                         ))
