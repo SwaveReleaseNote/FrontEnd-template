@@ -33,7 +33,7 @@ const SearchProjectList: React.FC = () => {
    const [searchResult, setSearchResult] = useState<SearchResult>();
    const [selectedCheckbox, setSelectedCheckbox] = useState('전체');
    const location = useLocation();
-   const searchTerm = location.state.searchTerm.searchTerm;
+   const searchTerm = location.state.searchTerm;
    const [isLoading, setIsLoading] = useState(true);
 
    useEffect(() => {
@@ -59,7 +59,9 @@ const SearchProjectList: React.FC = () => {
 
    useEffect(() => {
       console.log('selectedCheckbox:', selectedCheckbox);
-   }, [selectedCheckbox]);
+      console.log('searchResult:', searchResult);
+      console.log('searchTerm:', searchTerm);
+   }, [selectedCheckbox, searchResult, searchTerm]);
 
    const mockFetchSearchResult = (): void => {
       // Simulate API response with mock data
@@ -188,6 +190,10 @@ const SearchProjectList: React.FC = () => {
    };
 
    const renderProjects = (projects: ProjectInfo[], searchTerm: string, searchType: string): JSX.Element => {
+      console.log('projects:', projects);
+      console.log('searchType:', searchType);
+      console.log('searchTerm:', searchTerm);
+
       const highlightSearchTerm = (text: string): string => {
          const regex = new RegExp(searchTerm, 'gi');
          return text.replace(regex, match => `<span style="color: red; font-weight: bold">${match}</span>`);
@@ -203,7 +209,7 @@ const SearchProjectList: React.FC = () => {
                {projects.length > 0 ? (
                   projects.map(project => (
                      <div className="m-3 rounded-xl bg-gray-100 p-3 dark:!bg-navy-900" key={project.id}>
-                        <h2 className="text-2xl">
+                        <h2 className="hover:underline hover:text-blue-600 text-2xl">
                            {/* 프로젝트 제목: */}
                            <span
                               onClick={() => {
@@ -339,20 +345,19 @@ const SearchProjectList: React.FC = () => {
                <div className="flex justify-center">
                   {selectedCheckbox === '전체' && (
                      <div className="">
-                        <div className="">{renderProjects(searchResult?.titleSearch ?? [], searchTerm, '제목')};</div>
-                        <div>{renderProjects(searchResult?.titleSearch ?? [], searchTerm, '개요')};</div>
-                        <div>{renderProjects(searchResult?.titleSearch ?? [], searchTerm, '관리자')};</div>
-                        <div>{renderProjects(searchResult?.titleSearch ?? [], searchTerm, '개발자')};</div>
+                        <div className="">{renderProjects(searchResult?.titleSearch ?? [], searchTerm, '제목')}</div>
+                        <div>{renderProjects(searchResult?.descriptionSearch ?? [], searchTerm, '개요')}</div>
+                        <div>{renderProjects(searchResult?.managerSearch ?? [], searchTerm, '관리자')}</div>
+                        <div>{renderProjects(searchResult?.developerSearch ?? [], searchTerm, '개발자')}</div>
                      </div>
                   )}
-                  {selectedCheckbox === '제목' && renderProjects(searchResult?.titleSearch ?? [], searchTerm, '제목')};
-                  {selectedCheckbox === '개요' && renderProjects(searchResult?.titleSearch ?? [], searchTerm, '개요')};
+                  {selectedCheckbox === '제목' && renderProjects(searchResult?.titleSearch ?? [], searchTerm, '제목')}
+                  {selectedCheckbox === '개요' && renderProjects(searchResult?.descriptionSearch ?? [], searchTerm, '개요')}
                   {selectedCheckbox === '관리자' &&
-                     renderProjects(searchResult?.titleSearch ?? [], searchTerm, '관리자')}
-                  ;
+                     renderProjects(searchResult?.managerSearch ?? [], searchTerm, '관리자')}
+
                   {selectedCheckbox === '개발자' &&
-                     renderProjects(searchResult?.titleSearch ?? [], searchTerm, '개발자')}
-                  ;
+                     renderProjects(searchResult?.developerSearch ?? [], searchTerm, '개발자')}
                </div>
             )}
          </div>

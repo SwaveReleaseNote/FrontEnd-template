@@ -18,7 +18,7 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
       if (event.key === 'Enter') {
          navigate('/admin/project/searchResult', {
             state: {
-               searchTerm: searchTerm, // Removed the object wrapping from searchTerm
+               searchTerm: searchTerm,
             },
          });
          setSearchTerm('');

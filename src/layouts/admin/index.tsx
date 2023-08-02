@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navbar from 'components/navbar';
@@ -8,7 +7,6 @@ import routes from 'routes';
 import axios from 'axios';
 import ProjectDashboard from 'views/admin/default/pages/ProjectDashboard';
 import { getCookie } from 'views/auth/cookie';
-
 
 export default function Admin(props: Record<string, any>): JSX.Element {
    const { ...rest } = props;
@@ -38,6 +36,7 @@ export default function Admin(props: Record<string, any>): JSX.Element {
       }
       return activeRoute;
    };
+
    const getActiveNavbar = (routes: RoutesType[]): string | boolean => {
       const activeNavbar = false;
       for (let i = 0; i < routes.length; i++) {
