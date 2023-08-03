@@ -190,7 +190,7 @@ const CreateProject: React.FC = () => {
                         <input
                            type="text"
                            id="projectName"
-                           className="m-5 ml-10 block w-[50%] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700"
+                           className="dark:bg-gray-800 dark:text-white m-5 ml-10 block w-[50%] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                            placeholder="프로젝트 이름을 입력해주세요"
                            value={projectName}
                            onChange={event => {
@@ -202,7 +202,7 @@ const CreateProject: React.FC = () => {
                      <div>
                         <button
                            type="submit"
-                           className="hover:bg-gray-300 border-black absolute right-[15%] top-[30%] flex rounded border bg-gray-100 px-4 py-2 font-bold shadow-3xl shadow-shadow-500 dark:bg-navy-600 dark:text-white">
+                           className="dark:hover:bg-navy-300 hover:bg-gray-300 border-black absolute right-[15%] top-[30%] flex rounded border bg-gray-100 px-4 py-2 font-bold shadow-3xl shadow-shadow-500 dark:bg-navy-600 dark:text-white">
                            프로젝트 생성
                         </button>
                      </div>
@@ -215,7 +215,7 @@ const CreateProject: React.FC = () => {
                         <input
                            type="text"
                            id="description"
-                           className="m-5 ml-10 block w-[50%] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700"
+                           className="dark:bg-gray-800 dark:text-white m-5 ml-10 block w-[50%] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                            placeholder="프로젝트 개요을 입력해주세요"
                            value={description}
                            onChange={event => {
@@ -237,8 +237,8 @@ const CreateProject: React.FC = () => {
                            </div>
                            <ul className="dark:text-white">
                               <li className="mb-2 flex items-center justify-between">
-                                 <p className="rounded-2xl bg-gray-50 p-3 font-bold">{userRequest.managerName}</p>
-                                 <p className="ml-3 rounded-2xl bg-gray-50 p-3 font-bold">
+                                 <p className="dark:bg-gray-800 dark:text-white rounded-2xl bg-gray-50 p-3 font-bold">{userRequest.managerName}</p>
+                                 <p className="dark:bg-gray-800 dark:text-white ml-3 rounded-2xl bg-gray-50 p-3 font-bold">
                                     {userRequest.managerDepartment}
                                  </p>
                                  {/* 추후에 관리자 변경을 위해 보류 */}
@@ -256,7 +256,7 @@ const CreateProject: React.FC = () => {
                            <div className="mb-4 flex">
                               <input
                                  type="text"
-                                 className="w-64 rounded border border-gray-300 bg-gray-50 p-2 text-sm text-gray-900 dark:bg-gray-700"
+                                 className="dark:bg-gray-800 dark:text-white w-64 rounded border border-gray-300 bg-gray-50 p-2 text-sm text-gray-900 dark:bg-gray-700"
                                  placeholder="팀원 이름을 입력해주세요"
                                  value={newMemberName}
                                  onChange={handleInputChange}
@@ -272,12 +272,12 @@ const CreateProject: React.FC = () => {
                               <ul className="dark:text-white" data-testid="team-members-list">
                                  {teamMembers.map(member => (
                                     <li key={member.userId} className="mb-2 flex items-center justify-between">
-                                       <p className="rounded-2xl bg-gray-50 p-3 font-bold">{member.username}</p>
-                                       <p className="ml-3 rounded-2xl bg-gray-50 p-3 font-bold">
+                                       <p className="dark:bg-gray-800 dark:text-white rounded-2xl bg-gray-50 p-3 font-bold">{member.username}</p>
+                                       <p className="dark:bg-gray-800 dark:text-white ml-3 rounded-2xl bg-gray-50 p-3 font-bold">
                                           {member.userDepartment}
                                        </p>
                                        <button
-                                          className="hover:bg-gray-300 ml-5 rounded-xl bg-gray-50 px-2 py-1 font-bold"
+                                          className="dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 hover:bg-gray-300 ml-5 rounded-xl bg-gray-50 px-2 py-1 font-bold"
                                           onClick={() => {
                                              handleClickRemoveMemberButton(member);
                                           }}>
@@ -299,12 +299,12 @@ const CreateProject: React.FC = () => {
                                     <li
                                        key={member.userId}
                                        className="mb-2 flex items-center justify-between dark:text-white">
-                                       <p className="rounded-2xl bg-gray-50 p-3 font-bold">{member.username}</p>
-                                       <p className="ml-3 rounded-2xl bg-gray-50 p-3 font-bold">
+                                       <p className="dark:bg-gray-800 dark:text-white rounded-2xl bg-gray-50 p-3 font-bold">{member.username}</p>
+                                       <p className="dark:bg-gray-800 dark:text-white ml-3 rounded-2xl bg-gray-50 p-3 font-bold">
                                           {member.userDepartment}
                                        </p>
                                        <button
-                                          className="hover:bg-gray-300 ml-5 rounded-xl bg-gray-50 px-2 py-1 text-3xl font-bold text-blue-500"
+                                          className="dark:bg-gray-800 dark:hover:bg-gray-700 hover:bg-gray-300  ml-5 rounded-xl bg-gray-50 px-2 py-1 text-3xl font-bold text-blue-500"
                                           onClick={() => {
                                              handleClickAddMemberButton(member);
                                           }}>

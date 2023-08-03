@@ -177,12 +177,40 @@ const SearchProjectList: React.FC = () => {
       console.log('mock fetch search result');
    };
 
-   const handleClickProjectName = (projectId: number, projectName: string): void => {
-      const queryString = `projectId=${projectId}&role=${encodeURIComponent('Subscriber')}&projectName=${projectName}`;
-      const url = `/admin/dashboard?${queryString}`;
+   const mockFetchUserRole = (): string => {
+      return 'none';
+   };
 
-      navigate(url);
-      console.log('handleClickProjectCard');
+   const fetchUserRole = async (): Promise<string> => {
+      try {
+         const response = await api.get('user/role');
+         return response.data;
+      } catch (error) {
+         console.error('Error fetching search result:', error);
+         const mockResponse = mockFetchUserRole();
+         return mockResponse;
+      }
+   };
+
+   // 클릭한 유저의 권한을 확인해서 프로젝트의 대시보드에 접근할 권리가 없으면 구독을 할 수 있도록 알림창을 띄운다.
+   const handleClickProjectName = async (projectId: number, projectName: string): Promise<void> => {
+      try {
+         // 백엔드로 권한확인
+         const role = await fetchUserRole();
+         if (role === 'none') {
+            // 이 프로젝트의 대시보드를 볼 권한이 없습니다.
+            // 구독하시겠습니까? Yes/No
+         } else {
+            const queryString = `projectId=${projectId}&role=${encodeURIComponent(role)}&projectName=${projectName}`;
+            const url = `/admin/dashboard?${queryString}`;
+
+            navigate(url);
+            console.log('handleClickProjectCard');
+         }
+      } catch (error) {
+         // Handle the error gracefully, for example, show an error message or log it.
+         console.error('Error fetching user role:', error);
+      }
    };
 
    const handleCheckboxChange = (value: string): void => {
@@ -213,7 +241,7 @@ const SearchProjectList: React.FC = () => {
                            {/* 프로젝트 제목: */}
                            <span
                               onClick={() => {
-                                 handleClickProjectName(project.id, project.name);
+                                 void handleClickProjectName(project.id, project.name);
                               }}
                               className="text-blue-600 hover:cursor-pointer dark:text-blue-500"
                               dangerouslySetInnerHTML={{
@@ -343,7 +371,7 @@ const SearchProjectList: React.FC = () => {
          <div className="w-[60vh] m-10 flex justify-center rounded-3xl bg-gray-100 pb-5 pt-5 dark:!bg-navy-600">
             <p className="text-xl font-bold">{selectedCheckbox}를 선택하셨습니다</p>
          </div>
-            <div className='bg-gray-500 w-[80%] h-[0.2vh] mb-10'></div>
+         <div className="bg-gray-500 w-[80%] h-[0.2vh] mb-10"></div>
          {/* 프로젝트 검색 결과 리스트 */}
          <div className="flex justify-center">
             {isLoading ? (
