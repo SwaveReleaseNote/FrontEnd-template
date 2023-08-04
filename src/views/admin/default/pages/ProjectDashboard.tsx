@@ -64,7 +64,7 @@ const ProjectDashboard: React.FC = () => {
          ) : (
             <div>
                <div className="h-100% mt-4 flex w-auto justify-items-center gap-5 rounded-[20px] bg-white bg-clip-border p-6 text-4xl font-bold shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none sm:overflow-x-auto">
-                  <p className="w-[95vh] overflow-hidden">{projectName}</p>
+                  <p className="w-[95vh] overflow-hidden h-[6vh]">{projectName}</p>
                   {role === UserRole.Manager && (
                      <button
                         onClick={event => {

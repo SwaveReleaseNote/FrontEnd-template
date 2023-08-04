@@ -71,6 +71,7 @@ const Dashboard = (): JSX.Element => {
    useEffect(() => {
       const fetchData = async (): Promise<void> => {
          try {
+            console.log('api', api);
             const response = await api.get(`projects`);
             const fetchedProjectList = response.data;
             console.log(fetchedProjectList);
@@ -99,25 +100,34 @@ const Dashboard = (): JSX.Element => {
       });
    }, []);
 
-   useEffect(() => {
-      if (!isLoading) {
-         if (manageDevelopPage < FIRST_PAGE) {
-            const manageDevelopLastPage = Math.ceil(managerDeveloperProjectList.length / limit) ?? FIRST_PAGE;
+   function handleClickPageButton(change: number): void {
+      const manageDevelopLastPage = Math.ceil(managerDeveloperProjectList.length / limit) ?? FIRST_PAGE;
+      const subscribeLastPage = Math.ceil(subscriberProjectList.length / limit) ?? FIRST_PAGE;
+      if (!isSubscribeOpen) {
+         if (manageDevelopPage + change < FIRST_PAGE) {
             setManageDevelopPage(manageDevelopLastPage);
-         } else {
+         } else if (manageDevelopPage + change > manageDevelopLastPage) {
             setManageDevelopPage(FIRST_PAGE);
-         }
-
-         if (subscribePage < FIRST_PAGE) {
-            const subscribeLastPage = Math.ceil(subscriberProjectList.length / limit) ?? FIRST_PAGE;
-            setSubscribePage(subscribeLastPage);
          } else {
-            setSubscribePage(FIRST_PAGE);
+            setManageDevelopPage(manageDevelopPage + change);
          }
-         console.log('manageDevelopPage page:', manageDevelopPage);
-         console.log('subscribePage page:', subscribePage);
+      } else {
+         if (subscribePage + change < FIRST_PAGE || manageDevelopPage + change > subscribeLastPage) {
+            setSubscribePage(subscribeLastPage);
+         } else if (subscribePage + change > subscribeLastPage) {
+            setManageDevelopPage(FIRST_PAGE);
+         } else {
+            setSubscribePage(subscribePage + change);
+         }
       }
-   }, [manageDevelopPage, subscribePage, displayedManageDevelopList, displayedSubscribeList, isLoading]);
+   }
+
+   useEffect(() => {
+      console.log('manageDevelopPage page:', manageDevelopPage);
+      console.log('subscribePage page:', subscribePage);
+      console.log('displayedManageDevelopList page:', displayedManageDevelopList);
+      console.log('displayedSubscribeList page:', displayedSubscribeList);
+   }, [manageDevelopPage, subscribePage, displayedManageDevelopList, displayedSubscribeList]);
 
    const mockFetchProjectList = (): void => {
       // Simulate API response with mock data
@@ -219,7 +229,7 @@ const Dashboard = (): JSX.Element => {
             <div>
                <button
                   onClick={handleClickListTabButton}
-                  className={`ml-10 rounded-t-3xl font-bold border-l-4 border-r-4 border-t-4 hover:border-indigo-200 ${
+                  className={`dark:text-white ml-10 rounded-t-3xl font-bold border-l-4 border-r-4 border-t-4 hover:border-indigo-200 ${
                      isSubscribeOpen
                         ? 'bg-white-200  dark:!bg-navy-600'
                         : 'border-l-4  border-r-4 border-t-4 border-indigo-200 bg-gray-100 dark:!bg-navy-700'
@@ -228,7 +238,7 @@ const Dashboard = (): JSX.Element => {
                </button>
                <button
                   onClick={handleClickListTabButton}
-                  className={`ml-4 rounded-t-3xl font-bold border-l-4 border-r-4 border-t-4 hover:border-indigo-200 ${
+                  className={`dark:text-white ml-4 rounded-t-3xl font-bold border-l-4 border-r-4 border-t-4 hover:border-indigo-200 ${
                      isSubscribeOpen
                         ? 'border-l-4  border-r-4 border-t-4 border-indigo-200 bg-gray-100 dark:!bg-navy-700'
                         : 'bg-white-200  dark:!bg-navy-600'
@@ -251,11 +261,7 @@ const Dashboard = (): JSX.Element => {
             <div className="flex items-center">
                <button
                   onClick={() => {
-                     if (isSubscribeOpen) {
-                        setSubscribePage(subscribePage - FIRST_PAGE);
-                     } else {
-                        setManageDevelopPage(manageDevelopPage - FIRST_PAGE);
-                     }
+                     handleClickPageButton(-1);
                   }}
                   type="button"
                   className="absolute left-[5%] ml-5 rounded-full bg-indigo-400 p-4 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:!bg-navy-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -333,11 +339,7 @@ const Dashboard = (): JSX.Element => {
             <div className="flex items-center">
                <button
                   onClick={() => {
-                     if (isSubscribeOpen) {
-                        setSubscribePage(subscribePage + FIRST_PAGE);
-                     } else {
-                        setManageDevelopPage(manageDevelopPage + FIRST_PAGE);
-                     }
+                     handleClickPageButton(1);
                   }}
                   type="button"
                   className="absolute right-[5%] mr-5 rounded-full bg-indigo-300 p-4 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:!bg-navy-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">

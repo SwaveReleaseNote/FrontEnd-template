@@ -52,20 +52,21 @@ function ProjectCard({
       console.log('handleClickManageButton');
    };
 
-   const handleConfirmDelete = async (): Promise<void> => {
+   const handleClickYes = async (): Promise<void> => {
       // Perform the project deletion logic
       console.log('Project deletion confirmed');
       try {
          await api.delete(`project/drop/${projectId}`);
+         window.location.reload();
       } catch (error) {
-         console.error('Error delete project:', error);
+         console.error('Error exit project:', error);
          alert('Server error. Please try again.');
       } finally {
          setShowConfirmation(false);
       }
    };
 
-   const handleCancelDelete = (): void => {
+   const handleClickNo = (): void => {
       // Cancel the project deletion
       console.log('Project deletion canceled');
       setShowConfirmation(false);
@@ -82,8 +83,8 @@ function ProjectCard({
             <NotificationPopup
                message="이 프로젝트에서 탈퇴하시겠습니까??"
                subMessage="주의"
-               onConfirm={handleConfirmDelete}
-               onCancel={handleCancelDelete}
+               onConfirm={handleClickYes}
+               onCancel={handleClickNo}
             />
          )}
          <button
