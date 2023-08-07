@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useRef} from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navbar from 'components/navbar';
 import Sidebar from 'components/sidebar';
@@ -6,13 +6,21 @@ import Footer from 'components/footer/Footer';
 import routes from 'routes';
 import axios from 'axios';
 import ProjectDashboard from 'views/admin/default/pages/ProjectDashboard';
-import { getCookie } from 'views/auth/cookie';
+import type * as StompJs from '@stomp/stompjs';
 
 export default function Admin(props: Record<string, any>): JSX.Element {
    const { ...rest } = props;
    const location = useLocation();
    const [open, setOpen] = React.useState(false);
    const [currentRoute, setCurrentRoute] = React.useState('Main Dashboard');
+   const client = useRef<StompJs.Client | null>(null);
+
+  const disconnect = ():void => {
+    console.log('disconnect');
+    if ((client.current == null) || !client.current.connected) return;
+     // eslint-disable-next-line @typescript-eslint/no-floating-promises
+     client.current.deactivate();
+   };
 
    React.useEffect(() => {
       getActiveRoute(routes);
@@ -65,29 +73,8 @@ export default function Admin(props: Record<string, any>): JSX.Element {
 
    window.addEventListener('unload', event => {
       // 페이지가 완전히 떠난 후에 실행되는 작업을 수행할 수 있습니다.
-      try {
-         axios
-            .put(
-               'http://localhost:8080/api/user/update',
-               {
-                  loginState: false,
-               },
-               {
-                  headers: {
-                     Authorization: getCookie('id'),
-                  },
-               },
-            )
-            .then(response => {
-               console.log(response.data); // Process the response as needed
-            })
-            .catch(error => {
-               console.error(error);
-               // Handle error cases here
-            });
-      } catch (error) {
-         console.error(error);
-      }
+      disconnect();
+      window.localStorage.clear();
       alert('정말 종료하시겠습니까?');
    });
 

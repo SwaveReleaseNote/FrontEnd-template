@@ -1,15 +1,17 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-import React, { useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
+import * as StompJs from '@stomp/stompjs';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { setCookie } from './cookie';
-
+ 
 const Auth = (): JSX.Element => {
    const navigate = useNavigate();
 
    /* 로그인 페이지에서 Auth로 넘어오는지 log 확인 */
    const { provider } = useParams<{ provider?: string }>();
-
+   const client = useRef<StompJs.Client | null>(null);
+   
    useEffect(() => {
       (async () => {
          const pathname = window.location.search;
@@ -44,26 +46,17 @@ const Auth = (): JSX.Element => {
                HttpOnly: true,
                secure: true,
             });
-            axios
-               .patch(
-                  'http://localhost:8080/api/user/status',
-                  {
-                     loginState: true,
-                  },
-                  {
-                     headers: {
-                        Authorization: localStorage.getItem('token'),
-                     },
-                  },
-               )
-               .then(response => {
-                  console.log(response.data); // Process the response as needed
-               })
-               .catch(error => {
-                  console.error(error);
-                  // Handle error cases here
-               });
-
+            client.current = new StompJs.Client({
+               brokerURL: 'ws://localhost:8080/ws-stomp',
+               // eslint-disable-next-line @typescript-eslint/no-empty-function
+               connectHeaders: {
+                  Authorization: token,
+                },
+               onConnect: () => {
+                 console.log('success');
+               },
+             });
+             client.current.activate();
             try {
                axios
                   .get(`http://localhost:8080/api/user`, {
@@ -81,6 +74,8 @@ const Auth = (): JSX.Element => {
                      window.localStorage.setItem('info', '');
                      window.localStorage.setItem('department', response.data.department);
                      console.log(localStorage.getItem('email'));
+
+
                   });
                   navigate('/admin');
             } catch (error) {
