@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import LoadingComponent from '../components/LoadingComponent ';
 import api from 'context/api';
+import NotificationPopup from '../components/NotificationPopup';
 
 interface TeamMember {
    userId: number;
@@ -35,6 +36,7 @@ const SearchProjectList: React.FC = () => {
    const location = useLocation();
    const searchTerm = location.state.searchTerm;
    const [isLoading, setIsLoading] = useState(true);
+   const [showRoleCheck, setShowRoleCheck] = useState(false);
 
    useEffect(() => {
       const fetchSearchResult = async (): Promise<void> => {
@@ -61,7 +63,12 @@ const SearchProjectList: React.FC = () => {
       console.log('selectedCheckbox:', selectedCheckbox);
       console.log('searchResult:', searchResult);
       console.log('searchTerm:', searchTerm);
-   }, [selectedCheckbox, searchResult, searchTerm]);
+      console.log('showRoleCheck:', showRoleCheck);
+   }, [selectedCheckbox, searchResult, searchTerm, showRoleCheck]);
+
+   useEffect(() => {
+      console.log('showRoleCheck:', showRoleCheck);
+   }, [showRoleCheck]);
 
    const mockFetchSearchResult = (): void => {
       // Simulate API response with mock data
@@ -186,7 +193,7 @@ const SearchProjectList: React.FC = () => {
          const response = await api.get('user/role');
          return response.data;
       } catch (error) {
-         console.error('Error fetching search result:', error);
+         console.error('Error fetching user role:', error);
          const mockResponse = mockFetchUserRole();
          return mockResponse;
       }
@@ -198,8 +205,7 @@ const SearchProjectList: React.FC = () => {
          // 백엔드로 권한확인
          const role = await fetchUserRole();
          if (role === 'none') {
-            // 이 프로젝트의 대시보드를 볼 권한이 없습니다.
-            // 구독하시겠습니까? Yes/No
+            setShowRoleCheck(true);
          } else {
             const queryString = `projectId=${projectId}&role=${encodeURIComponent(role)}&projectName=${projectName}`;
             const url = `/admin/dashboard?${queryString}`;
@@ -227,6 +233,30 @@ const SearchProjectList: React.FC = () => {
          return text.replace(regex, match => `<span style="color: red; font-weight: bold">${match}</span>`);
       };
 
+      const handleClickYes = async (projectId: number, projectName: string): Promise<void> => {
+         // Perform the project subscribe logic
+         console.log('Click Yes Subscribe');
+         try {
+            await api.post(`project/subscribe`, { projectId });
+            const queryString = `projectId=${projectId}&role=${encodeURIComponent(
+               'Subscriber',
+            )}&projectName=${projectName}`;
+            const url = `/admin/dashboard?${queryString}`;
+            navigate(url);
+         } catch (error) {
+            console.error('Error Subscribe project:', error);
+            alert('Server error. Please try again.');
+         } finally {
+            setShowRoleCheck(false);
+         }
+      };
+
+      const handleClickNo = (): void => {
+         // Cancel the project deletion
+         console.log('Project deletion canceled');
+         setShowRoleCheck(false);
+      };
+
       return (
          <div className="items-top flex">
             <div className="mt-3 text-l flex h-[7vh] w-[13vh] justify-center rounded-2xl bg-gray-100 p-3 font-bold dark:!bg-navy-600">
@@ -237,6 +267,16 @@ const SearchProjectList: React.FC = () => {
                {projects.length > 0 ? (
                   projects.map(project => (
                      <div className="rounded-xl bg-gray-0 p-3 dark:!bg-navy-900" key={project.id}>
+                        {showRoleCheck && (
+                           <NotificationPopup
+                              message="이 프로젝트를 구독하시겠습니까?"
+                              subMessage="이 프로젝트를 볼 권한이 없습니다."
+                              onConfirm={async () => {
+                                 await handleClickYes(project.id, project.name);
+                              }}
+                              onCancel={handleClickNo}
+                           />
+                        )}
                         <h2 className="hover:underline hover:text-blue-600 text-2xl">
                            {/* 프로젝트 제목: */}
                            <span
