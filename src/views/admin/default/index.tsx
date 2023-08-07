@@ -35,7 +35,7 @@ interface Project {
    description: string;
    createDate: string;
    count: number;
-   recentReleaseVersion: string;
+   version: string;
 }
 
 const Dashboard = (): JSX.Element => {
@@ -128,7 +128,7 @@ const Dashboard = (): JSX.Element => {
             name: 'Manager1',
             description: '사내 릴리즈 노트 공유 시스템',
             createDate: 'Wed Jul 12 2023',
-            recentReleaseVersion: '3.6.7',
+            version: '3.6.7',
             count: 5,
          },
          {
@@ -137,7 +137,7 @@ const Dashboard = (): JSX.Element => {
             name: 'Manager2',
             description: '사내 릴리즈 노트 공유 시스템',
             createDate: 'Wed Jul 12 2023',
-            recentReleaseVersion: '3.6.7',
+            version: '3.6.7',
             count: 5,
          },
          {
@@ -146,7 +146,7 @@ const Dashboard = (): JSX.Element => {
             name: 'Developer1',
             description: '사내 릴리즈 노트 공유 시스템',
             createDate: 'Wed Jul 12 2023',
-            recentReleaseVersion: '3.6.7',
+            version: '3.6.7',
             count: 5,
          },
          {
@@ -155,7 +155,7 @@ const Dashboard = (): JSX.Element => {
             name: 'Developer2',
             description: '사내 릴리즈 노트 공유 시스템',
             createDate: 'Wed Jul 12 2023',
-            recentReleaseVersion: '3.6.7',
+            version: '3.6.7',
             count: 5,
          },
          {
@@ -164,7 +164,7 @@ const Dashboard = (): JSX.Element => {
             name: 'Developer3',
             description: '사내 릴리즈 노트 공유 시스템',
             createDate: 'Wed Jul 12 2023',
-            recentReleaseVersion: '3.6.7',
+            version: '3.6.7',
             count: 5,
          },
          {
@@ -173,7 +173,7 @@ const Dashboard = (): JSX.Element => {
             name: 'Developer4',
             description: '사내 릴리즈 노트 공유 시스템',
             createDate: 'Wed Jul 12 2023',
-            recentReleaseVersion: '3.6.7',
+            version: '3.6.7',
             count: 5,
          },
          {
@@ -182,7 +182,7 @@ const Dashboard = (): JSX.Element => {
             name: 'Developer5',
             description: '사내 릴리즈 노트 공유 시스템',
             createDate: 'Wed Jul 12 2023',
-            recentReleaseVersion: '3.6.7',
+            version: '3.6.7',
             count: 5,
          },
          {
@@ -191,7 +191,7 @@ const Dashboard = (): JSX.Element => {
             name: '사내 릴리즈 노트 공유 시스템',
             description: '사내 릴리즈 노트 공유 시스템',
             createDate: 'Wed Jul 12 2023',
-            recentReleaseVersion: '3.6.7',
+            version: '3.6.7',
             count: 5,
          },
       ];
@@ -219,7 +219,7 @@ const Dashboard = (): JSX.Element => {
             <div>
                <button
                   onClick={handleClickListTabButton}
-                  className={`ml-10 rounded-t-3xl font-bold ${
+                  className={`ml-10 rounded-t-3xl font-bold border-l-4 border-r-4 border-t-4 hover:border-indigo-200 ${
                      isSubscribeOpen
                         ? 'bg-white-200  dark:!bg-navy-600'
                         : 'border-l-4  border-r-4 border-t-4 border-indigo-200 bg-gray-100 dark:!bg-navy-700'
@@ -228,7 +228,7 @@ const Dashboard = (): JSX.Element => {
                </button>
                <button
                   onClick={handleClickListTabButton}
-                  className={`ml-4 rounded-t-3xl font-bold ${
+                  className={`ml-4 rounded-t-3xl font-bold border-l-4 border-r-4 border-t-4 hover:border-indigo-200 ${
                      isSubscribeOpen
                         ? 'border-l-4  border-r-4 border-t-4 border-indigo-200 bg-gray-100 dark:!bg-navy-700'
                         : 'bg-white-200  dark:!bg-navy-600'
@@ -295,7 +295,7 @@ const Dashboard = (): JSX.Element => {
                                     projectName={project.name}
                                     projectDescription={project.description}
                                     projectMemberNumber={project.count}
-                                    projectRecentRelease={project.recentReleaseVersion}
+                                    projectRecentRelease={project.version}
                                     projectCreateDate={project.createDate}
                                     projectRole={project.role}
                                  />
@@ -315,7 +315,7 @@ const Dashboard = (): JSX.Element => {
                                  projectName={project.name}
                                  projectDescription={project.description}
                                  projectMemberNumber={project.count}
-                                 projectRecentRelease={project.recentReleaseVersion}
+                                 projectRecentRelease={project.version}
                                  projectCreateDate={project.createDate}
                                  projectRole={project.role}
                               />

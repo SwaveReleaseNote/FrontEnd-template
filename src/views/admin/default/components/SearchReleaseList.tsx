@@ -204,7 +204,7 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
                                        className="mb-1 mt-1 h-[5vh] w-[10vh] rounded-xl"
                                     />
                                  </div>
-                                 <div className="h-[6vh] overflow-hidden text-sm text-gray-800">{release.context}</div>
+                                 <div className="h-[6vh] overflow-hidden text-sm text-gray-800 dark:text-white">{release.context}</div>
                               </td>
                            </tr>
                         ))

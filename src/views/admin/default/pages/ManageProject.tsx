@@ -270,7 +270,7 @@ const ManageProject: React.FC = () => {
             <div className="mt-10 h-full w-full items-center overflow-auto rounded-3xl bg-white bg-clip-border px-6 pb-6 shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none sm:overflow-x-auto">
                <button
                   onClick={handleClickProjectDeleteButton}
-                  className="hover:bg-red-300 border-black absolute right-[15%] top-[30%] flex rounded border bg-gray-100 px-4 py-2 font-bold text-red-500 shadow-3xl shadow-shadow-500 dark:bg-navy-600 dark:text-white">
+                  className="dark:hover:bg-red-800 hover:bg-red-300 border-black absolute right-[15%] top-[30%] flex rounded border bg-gray-100 px-4 py-2 font-bold text-red-500 shadow-3xl shadow-shadow-500 dark:bg-navy-600 dark:text-white">
                   프로젝트 삭제
                </button>
                {showConfirmation && (
@@ -296,7 +296,7 @@ const ManageProject: React.FC = () => {
                      <input
                         type="text"
                         id="projectName"
-                        className="m-5 ml-10 block w-[50%] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                        className="dark:bg-gray-800 dark:text-white m-5 ml-10 block w-[50%] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                         placeholder="프로젝트 이름을 입력해주세요"
                         value={projectName}
                         onChange={event => { setProjectName(event.target.value); }}
@@ -306,7 +306,7 @@ const ManageProject: React.FC = () => {
                   <div>
                      <button
                         type="submit"
-                        className="hover:bg-gray-300 border-black absolute right-[15%] top-[50%] flex rounded border bg-gray-100 px-4 py-2 font-bold shadow-3xl shadow-shadow-500 dark:bg-navy-600 dark:text-white">
+                        className="dark:hover:bg-navy-300 hover:bg-gray-300 border-black absolute right-[15%] top-[50%] flex rounded border bg-gray-100 px-4 py-2 font-bold shadow-3xl shadow-shadow-500 dark:bg-navy-600 dark:text-white">
                         변경사항 저장
                      </button>
                   </div>
@@ -319,7 +319,7 @@ const ManageProject: React.FC = () => {
                      <input
                         type="text"
                         id="description"
-                        className="m-5 ml-10 block w-[50%] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                        className="dark:bg-gray-800 dark:text-white m-5 ml-10 block w-[50%] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                         placeholder="프로젝트 개요을 입력해주세요"
                         value={description}
                         onChange={event => { setDescription(event.target.value); }}
@@ -329,7 +329,7 @@ const ManageProject: React.FC = () => {
 
                   <div className="m-5 ml-10 mt-10 flex">
                      <div>
-                        <h3 className="text-black mb-4 text-2xl font-bold dark:text-white">👑 프로젝트 관리자</h3>
+                        <h3 className="text-black mb-4 text-2xl font-bold">👑 프로젝트 관리자</h3>
                         <div className="mb-4 flex">
                            {/* <input
                   type="text"
@@ -339,8 +339,8 @@ const ManageProject: React.FC = () => {
                         </div>
                         <ul className="dark:text-white">
                            <li className="mb-2 flex items-center justify-between">
-                              <p className="rounded-2xl bg-gray-50 p-3 font-bold">{managerName}</p>
-                              <p className="ml-3 rounded-2xl bg-gray-50 p-3 font-bold">{managerDepartment}</p>
+                              <p className="dark:bg-gray-800 dark:text-white rounded-2xl bg-gray-50 p-3 font-bold">{managerName}</p>
+                              <p className="dark:bg-gray-800 dark:text-white ml-3 rounded-2xl bg-gray-50 p-3 font-bold">{managerDepartment}</p>
                               {/* 추후에 관리자 변경을 위해 보류 */}
                               {/* <button className="ml-5 rounded-xl bg-gray-50 px-2 py-1 font-bold">
                     ❌
@@ -387,7 +387,7 @@ const ManageProject: React.FC = () => {
                         <div className="mb-4 flex">
                            <input
                               type="text"
-                              className="text-black w-64 rounded border border-gray-300 bg-gray-50 p-2 text-sm dark:text-white"
+                              className="dark:bg-gray-800 dark:text-white text-black w-64 rounded border border-gray-300 bg-gray-50 p-2 text-sm dark:text-white"
                               placeholder="팀원 이름을 입력해주세요"
                               value={newMemberName}
                               onChange={handleInputChange}
@@ -403,10 +403,10 @@ const ManageProject: React.FC = () => {
                            <ul className="dark:text-white">
                               {teamMembers.map(member => (
                                  <li key={member.userId} className="mb-2 flex items-center justify-between">
-                                    <p className="rounded-2xl bg-gray-50 p-3 font-bold">{member.username}</p>
-                                    <p className="ml-3 rounded-2xl bg-gray-50 p-3 font-bold">{member.userDepartment}</p>
+                                    <p className="dark:bg-gray-800 dark:text-white rounded-2xl bg-gray-50 p-3 font-bold">{member.username}</p>
+                                    <p className="dark:bg-gray-800 dark:text-white ml-3 rounded-2xl bg-gray-50 p-3 font-bold">{member.userDepartment}</p>
                                     <button
-                                       className="hover:bg-gray-300 ml-5 rounded-xl bg-gray-50 px-2 py-1 font-bold"
+                                       className="dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white hover:bg-gray-300 ml-5 rounded-xl bg-gray-50 px-2 py-1 font-bold"
                                        onClick={() => { handleClickRemoveMemberButton(member); }}>
                                        ❌
                                     </button>
@@ -426,10 +426,10 @@ const ManageProject: React.FC = () => {
                                  <li
                                     key={member.userId}
                                     className="mb-2 flex items-center justify-between dark:text-white">
-                                    <p className="rounded-2xl bg-gray-50 p-3 font-bold">{member.username}</p>
-                                    <p className="ml-3 rounded-2xl bg-gray-50 p-3 font-bold">{member.userDepartment}</p>
+                                    <p className="dark:bg-gray-800 dark:text-white rounded-2xl bg-gray-50 p-3 font-bold">{member.username}</p>
+                                    <p className="dark:bg-gray-800 dark:text-white ml-3 rounded-2xl bg-gray-50 p-3 font-bold">{member.userDepartment}</p>
                                     <button
-                                       className="hover:bg-gray-300 ml-5 rounded-xl bg-gray-50 px-2 py-1 text-3xl font-bold text-blue-500"
+                                       className="dark:bg-gray-800 dark:hover:bg-gray-700 hover:bg-gray-300 ml-5 rounded-xl bg-gray-50 px-2 py-1 text-3xl font-bold text-blue-500"
                                        onClick={() => { handleClickAddMemberButton(member); }}>
                                        +
                                     </button>
