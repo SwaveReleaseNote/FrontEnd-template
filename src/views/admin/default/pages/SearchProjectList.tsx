@@ -201,14 +201,14 @@ const SearchProjectList: React.FC = () => {
 
       return (
          <div className="items-top flex">
-            <div className="text-l flex h-[7vh] w-auto rounded-2xl bg-gray-100 p-3 font-bold dark:!bg-navy-600">
+            <div className="mt-3 text-l flex h-[7vh] w-[13vh] justify-center rounded-2xl bg-gray-100 p-3 font-bold dark:!bg-navy-600">
                {searchType}
                {/* 에 {searchTerm}가 포함된 프로젝트입니다. */}
             </div>
-            <div className="m-3 w-[100vh] rounded-3xl bg-gray-100 p-5 dark:!bg-navy-600">
+            <div className="m-3 w-[100vh] rounded-3xl bg-gray-0 p-5 dark:!bg-navy-600">
                {projects.length > 0 ? (
                   projects.map(project => (
-                     <div className="m-3 rounded-xl bg-gray-100 p-3 dark:!bg-navy-900" key={project.id}>
+                     <div className="rounded-xl bg-gray-0 p-3 dark:!bg-navy-900" key={project.id}>
                         <h2 className="hover:underline hover:text-blue-600 text-2xl">
                            {/* 프로젝트 제목: */}
                            <span
@@ -221,41 +221,47 @@ const SearchProjectList: React.FC = () => {
                               }}
                            />
                         </h2>
-                        <p>
-                           {/* 프로젝트 개요: */}
-                           <span
-                              dangerouslySetInnerHTML={{
-                                 __html:
-                                    searchType === '개요'
-                                       ? highlightSearchTerm(project.description)
-                                       : project.description,
-                              }}
-                           />
-                        </p>
-                        <p>
-                           관리자:
-                           <span
-                              dangerouslySetInnerHTML={{
-                                 __html:
-                                    searchType === '관리자'
-                                       ? highlightSearchTerm(project.managerName)
-                                       : project.managerName,
-                              }}
-                           />
-                        </p>
-                        <p>
-                           팀원:
-                           {project.teamMembers.map(member => (
+                        <div className="mt-2 flex gap-5 overflow-hidden">
+                           <p className="ml-4 w-[40vh] h-[4vh] overflow-ellipsis">
+                              {/* 프로젝트 개요: */}
                               <span
-                                 className="p-1"
-                                 key={member.userId}
                                  dangerouslySetInnerHTML={{
                                     __html:
-                                       searchType === '개발자' ? highlightSearchTerm(member.username) : member.username,
+                                       searchType === '개요'
+                                          ? highlightSearchTerm(project.description)
+                                          : project.description,
                                  }}
                               />
-                           ))}
-                        </p>
+                           </p>
+                           <p>
+                              관리자:
+                              <span
+                                 className="p-1"
+                                 dangerouslySetInnerHTML={{
+                                    __html:
+                                       searchType === '관리자'
+                                          ? highlightSearchTerm(project.managerName)
+                                          : project.managerName,
+                                 }}
+                              />
+                           </p>
+                           <p>
+                              팀원:
+                              {project.teamMembers.map(member => (
+                                 <span
+                                    className="p-1"
+                                    key={member.userId}
+                                    dangerouslySetInnerHTML={{
+                                       __html:
+                                          searchType === '개발자'
+                                             ? highlightSearchTerm(member.username)
+                                             : member.username,
+                                    }}
+                                 />
+                              ))}
+                           </p>
+                        </div>
+                        <hr className="mt-1"></hr>
                      </div>
                   ))
                ) : (
@@ -269,9 +275,9 @@ const SearchProjectList: React.FC = () => {
    };
 
    return (
-      <div className="!z-5 relative flex flex-col rounded-[20px] bg-white bg-clip-border shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none">
+      <div className="items-center justify-center !z-5 relative flex flex-col rounded-[20px] bg-white bg-clip-border shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none">
          <header className="relative mt-10 flex items-center justify-center pt-4">
-            <div className="mb-10 flex text-3xl font-bold text-navy-700 dark:text-white">
+            <div className="mb-10 flex text-4xl font-bold text-navy-700 dark:text-white">
                {searchTerm}에 대한 검색 결과
             </div>
          </header>
@@ -334,9 +340,10 @@ const SearchProjectList: React.FC = () => {
             </label>
          </div>
          {/* 검색 분류 표시 */}
-         <div className="m-10 flex justify-center rounded-3xl bg-gray-100 pb-5 pt-5 dark:!bg-navy-600">
-            <p className="text-3xl font-bold">{selectedCheckbox}를 선택하셨습니다</p>
+         <div className="w-[60vh] m-10 flex justify-center rounded-3xl bg-gray-100 pb-5 pt-5 dark:!bg-navy-600">
+            <p className="text-xl font-bold">{selectedCheckbox}를 선택하셨습니다</p>
          </div>
+            <div className='bg-gray-500 w-[80%] h-[0.2vh] mb-10'></div>
          {/* 프로젝트 검색 결과 리스트 */}
          <div className="flex justify-center">
             {isLoading ? (
@@ -346,13 +353,18 @@ const SearchProjectList: React.FC = () => {
                   {selectedCheckbox === '전체' && (
                      <div className="">
                         <div className="">{renderProjects(searchResult?.titleSearch ?? [], searchTerm, '제목')}</div>
+                        {/* <hr></hr> */}
                         <div>{renderProjects(searchResult?.descriptionSearch ?? [], searchTerm, '개요')}</div>
+                        {/* <hr></hr> */}
                         <div>{renderProjects(searchResult?.managerSearch ?? [], searchTerm, '관리자')}</div>
+                        {/* <hr></hr> */}
                         <div>{renderProjects(searchResult?.developerSearch ?? [], searchTerm, '개발자')}</div>
+                        {/* <hr></hr> */}
                      </div>
                   )}
                   {selectedCheckbox === '제목' && renderProjects(searchResult?.titleSearch ?? [], searchTerm, '제목')}
-                  {selectedCheckbox === '개요' && renderProjects(searchResult?.descriptionSearch ?? [], searchTerm, '개요')}
+                  {selectedCheckbox === '개요' &&
+                     renderProjects(searchResult?.descriptionSearch ?? [], searchTerm, '개요')}
                   {selectedCheckbox === '관리자' &&
                      renderProjects(searchResult?.managerSearch ?? [], searchTerm, '관리자')}
 

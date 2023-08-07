@@ -202,7 +202,7 @@ const CreateProject: React.FC = () => {
                      <div>
                         <button
                            type="submit"
-                           className="border-black absolute right-[15%] top-[30%] flex rounded border bg-gray-100 px-4 py-2 font-bold shadow-3xl shadow-shadow-500 dark:bg-navy-600 dark:text-white">
+                           className="hover:bg-gray-300 border-black absolute right-[15%] top-[30%] flex rounded border bg-gray-100 px-4 py-2 font-bold shadow-3xl shadow-shadow-500 dark:bg-navy-600 dark:text-white">
                            프로젝트 생성
                         </button>
                      </div>
@@ -277,7 +277,7 @@ const CreateProject: React.FC = () => {
                                           {member.userDepartment}
                                        </p>
                                        <button
-                                          className="ml-5 rounded-xl bg-gray-50 px-2 py-1 font-bold"
+                                          className="hover:bg-gray-300 ml-5 rounded-xl bg-gray-50 px-2 py-1 font-bold"
                                           onClick={() => {
                                              handleClickRemoveMemberButton(member);
                                           }}>
@@ -291,8 +291,8 @@ const CreateProject: React.FC = () => {
                            )}
                         </div>
 
-                        <div className="ml-8">
-                           <h3 className="mb-4 text-xl font-medium dark:text-white">추천하는 팀원</h3>
+                        <div className="ml-40">
+                           <h3 className="mb-4 text-xl dark:text-white font-bold">추천하는 팀원</h3>
                            {suggestedMembers.length > 0 ? (
                               <ul>
                                  {suggestedMembers.map(member => (
@@ -304,7 +304,7 @@ const CreateProject: React.FC = () => {
                                           {member.userDepartment}
                                        </p>
                                        <button
-                                          className="ml-5 rounded-xl bg-gray-50 px-2 py-1 text-3xl font-bold text-blue-500"
+                                          className="hover:bg-gray-300 ml-5 rounded-xl bg-gray-50 px-2 py-1 text-3xl font-bold text-blue-500"
                                           onClick={() => {
                                              handleClickAddMemberButton(member);
                                           }}>
