@@ -1,8 +1,9 @@
 import Card from '../../../../components/card';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoadingComponent from './LoadingComponent ';
 import api from 'context/api';
+import { useQuery } from 'react-query';
 
 import New from 'assets/img/label/NEW.png';
 import Update from 'assets/img/label/UPDATE.png';
@@ -44,27 +45,26 @@ interface RecentReleaseNote {
 }
 
 const RecentRelease = (): JSX.Element => {
-   const [recentReleaseNote, setRecentReleaseNote] = useState<RecentReleaseNote | any>(); // Set initial state as undefined
-   const [isLoading, setIsLoading] = useState(true);
    const navigate = useNavigate();
 
-   // fetch All Members
-   const fetchRecentReleaseNote = async (): Promise<void> => {
+   // fetch Recent ReleaseNote
+   const fetchRecentReleaseNote = async (): Promise<RecentReleaseNote> => {
       try {
          const response = await api.get(`project/release-note/recent-release-note`);
-
-         console.log('recentRelease: ', JSON.stringify(response.data, null, '\t'));
-         setRecentReleaseNote(response.data);
+         return response.data;
       } catch (error) {
          console.error('Error fetching recent release note:', error);
-         console.log('Mocking');
-         mockFetchRecentRelease();
-      } finally {
-         setIsLoading(false); // Set loading state to false after fetching
+         console.log('Mocking data');
+         return mockFetchRecentRelease();
       }
    };
 
-   const mockFetchRecentRelease = (): void => {
+   const { data: recentReleaseNote, isLoading } = useQuery<RecentReleaseNote>(
+      'recentReleaseNote',
+      fetchRecentReleaseNote,
+   );
+
+   const mockFetchRecentRelease = (): RecentReleaseNote => {
       // Simulate API response with mock data
       const mockResponse: RecentReleaseNote = {
          blocks: [
@@ -151,16 +151,13 @@ const RecentRelease = (): JSX.Element => {
          version: '1.0.0',
       };
 
-      setRecentReleaseNote(mockResponse);
+      return mockResponse;
    };
 
    // First Rendering
    useEffect(() => {
       console.log('Recent Release Page rendered');
-      fetchRecentReleaseNote().catch(error => {
-         console.error('error fetch data', error);
-      });
-   }, []);
+   }, [recentReleaseNote?.releaseNoteId]);
 
    function handleClickRecentRelease(releaseNoteId: number): void {
       // 추후 프론트 릴리즈 노트 보여주는 곳으로 맵핑
@@ -185,12 +182,12 @@ const RecentRelease = (): JSX.Element => {
          ) : (
             <Card extra={'w-full h-full p-3 mt-2'}>
                <div className="mb-8 mt-2 w-full">
-                  <p className="text-xl font-bold text-navy-700 dark:text-white">
+                  <div className="text-xl font-bold text-navy-700 dark:text-white">
                      <p className="text-4xl">🆕Recent Release Note</p>
-                  </p>
-                  {recentReleaseNote !== '' ? (
+                  </div>
+                  {recentReleaseNote != null && Object.keys(recentReleaseNote).length > 0 ? (
                      <div className="m-5">
-                        <p
+                        <div
                            onClick={() => {
                               handleClickRecentRelease(recentReleaseNote?.releaseNoteId);
                            }}
@@ -199,7 +196,7 @@ const RecentRelease = (): JSX.Element => {
                               <span className="text-blue-700 dark:text-blue-500">{recentReleaseNote?.version}</span>{' '}
                               Release Note
                            </h1>
-                        </p>
+                        </div>
                         <p className="ml-10 mt-4 text-xl font-bold dark:text-white">{recentReleaseNote?.summary}</p>
                         <div className=" text-gray-500 mt-5 mb-2">
                            <p className="text-l font-bold dark:text-white">작성자: {recentReleaseNote?.creator}</p>
@@ -224,9 +221,6 @@ const RecentRelease = (): JSX.Element => {
                                           <div className="ml-10 mt-4 w-[90%]" key={context.index}>
                                              <p className="text-l font-bold text-navy-700 dark:text-white">
                                                 • {context.context}
-                                             </p>
-                                             <p className="text-l font-bold text-navy-700 dark:text-white">
-                                                {/* {context.tag} */}
                                              </p>
                                           </div>
                                        ))
@@ -253,7 +247,7 @@ const RecentRelease = (): JSX.Element => {
                                  </div>
                               ))
                            ) : (
-                              <p>댓글이 없습니다</p>
+                              <div>댓글이 없습니다</div>
                            )}
                         </div>
                      </div>

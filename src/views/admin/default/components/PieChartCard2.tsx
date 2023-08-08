@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
 import LoadingComponent from './LoadingComponent ';
 import api from 'context/api';
+import { useQuery } from 'react-query';
 
 interface LabelNum {
    label: string;
@@ -18,73 +19,77 @@ const PieChartCard: React.FC<Props> = ({ projectId }) => {
    const chartRef = useRef<HTMLCanvasElement>(null);
    const chartInstance = useRef<Chart<'pie'> | null>(null);
    const [dataCount, setDataCount] = useState(0);
-   const [isLoading, setIsLoading] = useState(true);
+   const [isRenderChart, setIsRenderChart] = useState(false);
+
+   const fetchChartData = async (): Promise<LabelNum[]> => {
+      try {
+         const response = await api.get(`project/${projectId.id}/release-note/label/count`);
+         return response.data;
+      } catch (error) {
+         console.error('Error fetching project Pie Chart:', error);
+         return mockFectchPieChart();
+      }
+   };
+
+   const mockFectchPieChart = (): LabelNum[] => {
+      // Simulate API response with mock data
+      const mockResponse: LabelNum[] = [
+         { label: 'update', count: 2 },
+         { label: 'delete', count: 4 },
+         { label: 'etc', count: 5 },
+         { label: 'new', count: 1 },
+         { label: 'stop', count: 2 },
+      ];
+
+      return mockResponse;
+   };
+
+   const chartData = useQuery<LabelNum[]>(['pieChartData', projectId], fetchChartData);
 
    useEffect(() => {
-      console.log('PieChart Project id:', projectId.id);
-      const fetchData = async (): Promise<void> => {
-         try {
-            const response = await api.get(`project/${projectId.id}/release-note/label/count`);
-            const data: LabelNum[] = response.data;
-            renderChart(data);
-            setDataCount(data.reduce((total, item) => total + item.count, 0));
-         } catch (error) {
-            console.error('Error fetching project Pie Chart:', error);
-            console.log('Mocking data');
-
-            const mockResponse: LabelNum[] = [
-               { label: 'update', count: 2 },
-               { label: 'delete', count: 4 },
-               { label: 'etc', count: 5 },
-               { label: 'new', count: 1 },
-               { label: 'stop', count: 7 },
-            ];
-
-            renderChart(mockResponse);
-            setDataCount(mockResponse.reduce((total, item) => total + item.count, 0));
-         } finally {
-            setIsLoading(false); // Set loading state to false after fetching
-         }
-      };
-
-      fetchData().catch(error => {
-         console.error('Error fetching data:', error);
-      });
-   }, [projectId, isLoading]);
+      if (chartData.isSuccess) {
+            renderChart(chartData.data);
+            setDataCount(chartData.data.reduce((total, item) => total + item.count, 0));
+      }
+   }, [chartData.isSuccess, isRenderChart]);
 
    const renderChart = (data: LabelNum[]): void => {
-      if (chartRef.current != null) {
-         if (chartInstance.current != null) {
-            chartInstance.current.destroy();
+      try {
+         if (chartRef.current != null) {
+            if (chartInstance.current != null) {
+               chartInstance.current.destroy();
+            }
+
+            const labels = data.map(item => item.label);
+            const numbers = data.map(item => item.count);
+            const colorMapping: Record<string, string> = {
+               update: 'rgb(232, 239, 151)',
+               delete: 'rgb(164, 101, 241)',
+               bugfix: 'rgb(101, 143, 241)',
+               new: 'rgb(51, 255, 148)',
+               stop: 'rgb(255, 125, 156)',
+            };
+
+            const backgroundColor = labels.map(label => colorMapping[label]);
+
+            chartInstance.current = new Chart(chartRef.current, {
+               type: 'pie',
+               data: {
+                  labels,
+                  datasets: [
+                     {
+                        label: 'Release Note',
+                        data: numbers,
+                        backgroundColor,
+                        hoverOffset: 4,
+                     },
+                  ],
+               },
+               options: {},
+            });
          }
-
-         const labels = data.map(item => item.label);
-         const numbers = data.map(item => item.count);
-         const colorMapping: Record<string, string> = {
-            update: 'rgb(232, 239, 151)',
-            delete: 'rgb(164, 101, 241)',
-            bugfix: 'rgb(101, 143, 241)',
-            new: 'rgb(51, 255, 148)',
-            stop: 'rgb(255, 125, 156)',
-         };
-
-         const backgroundColor = labels.map(label => colorMapping[label]);
-
-         chartInstance.current = new Chart(chartRef.current, {
-            type: 'pie',
-            data: {
-               labels,
-               datasets: [
-                  {
-                     label: 'Release Note',
-                     data: numbers,
-                     backgroundColor,
-                     hoverOffset: 4,
-                  },
-               ],
-            },
-            options: {},
-         });
+      } finally {
+         setIsRenderChart(true);
       }
    };
 
@@ -94,7 +99,7 @@ const PieChartCard: React.FC<Props> = ({ projectId }) => {
          <div className="relative flex items-center justify-between pt-4">
             <div className="text-xl font-bold text-navy-700 dark:text-white">Pie Chart</div>
          </div>
-         {!isLoading ? (
+         {isRenderChart ? (
             <div className="mb-auto mt-auto flex h-[30vh] w-[30vh] items-center justify-center">
                {dataCount <= 0 ? (
                   <div className="text-black-400 flex h-full w-full items-center justify-center gap-10 text-xl font-bold dark:text-white">

@@ -21,11 +21,13 @@ import ProjectCard from './components/ProjectCard';
 
 import LoadingComponent from './components/LoadingComponent ';
 import api from 'context/api';
+import { useQuery } from 'react-query';
 
 enum UserRole {
    Subscriber = 'Subscriber',
    Developer = 'Developer',
    Manager = 'Manager',
+   None = 'None'
 }
 
 interface Project {
@@ -38,19 +40,17 @@ interface Project {
    version: string;
 }
 
-const Dashboard = (): JSX.Element => {
+const MainPage = (): JSX.Element => {
    const navigate = useNavigate();
+   const [isLoading, setIsLoading] = useState(true);
 
-   // page 처리
    const FIRST_PAGE = 1;
    const [limit] = useState(3);
    const [manageDevelopPage, setManageDevelopPage] = useState(FIRST_PAGE);
    const [subscribePage, setSubscribePage] = useState(FIRST_PAGE);
    const manageDevelopOffset = (manageDevelopPage - FIRST_PAGE) * limit;
    const subscribeOffset = (subscribePage - FIRST_PAGE) * limit;
-   const [isLoading, setIsLoading] = useState(true);
 
-   // 탭으로 보여줄 리스트 구분
    const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
    const [managerDeveloperProjectList, setManagerDeveloperProjectList] = useState<Project[]>([]);
    const [subscriberProjectList, setSubscriberProjectList] = useState<Project[]>([]);
@@ -61,77 +61,20 @@ const Dashboard = (): JSX.Element => {
    );
    const displayedSubscribeList = subscriberProjectList.slice(subscribeOffset, subscribeOffset + limit);
 
-   const handleClickListTabButton = (): void => {
-      console.log('Button Cliked');
-      setManageDevelopPage(FIRST_PAGE);
-      setSubscribePage(FIRST_PAGE);
-      setIsSubscribeOpen(!isSubscribeOpen);
+   const fetchProjects = async (): Promise<Project[]> => {
+      try {
+         const response = await api.get(`projects`);
+         return response.data;
+      } catch (error) {
+         console.error('Error fetching project List:', error);
+         console.log('Mocking data');
+         return mockFetchProjectList();
+      }
    };
 
-   useEffect(() => {
-      const fetchData = async (): Promise<void> => {
-         try {
-            console.log('api', api);
-            const response = await api.get(`projects`);
-            const fetchedProjectList = response.data;
-            console.log(fetchedProjectList);
-
-            const managerDeveloperProjects = fetchedProjectList.filter(
-               (project: { role: string }) => project.role === UserRole.Manager || project.role === UserRole.Developer,
-            );
-
-            const subscriberProjects = fetchedProjectList.filter(
-               (project: { role: string }) => project.role === UserRole.Subscriber,
-            );
-
-            setManagerDeveloperProjectList(managerDeveloperProjects);
-            setSubscriberProjectList(subscriberProjects);
-         } catch (error) {
-            console.error('Error fetching project List:', error);
-            console.log('Mocking data');
-            mockFetchProjectList();
-         } finally {
-            setIsLoading(false); // Set loading state to false after fetching
-         }
-      };
-
-      fetchData().catch(error => {
-         console.error('error fetch data', error);
-      });
-   }, []);
-
-   function handleClickPageButton(change: number): void {
-      const manageDevelopLastPage = Math.ceil(managerDeveloperProjectList.length / limit) ?? FIRST_PAGE;
-      const subscribeLastPage = Math.ceil(subscriberProjectList.length / limit) ?? FIRST_PAGE;
-      if (!isSubscribeOpen) {
-         if (manageDevelopPage + change < FIRST_PAGE) {
-            setManageDevelopPage(manageDevelopLastPage);
-         } else if (manageDevelopPage + change > manageDevelopLastPage) {
-            setManageDevelopPage(FIRST_PAGE);
-         } else {
-            setManageDevelopPage(manageDevelopPage + change);
-         }
-      } else {
-         if (subscribePage + change < FIRST_PAGE || manageDevelopPage + change > subscribeLastPage) {
-            setSubscribePage(subscribeLastPage);
-         } else if (subscribePage + change > subscribeLastPage) {
-            setManageDevelopPage(FIRST_PAGE);
-         } else {
-            setSubscribePage(subscribePage + change);
-         }
-      }
-   }
-
-   useEffect(() => {
-      console.log('manageDevelopPage page:', manageDevelopPage);
-      console.log('subscribePage page:', subscribePage);
-      console.log('displayedManageDevelopList page:', displayedManageDevelopList);
-      console.log('displayedSubscribeList page:', displayedSubscribeList);
-   }, [manageDevelopPage, subscribePage, displayedManageDevelopList, displayedSubscribeList]);
-
-   const mockFetchProjectList = (): void => {
+   const mockFetchProjectList = (): Project[] => {
       // Simulate API response with mock data
-      const fetchedProjectList = [
+      const mockFetchedProjectList = [
          {
             id: 1,
             role: UserRole.Manager,
@@ -205,18 +148,54 @@ const Dashboard = (): JSX.Element => {
             count: 5,
          },
       ];
-
-      const managerDeveloperProjects = fetchedProjectList.filter(
-         (project: { role: string }) => project.role === UserRole.Manager || project.role === UserRole.Developer,
-      );
-
-      const subscriberProjects = fetchedProjectList.filter(
-         (project: { role: string }) => project.role === UserRole.Subscriber,
-      );
-
-      setManagerDeveloperProjectList(managerDeveloperProjects);
-      setSubscriberProjectList(subscriberProjects);
+      return mockFetchedProjectList;
    };
+
+   const projectListQuery = useQuery<Project[]>('projects', fetchProjects);
+
+   useEffect(() => {
+      if (projectListQuery.isSuccess) {
+         setManagerDeveloperProjectList(
+            projectListQuery.data.filter(
+               (project: { role: string }) => project.role === UserRole.Manager || project.role === UserRole.Developer,
+            ),
+         );
+
+         setSubscriberProjectList(
+            projectListQuery.data.filter((project: { role: string }) => project.role === UserRole.Subscriber),
+         );
+         setIsLoading(false);
+      }
+   }, [projectListQuery.isSuccess, isLoading]);
+
+   const handleClickListTabButton = (): void => {
+      console.log('Button Cliked');
+      setManageDevelopPage(FIRST_PAGE);
+      setSubscribePage(FIRST_PAGE);
+      setIsSubscribeOpen(!isSubscribeOpen);
+   };
+
+   function handleClickPageButton(change: number): void {
+      const manageDevelopLastPage = Math.ceil(managerDeveloperProjectList.length / limit) ?? FIRST_PAGE;
+      const subscribeLastPage = Math.ceil(subscriberProjectList.length / limit) ?? FIRST_PAGE;
+      if (!isSubscribeOpen) {
+         if (manageDevelopPage + change < FIRST_PAGE) {
+            setManageDevelopPage(manageDevelopLastPage);
+         } else if (manageDevelopPage + change > manageDevelopLastPage) {
+            setManageDevelopPage(FIRST_PAGE);
+         } else {
+            setManageDevelopPage(manageDevelopPage + change);
+         }
+      } else {
+         if (subscribePage + change < FIRST_PAGE || manageDevelopPage + change > subscribeLastPage) {
+            setSubscribePage(subscribeLastPage);
+         } else if (subscribePage + change > subscribeLastPage) {
+            setManageDevelopPage(FIRST_PAGE);
+         } else {
+            setSubscribePage(subscribePage + change);
+         }
+      }
+   }
 
    function handleClickProjectCreateButton(): void {
       console.log('project create button clicked');
@@ -416,4 +395,4 @@ const Dashboard = (): JSX.Element => {
    );
 };
 
-export default Dashboard;
+export default MainPage;

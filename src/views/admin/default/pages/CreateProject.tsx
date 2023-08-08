@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoadingComponent from '../components/LoadingComponent ';
 import api from '../../../../context/api';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 
 interface UserRequest {
    managerId: number;
@@ -18,6 +19,7 @@ interface User {
 
 const CreateProject: React.FC = () => {
    const navigate = useNavigate();
+   const queryClient = useQueryClient();
 
    const [teamMembers, setTeamMembers] = useState<User[]>([]);
    const [allMembers, setAllMembers] = useState<User[]>([]);
@@ -26,46 +28,50 @@ const CreateProject: React.FC = () => {
    const [projectName, setProjectName] = useState('');
    const [description, setDescription] = useState('');
    const [isLoading, setIsLoading] = useState(true);
-   const [userRequest, setUseRequest] = useState<UserRequest>({
-      managerId: 3,
-      managerName: '함건욱',
-      managerDepartment: 'Backend',
-      users: [
-         { userId: 1, username: '김기현', userDepartment: 'Project Manager' },
-         { userId: 2, username: '김성국', userDepartment: 'Architecture' },
-         { userId: 3, username: '함건욱', userDepartment: 'Backend' },
-         { userId: 4, username: '강준희', userDepartment: 'Frontend' },
-         { userId: 5, username: '이승섭', userDepartment: 'OAuth' },
-         { userId: 6, username: '전강훈', userDepartment: 'Machine Learning' },
-      ],
-   });
 
-   // fetch All Members
-   // 자기 자신은 빼기
-   const fetchMembers = async (): Promise<void> => {
+   const fetchAllMembers = async (): Promise<UserRequest> => {
       try {
          const response = await api.get('users');
-         console.log(JSON.stringify(response.data, null, '\t'));
-         const userRequest: UserRequest = response.data;
-         setUseRequest(userRequest);
-         const members: User[] = userRequest.users
-            .filter((member: User) => member.userId !== userRequest.managerId)
-            .map((member: User) => ({
-               userId: member.userId,
-               username: member.username,
-               userDepartment: member.userDepartment,
-            }));
-
-         setAllMembers(members);
-         console.log(allMembers);
+         return response.data;
       } catch (error) {
          console.error('Error fetching members:', error);
          console.log('Mocking');
-         mockFetchSuggestions();
-      } finally {
-         setIsLoading(false); // Set loading state to false after fetching
+         return mockFetchUserRequest();
       }
    };
+
+   const allMembersQuery = useQuery('allMembers', fetchAllMembers);
+
+   useEffect(() => {
+      if (allMembersQuery.isSuccess) {
+         setIsLoading(false);
+
+         const allMembersData: User[] = allMembersQuery.data.users;
+
+         const removeManagerFromAllMembers = allMembersData.filter(
+            member => member.userId !== allMembersQuery.data.managerId,
+         );
+
+         setAllMembers(removeManagerFromAllMembers);
+      }
+   }, [allMembersQuery.isSuccess]);
+
+   const createProjectMutation = useMutation(async (projectData: any) => await api.post('project', projectData), {
+      onSuccess: async () => {
+         setProjectName('');
+         setDescription('');
+         setTeamMembers([]);
+
+         await queryClient.refetchQueries('projects').then(() => {
+            console.log('refetch projects');
+            navigate('../default');
+         });
+      },
+      onError: error => {
+         console.error('Error submitting project:', error);
+         alert('서버 에러 입니다. 다시 시도하세요.');
+      },
+   });
 
    const handleClickAddMemberButton = (member: User): void => {
       const updatedMember: User = {
@@ -76,8 +82,6 @@ const CreateProject: React.FC = () => {
       setTeamMembers([...teamMembers, updatedMember]);
       setNewMemberName('');
       setSuggestedMembers([]);
-      // 전체 멤버 목록에서 member 제거
-      setAllMembers(allMembers.filter(allMember => allMember.userId !== member.userId));
    };
 
    const handleClickRemoveMemberButton = (member: User): void => {
@@ -103,7 +107,7 @@ const CreateProject: React.FC = () => {
       }
    };
 
-   const mockFetchSuggestions = (): void => {
+   const mockFetchUserRequest = (): UserRequest => {
       // Simulate API response with mock data
       const mockUserResponse: User[] = [
          { userId: 1, username: '김기현', userDepartment: 'Project Manager' },
@@ -121,52 +125,20 @@ const CreateProject: React.FC = () => {
          users: mockUserResponse,
       };
 
-      setUseRequest(userRequest);
-
-      const allUsers: User[] = userRequest.users
-         .filter((member: User) => member.userId !== userRequest.managerId)
-         .map((member: User) => ({
-            userId: member.userId,
-            username: member.username,
-            userDepartment: member.userDepartment,
-         }));
-
-      setAllMembers(allUsers);
+      return userRequest;
    };
 
    const handleSubmitProject = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
       event.preventDefault();
-      try {
-         const users: number[] = teamMembers.map(member => member.userId);
-         const projectData = {
-            projectName,
-            description,
-            users,
-         };
 
-         console.log(JSON.stringify(projectData, null, '\t'));
-
-         // Send projectData to the backend using axios
-         await api.post('project', projectData);
-
-         // Clear the form fields and team member list
-         setProjectName('');
-         setDescription('');
-         setTeamMembers([]);
-         navigate('../');
-      } catch (error) {
-         console.error('Error submitting project:', error);
-         alert('서버 에러 입니다. 다시 시도하세요.');
-      }
+      const users: number[] = teamMembers.map(member => member.userId);
+      const projectData = {
+         projectName,
+         description,
+         users,
+      };
+      createProjectMutation.mutate(projectData);
    };
-
-   // Frist Rendering
-   useEffect(() => {
-      console.log('Project Create Page rendered');
-      fetchMembers().catch(error => {
-         console.error('error fetch data', error);
-      });
-   }, []);
 
    return (
       <>
@@ -237,9 +209,11 @@ const CreateProject: React.FC = () => {
                            </div>
                            <ul className="dark:text-white">
                               <li className="mb-2 flex items-center justify-between">
-                                 <p className="dark:bg-gray-800 dark:text-white rounded-2xl bg-gray-50 p-3 font-bold">{userRequest.managerName}</p>
+                                 <p className="dark:bg-gray-800 dark:text-white rounded-2xl bg-gray-50 p-3 font-bold">
+                                    {allMembersQuery?.data?.managerName}
+                                 </p>
                                  <p className="dark:bg-gray-800 dark:text-white ml-3 rounded-2xl bg-gray-50 p-3 font-bold">
-                                    {userRequest.managerDepartment}
+                                    {allMembersQuery?.data?.managerDepartment}
                                  </p>
                                  {/* 추후에 관리자 변경을 위해 보류 */}
                                  {/* <button className="ml-5 rounded-xl bg-gray-50 px-2 py-1 font-bold">
@@ -256,7 +230,7 @@ const CreateProject: React.FC = () => {
                            <div className="mb-4 flex">
                               <input
                                  type="text"
-                                 className="dark:bg-gray-800 dark:text-white w-64 rounded border border-gray-300 bg-gray-50 p-2 text-sm text-gray-900 dark:bg-gray-700"
+                                 className="dark:bg-gray-800 dark:text-white w-64 rounded border border-gray-300 bg-gray-50 p-2 text-sm text-gray-900"
                                  placeholder="팀원 이름을 입력해주세요"
                                  value={newMemberName}
                                  onChange={handleInputChange}
@@ -272,7 +246,9 @@ const CreateProject: React.FC = () => {
                               <ul className="dark:text-white" data-testid="team-members-list">
                                  {teamMembers.map(member => (
                                     <li key={member.userId} className="mb-2 flex items-center justify-between">
-                                       <p className="dark:bg-gray-800 dark:text-white rounded-2xl bg-gray-50 p-3 font-bold">{member.username}</p>
+                                       <p className="dark:bg-gray-800 dark:text-white rounded-2xl bg-gray-50 p-3 font-bold">
+                                          {member.username}
+                                       </p>
                                        <p className="dark:bg-gray-800 dark:text-white ml-3 rounded-2xl bg-gray-50 p-3 font-bold">
                                           {member.userDepartment}
                                        </p>
@@ -299,7 +275,9 @@ const CreateProject: React.FC = () => {
                                     <li
                                        key={member.userId}
                                        className="mb-2 flex items-center justify-between dark:text-white">
-                                       <p className="dark:bg-gray-800 dark:text-white rounded-2xl bg-gray-50 p-3 font-bold">{member.username}</p>
+                                       <p className="dark:bg-gray-800 dark:text-white rounded-2xl bg-gray-50 p-3 font-bold">
+                                          {member.username}
+                                       </p>
                                        <p className="dark:bg-gray-800 dark:text-white ml-3 rounded-2xl bg-gray-50 p-3 font-bold">
                                           {member.userDepartment}
                                        </p>
