@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import api from 'context/api';
+import React, { useState, useEffect } from 'react';
 import LoadingComponent from './LoadingComponent ';
+import api from 'context/api';
+import { useQuery } from 'react-query';
 
 interface Props {
    projectId: {
@@ -15,47 +16,46 @@ interface MemberStatus {
 }
 
 const MemberStatusCard: React.FC<Props> = ({ projectId }) => {
-   const [memberStatus, setMemberStatus] = useState<MemberStatus[]>([]);
    const [isLoading, setIsLoading] = useState(true);
 
+   const fetchMemberStatus = async (): Promise<MemberStatus[]> => {
+      try {
+         const response = await api.get(`/project/memberStatus/${projectId.id}`);
+         return response.data;
+      } catch (error) {
+         console.error('Error fetching project Member Status:', error);
+         console.log('Mocking data');
+         return mockFetchMemberStatus();
+      }
+   };
+
+   const memberStatusQuery = useQuery<MemberStatus[]>('memberStatus', fetchMemberStatus);
+
+   const mockFetchMemberStatus = (): MemberStatus[] => {
+      // Simulate API response with mock data
+      const mockResponse: MemberStatus[] = [
+         { memberId: 1, memberName: '함건욱', online: true },
+         { memberId: 2, memberName: '김기현', online: false },
+         { memberId: 3, memberName: '김성국', online: false },
+         { memberId: 4, memberName: '강준희', online: true },
+         { memberId: 5, memberName: '전강훈', online: true },
+         { memberId: 6, memberName: '이승섭', online: true },
+         { memberId: 7, memberName: '이승섭', online: true },
+         { memberId: 8, memberName: '이승섭', online: true },
+         { memberId: 9, memberName: '이승섭', online: true },
+         { memberId: 10, memberName: '이승섭', online: true },
+         { memberId: 11, memberName: '이승섭', online: true },
+         { memberId: 12, memberName: '이승섭', online: true },
+      ];
+
+      return mockResponse;
+   };
+
    useEffect(() => {
-      console.log('Members Status Project id:', projectId.id);
-      const fetchData = async (): Promise<void> => {
-         //
-         try {
-            const response = await api.get(`/project/memberStatus/${projectId.id}`);
-            console.log(response.data);
-            const data: MemberStatus[] = response.data;
-            setMemberStatus(data);
-         } catch (error) {
-            console.error('Error fetching project Member Status:', error);
-            console.log('Mocking data');
-
-            const mockResponse: MemberStatus[] = [
-               { memberId: 1, memberName: '함건욱', online: true },
-               { memberId: 2, memberName: '김기현', online: false },
-               { memberId: 3, memberName: '김성국', online: false },
-               { memberId: 4, memberName: '강준희', online: true },
-               { memberId: 5, memberName: '전강훈', online: true },
-               { memberId: 6, memberName: '이승섭', online: true },
-               { memberId: 7, memberName: '이승섭', online: true },
-               { memberId: 8, memberName: '이승섭', online: true },
-               { memberId: 9, memberName: '이승섭', online: true },
-               { memberId: 10, memberName: '이승섭', online: true },
-               { memberId: 11, memberName: '이승섭', online: true },
-               { memberId: 12, memberName: '이승섭', online: true },
-            ];
-
-            setMemberStatus(mockResponse);
-         } finally {
-            setIsLoading(false);
-         }
-      };
-
-      fetchData().catch(error => {
-         console.error('Error fetching data:', error);
-      });
-   }, [projectId]);
+      if (memberStatusQuery.isSuccess) {
+         setIsLoading(false);
+      }
+   }, [memberStatusQuery.isSuccess, isLoading]);
 
    return (
       <div
@@ -75,7 +75,7 @@ const MemberStatusCard: React.FC<Props> = ({ projectId }) => {
             <div className="overflow-auto" style={{ maxHeight: '250px' }}>
                <table>
                   <tbody>
-                     {memberStatus.map(member => (
+                     {memberStatusQuery?.data?.map(member => (
                         // <tr key={member.memberName}>
                         <tr key={member.memberId}>
                            <td className="py-2">{member.memberName}</td>

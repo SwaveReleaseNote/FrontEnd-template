@@ -131,7 +131,7 @@ const SignIn: React.FC = () => {
                      window.localStorage.setItem('token', `Bearer ${String(token)}`);
                      axios
                         .patch(
-                           'http://localhost:8080/api/user/status',
+                           'http://localhost:8080/api/user',
                            {
                               loginState: true,
                            },
