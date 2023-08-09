@@ -1,16 +1,21 @@
-import { type KeyboardEvent, useRef, type MouseEvent } from 'react'
+/* eslint-disable */
+import {filterDropdownOptions} from 'context/atom';
+import {type KeyboardEvent, useRef, type MouseEvent, useState, useEffect} from 'react'
 import React from 'react';
+import {useRecoilState} from 'recoil';
 
 interface DropdownMenuProps {
     cursorPosition: { top: number; left: number };
     onClose: () => void;
 }
 
-export default function DropdownMenu(props: DropdownMenuProps):JSX.Element {
+export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
+    const [dropdownOptions, setDropdownOptions] = useRecoilState(filterDropdownOptions);
+
     const buttonRef = useRef<HTMLButtonElement>(null);
     const cursorPosition = props.cursorPosition;
 
-    const handleChoiceLabelKeyPress = (event: KeyboardEvent<HTMLDivElement>):void => {
+    const handleChoiceLabelKeyPress = (event: KeyboardEvent<HTMLDivElement>): void => {
         // if(event.key === 'Home') { // 방향키 왼족
         //     console.log('왼')
         // }
@@ -26,16 +31,13 @@ export default function DropdownMenu(props: DropdownMenuProps):JSX.Element {
     }
 
     const handleSelectLavelkeyPress = (event: KeyboardEvent<HTMLDivElement>): void => {
-        console.log("빈 함수여서 에러 생겨서 콘솔 로그");    
+        console.log("빈 함수여서 에러 생겨서 콘솔 로그");
     }
 
     const handleSelectLavelClickEvent = (event: MouseEvent<HTMLDivElement>): void => {
         switch (buttonRef.current?.textContent) {
             case "new":
-                // 리턴 타입 오류
-                // return(
-                //     <div></div>
-                // )
+
                 break;
             case "update":
 
@@ -54,7 +56,7 @@ export default function DropdownMenu(props: DropdownMenuProps):JSX.Element {
 
     return (
         <div
-            style={{ position: 'absolute', top: cursorPosition.top, left: cursorPosition.left }}
+            style={{position: 'absolute', top: cursorPosition.top, left: cursorPosition.left}}
         >
             <div
                 className=' transition-all ease-in-out flex flex-col z-10 bg-lightPrimary divide-y divide-gray-200 rounded-lg shadow-md w-44 dark:bg-gray-700'
@@ -66,21 +68,11 @@ export default function DropdownMenu(props: DropdownMenuProps):JSX.Element {
                     handleSelectLavelClickEvent(event)
                 }}
             >
-                <button ref={buttonRef} className='hover:bg-navy-50'>
-                    new
-                </button>
-                <button ref={buttonRef} className='hover:bg-navy-50'>
-                    update
-                </button>
-                <button ref={buttonRef} className='hover:bg-navy-50'>
-                    stop
-                </button>
-                <button ref={buttonRef} className='hover:bg-navy-50'>
-                    delete
-                </button>
-                <button ref={buttonRef} className='hover:bg-navy-50'>
-                    etc
-                </button>
+                {dropdownOptions.map(option => (
+                    <button ref={buttonRef} className='hover:bg-navy-50'>
+                        {option}
+                    </button>
+                ))}
             </div>
         </div>
     )

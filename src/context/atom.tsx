@@ -1,22 +1,22 @@
-import {atom} from 'recoil'
+import { atom } from 'recoil'
 
 export const noteFieldState = atom({
     key: "noteFieldState",
     default: {
-        id:0,
-        version:"",
+        id: 0,
+        version: "",
         block: [
             {
-                id:0,
-                label:"",
-                text:""
+                id: 0,
+                label: "",
+                text: ""
             }
         ],
         comment: [
             {
-                id:0,
-                writer:"",
-                content:""
+                id: 0,
+                writer: "",
+                content: ""
             }
         ]
     }
@@ -25,31 +25,31 @@ export const noteFieldState = atom({
 export const labelState = atom({
     key: "labelState",
     default: [{
-        label:"",
-        text:""
+        label: "",
+        text: ""
     }]
 })
 
 export const commentState = atom({
     key: "commentState",
     default: [{
-        writer:"",
-        content:"",
-        id:""
+        writer: "",
+        content: "",
+        id: 0
     }]
 })
 
 export const loginState = atom({
-  key: "loginState",
-  default: {
-    state: false,
-    id: -1,
-    name: "atom",
-    info: null,
-    email: null,
-    token: null,
-    department: "부서 0",
-  },
+    key: "loginState",
+    default: {
+        state: false,
+        id: -1,
+        name: "atom",
+        info: null,
+        email: null,
+        token: null,
+        department: "부서 0",
+    },
 });
 
 /**
@@ -57,11 +57,11 @@ export const loginState = atom({
  * 프로젝트 리스트, 릴리즈노트 리스트
  */
 export const sideBarState = atom({
-  key: "sideBarState",
-  default: {
-    projectList: [],
-    releaseNoteList: [],
-  },
+    key: "sideBarState",
+    default: {
+        projectList: [],
+        releaseNoteList: [],
+    },
 });
 
 export const noteBlockState = atom({
@@ -70,4 +70,15 @@ export const noteBlockState = atom({
         id: 0,
         content: '',
     }
-})
+});
+
+export const filterDropdownOptions = atom({
+    key: "filterDropdownOptions",
+    default: [
+        'new',
+        'update',
+        'stop',
+        'delete',
+        'etc'
+    ]
+});

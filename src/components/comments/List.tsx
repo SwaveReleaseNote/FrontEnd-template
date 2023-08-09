@@ -1,4 +1,4 @@
-import { commentState } from 'context/dist/atom';
+import { commentState } from 'context/atom';
 import React from 'react';
 import { useRecoilState } from 'recoil';
 import data from '../label/mockData/NoteFiledMockData.json';
