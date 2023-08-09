@@ -1,9 +1,9 @@
 import axios from 'axios';
-
+import { getCookie } from '../views/auth/cookie';
 const api = axios.create({
    baseURL: 'http://localhost:8080/api/',
    headers: {
-      Authorization: localStorage.getItem('token'),
+      Authorization: getCookie('id'),
       'Content-Type': 'application/json',
    },
 });
