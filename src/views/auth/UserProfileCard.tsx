@@ -63,6 +63,8 @@ function UserProfileCard(): ReactElement {
         setUserName(localStorage.getItem("name"));
         setEmail(localStorage.getItem("email"));
         setDepartment(localStorage.getItem("department"));
+        alert("Save Complete");
+        window.location.reload();
       })
       .catch((error) => {
         console.error(error);

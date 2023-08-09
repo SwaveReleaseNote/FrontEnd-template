@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useQuery, useQueryClient } from 'react-query';
 
 import LoadingComponent from '../components/LoadingComponent ';
 import api from 'context/api';
 import NotificationPopup from '../components/NotificationPopup';
+
+enum UserRole {
+   Subscriber = 'Subscriber',
+   Developer = 'Developer',
+   Manager = 'Manager',
+   None = 'None'
+}
 
 interface TeamMember {
    userId: number;
@@ -30,49 +38,45 @@ interface SearchResult {
 
 const SearchProjectList: React.FC = () => {
    const navigate = useNavigate();
-
-   const [searchResult, setSearchResult] = useState<SearchResult>();
    const [selectedCheckbox, setSelectedCheckbox] = useState('전체');
    const location = useLocation();
    const searchTerm = location.state.searchTerm;
-   const [isLoading, setIsLoading] = useState(true);
    const [showRoleCheck, setShowRoleCheck] = useState(false);
+   const [isLoading, setIsLoading] = useState(true);
+   const queryClient = useQueryClient();
 
-   useEffect(() => {
-      const fetchSearchResult = async (): Promise<void> => {
-         try {
-            const response = await api.post('project/search', {
-               keyword: searchTerm,
-            });
+   const fetchSearchResults = async (): Promise<SearchResult> => {
+      try {
+         console.log('setSearchTerm', searchTerm);
+         const response = await api.post('project/search', {
+            keyword: searchTerm,
+         });
 
-            const searchResult = response.data;
-            setSearchResult(searchResult);
-            setIsLoading(false);
-         } catch (error) {
-            console.error('Error fetching search result:', error);
-            mockFetchSearchResult();
-            setIsLoading(false);
-         }
-      };
+         return response.data;
+      } catch (error) {
+         console.error('Error fetching search result:', error);
+         return mockFetchSearchResult();
+      }
+   };
 
-      // Call the async function to fetch search result
-      fetchSearchResult().catch(Error);
-   }, [searchTerm]);
+   const fetchUserRole = async (projectId: number): Promise<UserRole> => {
+      try {
+         const response = await api.get(`project/${projectId}/role`);
+         console.log(JSON.stringify(response.data, null, "\t"));
+         return response.data;
+      } catch (error) {
+         console.error('Error fetching user role:', error);
+         return mockFetchUserRole();
+      }
+   };
 
-   useEffect(() => {
-      console.log('selectedCheckbox:', selectedCheckbox);
-      console.log('searchResult:', searchResult);
-      console.log('searchTerm:', searchTerm);
-      console.log('showRoleCheck:', showRoleCheck);
-   }, [selectedCheckbox, searchResult, searchTerm, showRoleCheck]);
+   const mockFetchUserRole = (): UserRole => {
+      return UserRole.None;
+   };
 
-   useEffect(() => {
-      console.log('showRoleCheck:', showRoleCheck);
-   }, [showRoleCheck]);
-
-   const mockFetchSearchResult = (): void => {
+   const mockFetchSearchResult = (): SearchResult => {
       // Simulate API response with mock data
-      setSearchResult({
+      const mockResponse: SearchResult = {
          titleSearch: [],
          descriptionSearch: [
             {
@@ -180,42 +184,34 @@ const SearchProjectList: React.FC = () => {
                ],
             },
          ],
-      });
-      console.log('mock fetch search result');
+      };
+
+      return mockResponse;
    };
 
-   const mockFetchUserRole = (): string => {
-      return 'none';
-   };
+   // Use the useQuery hook to fetch data
+   const searchResultQuery = useQuery(['searchResults', searchTerm], fetchSearchResults);
 
-   const fetchUserRole = async (): Promise<string> => {
-      try {
-         const response = await api.get('user/role');
-         return response.data;
-      } catch (error) {
-         console.error('Error fetching user role:', error);
-         const mockResponse = mockFetchUserRole();
-         return mockResponse;
+   useEffect(() => {
+      if (searchResultQuery.isSuccess) {
+         setIsLoading(false);
       }
-   };
+   }, [searchResultQuery.isSuccess]);
 
-   // 클릭한 유저의 권한을 확인해서 프로젝트의 대시보드에 접근할 권리가 없으면 구독을 할 수 있도록 알림창을 띄운다.
    const handleClickProjectName = async (projectId: number, projectName: string): Promise<void> => {
       try {
-         // 백엔드로 권한확인
-         const role = await fetchUserRole();
-         if (role === 'none') {
+         const userRoleResponse = await fetchUserRole(projectId);
+         if (userRoleResponse === UserRole.None) {
             setShowRoleCheck(true);
          } else {
-            const queryString = `projectId=${projectId}&role=${encodeURIComponent(role)}&projectName=${projectName}`;
+            const queryString = `projectId=${projectId}&projectName=${projectName}`;
             const url = `/admin/dashboard?${queryString}`;
 
             navigate(url);
-            console.log('handleClickProjectCard');
          }
       } catch (error) {
-         // Handle the error gracefully, for example, show an error message or log it.
          console.error('Error fetching user role:', error);
+         alert('Server error. Please try again.');
       }
    };
 
@@ -223,38 +219,29 @@ const SearchProjectList: React.FC = () => {
       setSelectedCheckbox(value);
    };
 
-   const renderProjects = (projects: ProjectInfo[], searchTerm: string, searchType: string): JSX.Element => {
-      console.log('projects:', projects);
-      console.log('searchType:', searchType);
-      console.log('searchTerm:', searchTerm);
+   const handleClickYes = async (projectId: number, projectName: string): Promise<void> => {
+      try {
+         await api.post(`project/${projectId}/subscribe`);
+         const queryString = `projectId=${projectId}&projectName=${projectName}`;
+         const url = `/admin/dashboard?${queryString}`;
+         await queryClient.refetchQueries('projects');
+         navigate(url);
+      } catch (error) {
+         console.error('Error Subscribe project:', error);
+         alert('Server error. Please try again.');
+      } finally {
+         setShowRoleCheck(false);
+      }
+   };
 
+   const handleClickNo = (): void => {
+      setShowRoleCheck(false);
+   };
+
+   const renderProjects = (projects: ProjectInfo[], searchTerm: string, searchType: string): JSX.Element => {
       const highlightSearchTerm = (text: string): string => {
          const regex = new RegExp(searchTerm, 'gi');
          return text.replace(regex, match => `<span style="color: red; font-weight: bold">${match}</span>`);
-      };
-
-      const handleClickYes = async (projectId: number, projectName: string): Promise<void> => {
-         // Perform the project subscribe logic
-         console.log('Click Yes Subscribe');
-         try {
-            await api.post(`project/subscribe`, { projectId });
-            const queryString = `projectId=${projectId}&role=${encodeURIComponent(
-               'Subscriber',
-            )}&projectName=${projectName}`;
-            const url = `/admin/dashboard?${queryString}`;
-            navigate(url);
-         } catch (error) {
-            console.error('Error Subscribe project:', error);
-            alert('Server error. Please try again.');
-         } finally {
-            setShowRoleCheck(false);
-         }
-      };
-
-      const handleClickNo = (): void => {
-         // Cancel the project deletion
-         console.log('Project deletion canceled');
-         setShowRoleCheck(false);
       };
 
       return (
@@ -420,24 +407,27 @@ const SearchProjectList: React.FC = () => {
                <div className="flex justify-center">
                   {selectedCheckbox === '전체' && (
                      <div className="">
-                        <div className="">{renderProjects(searchResult?.titleSearch ?? [], searchTerm, '제목')}</div>
-                        {/* <hr></hr> */}
-                        <div>{renderProjects(searchResult?.descriptionSearch ?? [], searchTerm, '개요')}</div>
-                        {/* <hr></hr> */}
-                        <div>{renderProjects(searchResult?.managerSearch ?? [], searchTerm, '관리자')}</div>
-                        {/* <hr></hr> */}
-                        <div>{renderProjects(searchResult?.developerSearch ?? [], searchTerm, '개발자')}</div>
-                        {/* <hr></hr> */}
+                        <div className="">
+                           {renderProjects(searchResultQuery?.data?.titleSearch ?? [], searchTerm, '제목')}
+                        </div>
+                        <div>
+                           {renderProjects(searchResultQuery?.data?.descriptionSearch ?? [], searchTerm, '개요')}
+                        </div>
+                        <div>{renderProjects(searchResultQuery?.data?.managerSearch ?? [], searchTerm, '관리자')}</div>
+                        <div>
+                           {renderProjects(searchResultQuery?.data?.developerSearch ?? [], searchTerm, '개발자')}
+                        </div>
                      </div>
                   )}
-                  {selectedCheckbox === '제목' && renderProjects(searchResult?.titleSearch ?? [], searchTerm, '제목')}
+                  {selectedCheckbox === '제목' &&
+                     renderProjects(searchResultQuery?.data?.titleSearch ?? [], searchTerm, '제목')}
                   {selectedCheckbox === '개요' &&
-                     renderProjects(searchResult?.descriptionSearch ?? [], searchTerm, '개요')}
+                     renderProjects(searchResultQuery?.data?.descriptionSearch ?? [], searchTerm, '개요')}
                   {selectedCheckbox === '관리자' &&
-                     renderProjects(searchResult?.managerSearch ?? [], searchTerm, '관리자')}
+                     renderProjects(searchResultQuery?.data?.managerSearch ?? [], searchTerm, '관리자')}
 
                   {selectedCheckbox === '개발자' &&
-                     renderProjects(searchResult?.developerSearch ?? [], searchTerm, '개발자')}
+                     renderProjects(searchResultQuery?.data?.developerSearch ?? [], searchTerm, '개발자')}
                </div>
             )}
          </div>

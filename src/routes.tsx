@@ -1,7 +1,7 @@
 import React from "react";
 
 // Admin Imports
-import MainDashboard from "views/admin/default";
+import MainDashboard from "views/admin/default/MainPage";
 import ReleaseNote from "views/admin/marketplace";
 import CreateReleaseNote from "views/admin/note";
 
