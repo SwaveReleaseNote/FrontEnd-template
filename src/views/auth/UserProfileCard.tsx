@@ -123,6 +123,49 @@ function UserProfileCard(): ReactElement {
       });
   };
 
+  /* department 설정 */
+  const [showPasswordChangeModal, setShowPasswordChangeModal] = React.useState(false);
+  const [password, setPassword] = React.useState("");
+
+  const handlePasswordChangeModalButton = ():void => {
+    setShowPasswordChangeModal(!showPasswordChangeModal);
+  };
+
+  const handleClickChangePasswordFormSubmit = (
+    event: React.FormEvent<HTMLFormElement>
+  ):void => {
+    event.preventDefault();
+    // Handle forgot password form submission
+    console.log(password);
+    axios
+      .patch("http://localhost:8080/api/user/password", {
+        password: password,
+      },
+      {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        // Handle successful response
+        console.log(response.data);
+        setShowPasswordChangeModal(!showPasswordChangeModal);
+      })
+      .catch((error) => {
+        // Handle error
+        console.error(error);
+      });
+  };
+
+  const handleChnagePasswordInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ):void => {
+    setPassword(event.target.value);
+  };
+  const handleModalClose = ():void => {
+    setShowPasswordChangeModal(false);
+   };
+
   return (
     <>
       <form onSubmit={handleUserUpdateFormSubmit}>
@@ -156,13 +199,10 @@ function UserProfileCard(): ReactElement {
                   />
                 </div>
                 <div className="data">
-                  <h4>Phone</h4>
-                  <input
-                    type="text"
-                    name="phone"
-                    value={phone ?? ""}
-                    onChange={handleChangeUserInputChange}
-                  />
+                  <h4>Password</h4>
+                  <button type="button" className="mr-2 text-red-600" onClick={handlePasswordChangeModalButton}>
+                Password Change
+              </button>
                 </div>
               </div>
             </div>
@@ -210,6 +250,45 @@ function UserProfileCard(): ReactElement {
           </div>
         </div>
       </form>
+      {showPasswordChangeModal && (
+        <div className="userprofileCard-modal-overlay">
+          <div className="userprofileCard-modal-content">
+            <span className="userprofileCard-close" onClick={handleModalClose}>
+              &times;
+            </span>
+            <h2>Select Department</h2>
+            {/* Department selection options */}
+            <div className="modal-body">
+            <form onSubmit={handleClickChangePasswordFormSubmit}>
+              {/* Forgot password form */}
+              <div className="mb-4">
+                <label
+                  htmlFor="forgotPasswordEmail"
+                  className="mb-2 block font-medium text-gray-800"
+                >
+                  Email
+                </label>
+                <input
+                  type="password"
+                  className="w-full rounded-md border px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter your password"
+                  onChange={handleChnagePasswordInputChange}
+                  required
+                />
+              </div>
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className="rounded-md bg-blue-500 px-4 py-2 font-medium text-white hover:bg-blue-600 focus:bg-blue-600 focus:outline-none"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
