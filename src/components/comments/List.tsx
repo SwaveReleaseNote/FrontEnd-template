@@ -1,19 +1,13 @@
-import { commentState } from 'context/dist/atom';
+import { commentState } from 'context/atom';
 import React from 'react';
 import { useRecoilState } from 'recoil';
 import data from '../label/mockData/NoteFiledMockData.json';
 import tmpImage from '../../assets/img/avatars/avatar5.png';
 import Card from 'components/card';
 
-interface Comment {
-  writer: string;
-  content: string;
-  id: number; // Assuming each comment has a unique identifier (e.g., "id")
-}
-
 export default function List(): JSX.Element {
   // 댓글 내용
-  const [comments, setComments] = useRecoilState<Comment[]>(commentState);
+  const [comments, setComments] = useRecoilState(commentState);
   setComments(data.mock.releaseNote.comment);
 
   const view = comments?.map((comment) => {
