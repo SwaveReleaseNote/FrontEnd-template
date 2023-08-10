@@ -1,9 +1,13 @@
 /*eslint-disable*/
 
-import React, {useEffect, useState} from 'react';
+import React, {MouseEvent, useEffect, useState} from 'react';
 import api from "../../../context/api";
 import {useLocation} from "react-router-dom";
 import mockData from "../mockData/noteListData.json"
+import {RecoilLoadable, useRecoilState} from "recoil";
+import {noteFieldState} from "../../../context/atom";
+import {Mouse} from "@testing-library/user-event/system/pointer/mouse";
+import error = RecoilLoadable.error;
 
 interface Note {
     releaseNoteId: number,
@@ -21,8 +25,9 @@ function ProjectList(): JSX.Element {
     const location = useLocation();
     const [projects, setProjects] = useState<Project[]>();
     const [selectedProject, setSelectedProject] = useState<Project>();
+    const [releaseNoteId, setReleaseNoteId] = useState<number>();
     const [isSelect, setIsSelect] = useState(false);
-
+    const [selectNote, setSelectNote] = useRecoilState(noteFieldState);
     // useEffect(() => {
     //
     //     const fetchProjects = async (): Promise<void> => {
@@ -57,6 +62,33 @@ function ProjectList(): JSX.Element {
         setIsSelect(true);
     };
 
+    // 리코일을 사용하여 릴리즈 노트 클릭했을때 해당 릴리즈 노트로 가도록 설정
+    useEffect(() => {
+        const fetchNote = async (): Promise<void> => {
+            try{
+                const response = await api.get(`project/release-note/${releaseNoteId}`)
+                const fetchData = response.data
+                setSelectNote(fetchData)
+
+                console.log(releaseNoteId + " 릴리즈 노트 데이터 가져옴")
+
+                // todo: 라우팅 해주자?
+            }
+            catch (error) {
+                console.error(error)
+            }
+        }
+
+        fetchNote().catch(error => {
+            console.log(error)
+        });
+
+    }, [releaseNoteId]);
+
+    const handleNoteButtonClick = (event: MouseEvent<HTMLButtonElement>, id: number) => {
+        setReleaseNoteId(id);
+    }
+
     return (
         <div className="bg-gray-50 dark:bg-gray-800">
             <ul className="space-y-2 font-medium">
@@ -81,7 +113,10 @@ function ProjectList(): JSX.Element {
                     <div className="flex inline-flex items-end">
                         {/*릴리즈 노트 리스트*/}
                         {selectedProject?.releaseNoteVersionList.map(note => (
-                            <button className="flex">
+                            <button
+                                key={note.releaseNoteId}
+                                onClick={event => handleNoteButtonClick(event, note.releaseNoteId)}
+                                className="flex">
                                 {note.version}
                             </button>
                         ))}

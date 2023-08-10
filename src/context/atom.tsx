@@ -3,22 +3,35 @@ import {atom} from 'recoil'
 export const noteFieldState = atom({
     key: "noteFieldState",
     default: {
-        id:0,
-        version:"",
-        block: [
+        blocks: [
             {
-                id:0,
-                label:"",
-                text:""
+                contexts: [
+                    {
+                        context: "",
+                        index: 0,
+                        tag: ""
+                    }
+                ],
+                Label: ""
             }
         ],
         comment: [
             {
-                id:0,
-                writer:"",
-                content:""
+                context:0,
+                LastModifiedDate:"",
+                name:"",
+                releaseNoteId: 0,
+                version: ""
             }
-        ]
+        ],
+        count: 0,
+        creator: "",
+        LastModified: "",
+        Liked: 0,
+        releaseDate: "",
+        releaseNoteId: 0,
+        summary: "",
+        version: ""
     }
 });
 

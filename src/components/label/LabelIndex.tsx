@@ -8,17 +8,28 @@ import deleteLabel from '../../assets/img/label/DELETE.png'
 import stopLabel from '../../assets/img/label/STOP.png'
 import etcLabel from '../../assets/img/label/ETC.png'
 
-export default function LabelIndex(props: any):JSX.Element {
-    const block = props.NoteFieldBlock;
+interface context {
+    context: string,
+    index: number,
+    tag: string
+}
+interface block {
+    contexts: context[],
+    Label: string
+}
+export default function LabelIndex(props: block):JSX.Element {
+    const block = props;
 
-    switch (block.label) {
+    switch (block.Label) {
         case 'new':
             return (<div className='my-10'>
                 <span>
                     <img className='my-5 rounded-xl w-1/12 max-w-lg shadow-xl' src={newLabel} />
                 </span>
                 <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
-                    <p>{block.text}</p>
+                    {block.contexts.map(context => (
+                        <p>{context}</p>
+                    ))}
                 </div>
             </div>)
         case 'update':
@@ -27,8 +38,9 @@ export default function LabelIndex(props: any):JSX.Element {
                     <img className='my-5 rounded-xl w-1/12 max-w-lg shadow-xl' src={updateLabel} />
                 </span>
                 <div className=' break-words w-full text-clip mt-2 px-2 inline-block'>
-                    <p>{block.text}</p>
-
+                    {block.contexts.map(context => (
+                        <p>{context}</p>
+                    ))}
                 </div>
             </div>
         case 'delete':
@@ -37,8 +49,9 @@ export default function LabelIndex(props: any):JSX.Element {
                     <img className='my-5 rounded-xl w-1/12 max-w-lg shadow-xl' src={deleteLabel} />
                 </span>
                 <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
-                    <p>{block.text}</p>
-                </div>
+                    {block.contexts.map(context => (
+                        <p>{context}</p>
+                    ))}                </div>
             </div>
         case 'stop':
             return <div className='my-10'>
@@ -46,8 +59,9 @@ export default function LabelIndex(props: any):JSX.Element {
                     <img className='my-5 rounded-xl w-1/12 max-w-lg shadow-xl' src={stopLabel} />
                 </span>
                 <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
-                    <p>{block.text}</p>
-                </div>
+                    {block.contexts.map(context => (
+                        <p>{context}</p>
+                    ))}                </div>
             </div>
         case 'etc':
             return <div className='my-10'>
@@ -55,7 +69,9 @@ export default function LabelIndex(props: any):JSX.Element {
                     <img className='my-5 rounded-xl w-1/12 max-w-lg shadow-xl' src={etcLabel} />
                 </span>
                 <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
-                    <p>{block.text}</p>
+                    {block.contexts.map(context => (
+                        <p>{context}</p>
+                    ))}
                 </div>
             </div>
     }

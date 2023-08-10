@@ -13,13 +13,13 @@ export default function NoteField(): JSX.Element {
 
     // 백에서 라벨과 블록을 받는다.
     const [noteField, setNoteField] = useRecoilState(noteFieldState);
-    setNoteField(data.mock.releaseNote);
+    setNoteField(data);
 
     // block 부분 받기
-    const noteFieldBlock = noteField.block?.map((block) => <LabelIndex key={block.id} NoteFieldBlock={block} />);
+    const noteFieldBlock = noteField.blocks?.map((block) => <LabelIndex block={block} />);
 
     // comment 부분 받기
-    const noteFieldComment = noteField.comment?.map((comment) => <CommentIndex key={comment.id} NoteFieldComment={comment} />);
+    const noteFieldComment = noteField.comment?.map((comment) => <CommentIndex comment={comment} />);
 
     return (
         <div className='mt-2 mb-8'>
