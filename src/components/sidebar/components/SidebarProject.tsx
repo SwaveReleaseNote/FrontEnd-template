@@ -1,13 +1,18 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 
-interface ProjectType {
-   id: number;
-   projectName: string;
-   releaseNotes: any[]; // Change 'any[]' to the actual type of 'releaseNotes'
+interface Note {
+    releaseNoteId: number,
+    version: string;
+}
+interface Project {
+    projectId: number,
+    projectName: string,
+    releaseNoteVersionList: Note[],
+    subscribe: boolean;
 }
 
-export default function SidebarProject(props: { myProject: ProjectType }): JSX.Element {
+export default function SidebarProject(props: { myProject: Project }): JSX.Element {
     const { myProject } = props;
     const location = useLocation();
   
