@@ -33,8 +33,8 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
    const [searchTerm, setSearchTerm] = useState('');
    const [filteredReleaseList, setFilteredReleaseList] = useState<ReleaseList[]>([]);
    const [isLoading, setIsLoading] = useState(true);
-
-   const handleChangeSearchInput = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+   /* 릴리즈 노트 검색 했을 때 다른 페이지로 넘어갈지? 위의 글로버 바와 혼동 생길 수 있음
+   const handleKeyDownSearchInput = (event: React.KeyboardEvent<HTMLInputElement>): void => {
       if (event.key === 'Enter') {
          navigate('/admin/release/searchResult', {
             state: {
@@ -44,9 +44,11 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
          setSearchTerm('');
       }
    };
+   */
 
-   const handleKeyDownSearchInput = (event: React.ChangeEvent<HTMLInputElement>): void => {
+   const handleChangeSearchInput = (event: React.ChangeEvent<HTMLInputElement>): void => {
       setSearchTerm(event.target.value);
+      console.log(searchTerm);
    };
 
    const labelToIconMap: Record<string, string> = {
@@ -61,12 +63,21 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
       try {
          const response = await api.get(`project/${searchRelease.projectId}/release-note/label/filter`);
          return response.data;
-      } catch (error) {
+      } catch (error: any) {
          console.error('Error fetching release list:', error);
-         console.log('Mocking data');
-         // Mock data generation here
+         // let status = error.code;
+         // if (error.response?.status != null) {
+         //    status = error.response.status;
+         // }
+         // navigate(`../error?status=${status as string}`);
          return mockFetchReleaseList();
       }
+   }
+
+   function filterReleaseNotes(releaseNotes: ReleaseList[], searchTerm: string, label: string): ReleaseList[] {
+      const filteredNotes = releaseNotes.filter(release => release.label === label);
+
+      return filteredNotes?.filter(release => release.context.toLowerCase().includes(searchTerm.toLowerCase()));
    }
 
    const releaseList = useQuery<ReleaseList[]>(['searchRelease', searchRelease.projectId], fetchData);
@@ -74,10 +85,11 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
    useEffect(() => {
       if (releaseList.isSuccess) {
          // Filter the releaseList based on the label value
-         setFilteredReleaseList(releaseList.data.filter(release => release.label === searchRelease.label));
+         const filteredNotes = filterReleaseNotes(releaseList.data, searchTerm, searchRelease.label);
+         setFilteredReleaseList(filteredNotes);
          setIsLoading(false);
       }
-   }, [releaseList.isSuccess, isLoading, searchRelease.label]);
+   }, [releaseList.isSuccess, isLoading, searchRelease.label, searchTerm]);
 
    const mockFetchReleaseList = (): ReleaseList[] => {
       function generateRandomVersion(): string {
@@ -153,8 +165,8 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
             </p>
             <input
                value={searchTerm}
-               onChange={handleKeyDownSearchInput}
-               onKeyDown={handleChangeSearchInput}
+               onChange={handleChangeSearchInput}
+               // onKeyDown={handleKeyDownSearchInput}
                type="text"
                placeholder="릴리즈 노트 검색"
                className="block h-full w-full rounded-3xl bg-lightPrimary text-sm text-navy-700 outline-none placeholder:!text-gray-400 dark:bg-navy-900 dark:text-white dark:placeholder:!text-white"
@@ -184,7 +196,7 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
                                  className="h-[5vh] w-[10vh] rounded-xl"
                               />
                               <div className="mt-2 text-black-400 flex h-full w-full items-center justify-center gap-10 text-xl font-bold dark:text-white">
-                                 생성된 릴리즈노트가 없습니다!!👻
+                                 검색된 릴리즈노트가 없습니다!!👻
                               </div>
                            </td>
                         </tr>

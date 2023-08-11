@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import LoadingComponent from './LoadingComponent ';
 import api from 'context/api';
 import { useQuery } from 'react-query';
+// import { useNavigate } from 'react-router-dom';
 
 interface Props {
    projectId: {
@@ -17,14 +18,19 @@ interface MemberStatus {
 
 const MemberStatusCard: React.FC<Props> = ({ projectId }) => {
    const [isLoading, setIsLoading] = useState(true);
+   // const navigate = useNavigate();
 
    const fetchMemberStatus = async (): Promise<MemberStatus[]> => {
       try {
          const response = await api.get(`/project/memberStatus/${projectId.id}`);
          return response.data;
-      } catch (error) {
+      } catch (error: any) {
          console.error('Error fetching project Member Status:', error);
-         console.log('Mocking data');
+         // let status = error.code;
+         // if (error.response?.status != null) {
+         //    status = error.response.status;
+         // }
+         // navigate(`../error?status=${status as string}`);
          return mockFetchMemberStatus();
       }
    };

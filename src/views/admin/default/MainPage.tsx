@@ -3,7 +3,6 @@
 // import TotalSpent from 'views/admin/default/components/TotalSpent';
 // import PieChartCard from 'views/admin/default/components/PieChartCard';
 
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RecentRelease from './components/RecentRelease';
@@ -17,7 +16,7 @@ enum UserRole {
    Subscriber = 'Subscriber',
    Developer = 'Developer',
    Manager = 'Manager',
-   None = 'None'
+   None = 'None',
 }
 
 interface Project {
@@ -55,9 +54,13 @@ const MainPage = (): JSX.Element => {
       try {
          const response = await api.get(`projects`);
          return response.data;
-      } catch (error) {
-         console.error('Error fetching project List:', error);
-         console.log('Mocking data');
+      } catch (error: any) {
+         console.error('Error fetching projects', error);
+         let status = error.code;
+         if (error.response?.status != null) {
+            status = error.response.status;
+         }
+         navigate(`../error?status=${status as string}`);
          return mockFetchProjectList();
       }
    };
@@ -334,8 +337,6 @@ const MainPage = (): JSX.Element => {
          <div>
             <RecentRelease />
          </div>
-
-        
       </div>
    );
 };

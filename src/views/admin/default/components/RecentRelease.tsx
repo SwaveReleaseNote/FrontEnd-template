@@ -41,7 +41,6 @@ interface RecentReleaseNote {
    version: string;
    comment: Comment[];
    blocks: Blocks[];
-   // 어떤 프로젝트의 릴리즈 노트인지?
 }
 
 const RecentRelease = (): JSX.Element => {
@@ -52,9 +51,13 @@ const RecentRelease = (): JSX.Element => {
       try {
          const response = await api.get(`project/release-note/recent-release-note`);
          return response.data;
-      } catch (error) {
-         console.error('Error fetching recent release note:', error);
-         console.log('Mocking data');
+      } catch (error: any) {
+         console.error('Error fetching recent release note', error);
+         // let status = error.code;
+         // if (error.response?.status != null) {
+         //    status = error.response.status;
+         // }
+         // navigate(`../error?status=${status as string}`);
          return mockFetchRecentRelease();
       }
    };
@@ -209,8 +212,8 @@ const RecentRelease = (): JSX.Element => {
                         </div>
                         <div className="overflow-y-scroll">
                            {recentReleaseNote?.blocks?.length > 0 ? (
-                              recentReleaseNote?.blocks?.map((block: Blocks) => (
-                                 <div className="m-4 mt-8 w-[95%]" key={block.label}>
+                              recentReleaseNote?.blocks?.map((block: Blocks, index: number) => (
+                                 <div className="m-4 mt-8 w-[95%]" key={index}>
                                     <img
                                        src={labelToIconMap[block.label]}
                                        alt={block.label}
@@ -238,8 +241,8 @@ const RecentRelease = (): JSX.Element => {
                         </p>
                         <div className="overflow-y-scroll w-full h-[30vh]">
                            {recentReleaseNote?.comment?.length > 0 ? (
-                              recentReleaseNote?.comment?.map((comment: Comment) => (
-                                 <div className="mb-8 mt-2" key={comment.lastModifiedDate}>
+                              recentReleaseNote?.comment?.map((comment: Comment, index: number) => (
+                                 <div className="mb-8 mt-2" key={index}>
                                     <p className="text-l  font-bold text-navy-700 dark:text-white">
                                        {comment.name}: {comment.context}
                                     </p>

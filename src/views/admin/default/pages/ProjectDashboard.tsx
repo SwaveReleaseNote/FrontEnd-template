@@ -1,4 +1,4 @@
-import React, {  } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import PieChartCard from '../components/PieChartCard2';
@@ -29,14 +29,19 @@ const ProjectDashboard: React.FC = () => {
       try {
          const response = await api.get(`project/${projectId}/role`);
          return response.data;
-      } catch (error) {
-         console.error('Error fetching user role:', error);
+      } catch (error: any) {
+         // console.error('Error fetching user role:', error);
+         // let status = error.code;
+         // if (error.response?.status != null) {
+         //    status = error.response.status;
+         // }
+         // navigate(`../error?status=${status as string}`);
          return mockFetchUserRole();
       }
    };
 
    const mockFetchUserRole = (): UserRole => {
-      return UserRole.None;
+      return UserRole.Manager;
    };
 
    // Use the useQuery hook to fetch data
@@ -45,11 +50,11 @@ const ProjectDashboard: React.FC = () => {
       async () => await fetchUserRole(parseInt(projectId ?? '')),
    );
 
-   // useEffect(() => {
-   //    if (checkUserRoleQuery.isSuccess) {
-   //       // setIsLoading(false);
-   //    }
-   // }, [checkUserRoleQuery.isSuccess]);
+   useEffect(() => {
+      if (checkUserRoleQuery.isSuccess) {
+         console.log(checkUserRoleQuery.data);
+      }
+   }, [checkUserRoleQuery.isSuccess]);
 
    const handleClickManageButton = async (
       event: React.MouseEvent<HTMLButtonElement>,

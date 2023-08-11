@@ -87,12 +87,12 @@ function ProjectCard({
                onCancel={handleClickNo}
             />
          )}
-         <button
-            className="h-[60vh] w-[40vh] rounded-3xl pl-2 pr-2 hover:bg-indigo-100 dark:hover:bg-gray-800 focus:ring-1 focus:ring-blue-300"
+         <div
+            className="hover:cursor-pointer h-[60vh] w-[40vh] rounded-3xl p-2 hover:bg-indigo-100 dark:hover:bg-gray-800 focus:ring-1 focus:ring-blue-300"
             onClick={() => {
                handleClickProjectCard(projectId, projectRole);
             }}>
-            <Card extra={'items-center w-auto h-[95%] p-[16px] bg-cover'}>
+            <Card extra={'items-center w-auto h-[100%] p-[16px] bg-cover'}>
                <div className="relative bottom-[1%] left-[43%]">
                   {projectRole === UserRole.Manager ? (
                      <button
@@ -141,8 +141,8 @@ function ProjectCard({
                </div>
 
                {/* 프로젝트 개요 */}
-               <div className="mt-4 flex flex-col items-center">
-                  <h1 className="text-l h-[10vh] w-[30vh] overflow-hidden font-bold text-navy-700 dark:text-white">
+               <div className="mt-4 flex flex-col items-center justify-center">
+                  <h1 className="text-l text-center h-[10vh] w-[30vh] overflow-hidden font-bold text-navy-700 dark:text-white">
                      {projectDescription}
                   </h1>
                   <p className="text-l font-normal text-gray-600">프로젝트 개요</p>
@@ -167,7 +167,7 @@ function ProjectCard({
                   <p className="text-l font-normal text-gray-600">생성 날짜</p>
                </div>
             </Card>
-         </button>
+         </div>
       </div>
    );
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from 'react-query';
@@ -10,7 +11,7 @@ enum UserRole {
    Subscriber = 'Subscriber',
    Developer = 'Developer',
    Manager = 'Manager',
-   None = 'None'
+   None = 'None',
 }
 
 interface TeamMember {
@@ -40,7 +41,7 @@ const SearchProjectList: React.FC = () => {
    const navigate = useNavigate();
    const [selectedCheckbox, setSelectedCheckbox] = useState('전체');
    const location = useLocation();
-   const searchTerm = location.state.searchTerm;
+   const [searchTerm, setSearchTerm] = useState('');
    const [showRoleCheck, setShowRoleCheck] = useState(false);
    const [isLoading, setIsLoading] = useState(true);
    const queryClient = useQueryClient();
@@ -53,8 +54,13 @@ const SearchProjectList: React.FC = () => {
          });
 
          return response.data;
-      } catch (error) {
+      } catch (error: any) {
          console.error('Error fetching search result:', error);
+         let status = error.code;
+         if (error.response?.status != null) {
+            status = error.response.status;
+         }
+         navigate(`../error?status=${status as string}`);
          return mockFetchSearchResult();
       }
    };
@@ -62,10 +68,15 @@ const SearchProjectList: React.FC = () => {
    const fetchUserRole = async (projectId: number): Promise<UserRole> => {
       try {
          const response = await api.get(`project/${projectId}/role`);
-         console.log(JSON.stringify(response.data, null, "\t"));
+         console.log(JSON.stringify(response.data, null, '\t'));
          return response.data;
-      } catch (error) {
+      } catch (error: any) {
          console.error('Error fetching user role:', error);
+         let status = error.code;
+         if (error.response?.status != null) {
+            status = error.response.status;
+         }
+         navigate(`../error?status=${status as string}`);
          return mockFetchUserRole();
       }
    };
@@ -193,6 +204,9 @@ const SearchProjectList: React.FC = () => {
    const searchResultQuery = useQuery(['searchResults', searchTerm], fetchSearchResults);
 
    useEffect(() => {
+      if (location.state.searchTerm != null) {
+         setSearchTerm(location.state.searchTerm);
+      }
       if (searchResultQuery.isSuccess) {
          setIsLoading(false);
       }
@@ -209,8 +223,13 @@ const SearchProjectList: React.FC = () => {
 
             navigate(url);
          }
-      } catch (error) {
+      } catch (error: any) {
          console.error('Error fetching user role:', error);
+         let status = error.code;
+         if (error.response?.status != null) {
+            status = error.response.status;
+         }
+         navigate(`../error?status=${status as string}`);
          alert('Server error. Please try again.');
       }
    };
@@ -221,14 +240,21 @@ const SearchProjectList: React.FC = () => {
 
    const handleClickYes = async (projectId: number, projectName: string): Promise<void> => {
       try {
-         await api.post(`project/${projectId}/subscribe`);
+         console.log("projectId", projectId);
+         console.log("projectName", projectName);
+         const response = await api.post(`project/${projectId}/subscribe`);
+         console.log("response", response);
          const queryString = `projectId=${projectId}&projectName=${projectName}`;
          const url = `/admin/dashboard?${queryString}`;
          await queryClient.refetchQueries('projects');
          navigate(url);
-      } catch (error) {
+      } catch (error: any) {
          console.error('Error Subscribe project:', error);
-         alert('Server error. Please try again.');
+         let status = error.code;
+         if (error.response?.status != null) {
+            status = error.response.status;
+         }
+         navigate(`../error?status=${status as string}`);
       } finally {
          setShowRoleCheck(false);
       }
