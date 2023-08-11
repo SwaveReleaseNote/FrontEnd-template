@@ -39,7 +39,7 @@ const Sidebar = (props: {
 
             {/*프로젝트 선택 & 프로젝트 내부 릴리즈 노트*/}
             <div className=" flex pt-1">
-                <ProjectList />
+                <ProjectList/>
             </div>
             <ul className="mb-auto pt-1">
                 <Links routes={routes}/>

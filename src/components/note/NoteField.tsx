@@ -1,3 +1,4 @@
+/*eslint-disable*/
 /**
  * @description 릴리즈 노트를 보여주는 컴포넌트
  */
@@ -7,6 +8,7 @@ import LabelIndex from '../label/LabelIndex'
 import data from '../label/mockData/NoteFiledMockData.json'
 import { noteFieldState } from '../../context/atom'
 import CommentIndex from '../comments/CommentIndex'
+import {comment} from "postcss";
 
 // 노트 필드안에 라벨 블록들과 댓글을 작성할 수 있도록 만들기
 export default function NoteField(): JSX.Element {
@@ -16,10 +18,7 @@ export default function NoteField(): JSX.Element {
     setNoteField(data);
 
     // block 부분 받기
-    const noteFieldBlock = noteField.blocks?.map((block) => <LabelIndex block={block} />);
-
     // comment 부분 받기
-    const noteFieldComment = noteField.comment?.map((comment) => <CommentIndex comment={comment} />);
 
     return (
         <div className='mt-2 mb-8'>
@@ -30,7 +29,9 @@ export default function NoteField(): JSX.Element {
             <hr className='h-px my-8 bg-gray-200 border-0 dark:bg-gray-700' />
             {/* 라벨들 모아서 보여주는 부분 */}
             <div className='my-10 mt-2 px-2 text-gray-600'>
-                {noteFieldBlock}
+                {noteField.blocks.map(block => (
+                    <LabelIndex contexts={block.contexts} label={block.label} />
+                ))}
             </div>
 
             {/* 조회수 좋아요 보여주는 부분 */}
@@ -57,8 +58,15 @@ export default function NoteField(): JSX.Element {
 
             {/* 댓글 보여주는 부분 */}
             <div>
-                <CommentIndex NoteFieldComment={noteField.comment} />
-                {noteFieldComment}
+                {noteField.comment?.map(comment => (
+                    <CommentIndex
+                        lastModifiedDate={comment.lastModifiedDate}
+                        context={comment.context}
+                        name={comment.name}
+                        version={comment.version}
+                        releaseNoteId={comment.releaseNoteId}
+                    />
+                ))}
             </div>
         </div>
     )

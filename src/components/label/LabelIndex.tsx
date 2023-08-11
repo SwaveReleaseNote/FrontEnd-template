@@ -1,3 +1,4 @@
+/*eslint-disable*/
 /**
  * @description 라벨 컴포넌트 : 라벨과 Text를 보여준다
  */
@@ -15,65 +16,72 @@ interface context {
 }
 interface block {
     contexts: context[],
-    Label: string
+    label: string
 }
-export default function LabelIndex(props: block):JSX.Element {
-    const block = props;
+export default function LabelIndex(props: {contexts: context[], label: string}):JSX.Element {
 
-    switch (block.Label) {
+    switch (props.label) {
         case 'new':
             return (<div className='my-10'>
                 <span>
                     <img className='my-5 rounded-xl w-1/12 max-w-lg shadow-xl' src={newLabel} />
                 </span>
                 <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
-                    {block.contexts.map(context => (
-                        <p>{context}</p>
+                    {props.contexts.map(context => (
+                        <p>{context.context}</p>
                     ))}
                 </div>
             </div>)
         case 'update':
-            return <div className='my-10'>
+            return (<div className='my-10'>
                 <span>
                     <img className='my-5 rounded-xl w-1/12 max-w-lg shadow-xl' src={updateLabel} />
                 </span>
                 <div className=' break-words w-full text-clip mt-2 px-2 inline-block'>
-                    {block.contexts.map(context => (
-                        <p>{context}</p>
+                    {props.contexts.map(context => (
+                        <p>{context.context}</p>
                     ))}
                 </div>
-            </div>
+            </div>)
         case 'delete':
-            return <div className='my-10'>
+            return (
+                <div className='my-10'>
                 <span>
                     <img className='my-5 rounded-xl w-1/12 max-w-lg shadow-xl' src={deleteLabel} />
                 </span>
                 <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
-                    {block.contexts.map(context => (
-                        <p>{context}</p>
-                    ))}                </div>
+                    {props.contexts.map(context => (
+                        <p>{context.context}</p>
+                    ))}
+                </div>
             </div>
+            )
         case 'stop':
-            return <div className='my-10'>
+            return (
+                <div className='my-10'>
                 <span>
                     <img className='my-5 rounded-xl w-1/12 max-w-lg shadow-xl' src={stopLabel} />
                 </span>
                 <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
-                    {block.contexts.map(context => (
-                        <p>{context}</p>
-                    ))}                </div>
+                    {props.contexts.map(context => (
+                        <p>{context.context}</p>
+                    ))}
+                </div>
             </div>
+            )
         case 'etc':
-            return <div className='my-10'>
+            return (
+                <div className='my-10'>
                 <span>
                     <img className='my-5 rounded-xl w-1/12 max-w-lg shadow-xl' src={etcLabel} />
                 </span>
                 <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
-                    {block.contexts.map(context => (
-                        <p>{context}</p>
+                    {props.contexts.map(context => (
+                        <p>{context.context}</p>
                     ))}
                 </div>
             </div>
+            )
     }
     // new, update, delete, stop, etc
     return (

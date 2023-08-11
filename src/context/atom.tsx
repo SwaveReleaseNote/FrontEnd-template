@@ -12,13 +12,13 @@ export const noteFieldState = atom({
                         tag: ""
                     }
                 ],
-                Label: ""
+                label: ""
             }
         ],
         comment: [
             {
-                context:0,
-                LastModifiedDate:"",
+                context: "",
+                lastModifiedDate:"",
                 name:"",
                 releaseNoteId: 0,
                 version: ""
@@ -26,8 +26,8 @@ export const noteFieldState = atom({
         ],
         count: 0,
         creator: "",
-        LastModified: "",
-        Liked: 0,
+        lastModified: "",
+        liked: 0,
         releaseDate: "",
         releaseNoteId: 0,
         summary: "",
