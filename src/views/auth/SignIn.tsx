@@ -330,7 +330,7 @@ const SignIn: React.FC = () => {
          {/* Register Modal */}
          {showRegisterModal && (
             <div className="fixed inset-0 z-10 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
-               <div className="relative mx-auto my-4 w-full max-w-3xl rounded-xl bg-white p-8 shadow-lg">
+               <div className="relative mx-auto my-4 w-full max-w-3xl rounded-xl bg-white p-8 shadow-lg" style={{ right: '22%' }}>
                   <div className="mb-6 flex items-start justify-between">
                      <h3 className="text-xl font-semibold">Create an Account</h3>
                      <button onClick={handleRegisterModalButton} className="text-gray-500 hover:text-gray-700">
@@ -474,7 +474,7 @@ const SignIn: React.FC = () => {
          {/* Forgot Password Modal */}
          {showForgotPasswordModal && (
             <div className="fixed inset-0 z-10 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
-               <div className="relative mx-auto my-4 w-full max-w-3xl rounded-xl bg-white p-8 shadow-lg">
+               <div className="relative mx-auto my-4 w-full max-w-3xl rounded-xl bg-white p-8 shadow-lg" style={{ right: '22%' }}>
                   <div className="mb-6 flex items-start justify-between">
                      <h3 className="text-xl font-semibold">Forgot Password</h3>
                      <button onClick={handleForgotPasswordModalButton} className="text-gray-500 hover:text-gray-700">

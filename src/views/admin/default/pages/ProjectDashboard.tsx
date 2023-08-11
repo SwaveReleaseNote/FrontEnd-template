@@ -36,7 +36,7 @@ const ProjectDashboard: React.FC = () => {
    };
 
    const mockFetchUserRole = (): UserRole => {
-      return UserRole.None;
+      return UserRole.Manager;
    };
 
    // Use the useQuery hook to fetch data

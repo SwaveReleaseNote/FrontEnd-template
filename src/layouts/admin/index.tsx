@@ -134,53 +134,7 @@ export default function Admin(props: Record<string, any>): JSX.Element {
       alert('정말 종료하시겠습니까?');
    });
 
-   /* department 설정 */
-   const [showDepartmentRegisterModal, setShowDepartmentRegisterModal] = React.useState(false);
-   const [isDepartment, setIsDepartment] = React.useState(false);
-   const [department, setDepartment] = React.useState(localStorage.getItem('department'));
-
-   React.useEffect(() => {
-      if (localStorage.getItem('department') === 'null') {
-         console.log('showdepartment');
-         setShowDepartmentRegisterModal(true);
-      }
-   }, []);
-
-   const handleModalClose = (): void => {
-      console.log(isDepartment);
-      setIsDepartment(false);
-   };
-
-   const handleSelectUserDepartmentChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
-      const { value } = event.target;
-      setDepartment(value);
-   };
-
-   const handleClickSaveChangeButton = (): void => {
-      axios
-         .patch(
-            'http://localhost:8080/api/user',
-            {
-               department: department,
-            },
-            {
-               headers: {
-                  Authorization: localStorage.getItem('token'),
-               },
-            },
-         )
-         .then(response => {
-            console.log(response.data); // Process the response as needed
-            localStorage.setItem('department', department ?? '');
-            setDepartment(localStorage.getItem('department'));
-         })
-         .catch(error => {
-            console.error(error);
-            // Handle error cases here
-         });
-      setShowDepartmentRegisterModal(false);
-   };
-
+   
    return (
       <>
          <div className="flex h-full w-full">
@@ -224,27 +178,7 @@ export default function Admin(props: Record<string, any>): JSX.Element {
                </main>
             </div>
          </div>
-         {showDepartmentRegisterModal && (
-            <div className="userprofileCard-modal-overlay">
-               <div className="userprofileCard-modal-content">
-                  <span className="userprofileCard-close" onClick={handleModalClose}>
-                     &times;
-                  </span>
-                  <h2>Select Department</h2>
-                  {/* Department selection options */}
-                  <div className="modal-body">
-                     <select name="department" value={department ?? ''} onChange={handleSelectUserDepartmentChange}>
-                        <option value="Department 1">Department 1</option>
-                        <option value="Department 2">Department 2</option>
-                        <option value="Department 3">Department 3</option>
-                     </select>
-                  </div>
-                  <button type="button" onClick={handleClickSaveChangeButton}>
-                     Save
-                  </button>
-               </div>
-            </div>
-         )}
+         
       </>
    );
 }
