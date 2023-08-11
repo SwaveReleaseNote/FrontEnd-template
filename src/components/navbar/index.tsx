@@ -29,6 +29,7 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
       setSearchTerm(event.target.value);
    };
 
+
    return (
       <nav className="mb-5 sticky top-4 z-40 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/10 p-2 backdrop-blur-xl dark:bg-[#0b14374d]">
          <div className="ml-[6px]">
@@ -217,6 +218,7 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
             </Dropdown>
          </div>
       </nav>
+      
    );
 };
 

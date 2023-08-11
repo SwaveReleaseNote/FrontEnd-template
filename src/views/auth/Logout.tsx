@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, type ReactElement } from 'react';
 import type * as StompJs from '@stomp/stompjs';
 import { useNavigate } from 'react-router-dom';
-
+import { removeCookie } from './cookie';
 const Logout = (): ReactElement => {
    const navigate = useNavigate();
    // Logout으로 넘어오는지 log 확인
@@ -17,12 +17,13 @@ const Logout = (): ReactElement => {
 
    useEffect(() => {
       try {
+         removeCookie('id',{path: '/'});
          disconnect();
+         window.localStorage.clear();
+
+         navigate('/auth/sign-in');
       } catch (error) {
          console.error(error);
-      } finally {
-         window.localStorage.clear();
-         navigate('/auth/sign-in');
       }
    }, []);
 
