@@ -5,11 +5,13 @@ import imgSrc from 'assets/img/profile/banner2.png';
 import Card from 'components/card';
 import NotificationPopup from '../components/NotificationPopup';
 import api from 'context/api';
+import { useMutation, useQueryClient } from 'react-query';
 
 enum UserRole {
    Subscriber = 'Subscriber',
    Developer = 'Developer',
    Manager = 'Manager',
+   None = 'None'
 }
 
 interface ProjectCardProps {
@@ -34,46 +36,45 @@ function ProjectCard({
    const banner = imgSrc as string;
    const navigate = useNavigate();
    const [showConfirmation, setShowConfirmation] = useState(false);
+   const queryClient = useQueryClient();
 
    function handleClickProjectCard(projectId: number, projectRole: string): void {
-      const queryString = `projectId=${projectId}&role=${encodeURIComponent(projectRole)}&projectName=${projectName}`;
+      const queryString = `projectId=${projectId}&projectName=${projectName}`;
       const url = `/admin/dashboard?${queryString}`;
-
       navigate(url);
-      console.log('handleClickProjectCard');
    }
+   
+   const deleteProjectMutation = useMutation(async () => await api.delete(`project/drop/${projectId}`), {
+      onSuccess: async () => {
+         setShowConfirmation(false);
 
+         await queryClient.refetchQueries('projects').then(() => {
+            window.location.reload();
+         });
+      },
+      onError: error => {
+         console.error('Error deleting project:', error);
+         alert('서버 에러 입니다. 다시 시도하세요.');
+      },
+   });
    const handleClickManageButton = async (
       event: React.MouseEvent<HTMLButtonElement>,
       projectId: number,
    ): Promise<void> => {
       event.stopPropagation();
       navigate(`/admin/project/manage?projectId=${projectId}`);
-      console.log('handleClickManageButton');
    };
 
-   const handleConfirmDelete = async (): Promise<void> => {
-      // Perform the project deletion logic
-      console.log('Project deletion confirmed');
-      try {
-         await api.delete(`project/drop/${projectId}`);
-      } catch (error) {
-         console.error('Error delete project:', error);
-         alert('Server error. Please try again.');
-      } finally {
-         setShowConfirmation(false);
-      }
+   const handleClickYes = async (): Promise<void> => {
+      deleteProjectMutation.mutate();
    };
 
-   const handleCancelDelete = (): void => {
-      // Cancel the project deletion
-      console.log('Project deletion canceled');
+   const handleClickNo = (): void => {
       setShowConfirmation(false);
    };
 
    const handleClickProjectDeleteButton = (): void => {
       setShowConfirmation(true);
-      console.log('handleClickProjectDeleteButton');
    };
 
    return (
@@ -82,12 +83,12 @@ function ProjectCard({
             <NotificationPopup
                message="이 프로젝트에서 탈퇴하시겠습니까??"
                subMessage="주의"
-               onConfirm={handleConfirmDelete}
-               onCancel={handleCancelDelete}
+               onConfirm={handleClickYes}
+               onCancel={handleClickNo}
             />
          )}
          <button
-            className="h-[60vh] w-[40vh] rounded-3xl pl-2 pr-2 hover:bg-gray-500 focus:ring-1 focus:ring-blue-300"
+            className="h-[60vh] w-[40vh] rounded-3xl pl-2 pr-2 hover:bg-indigo-100 dark:hover:bg-gray-800 focus:ring-1 focus:ring-blue-300"
             onClick={() => {
                handleClickProjectCard(projectId, projectRole);
             }}>
@@ -119,7 +120,7 @@ function ProjectCard({
                <div
                   className="relative mt-1 flex h-32 w-full justify-center rounded-xl bg-cover"
                   style={{ backgroundImage: `url(${banner})` }}>
-                  <div className="absolute right-[5%] top-[5%]">
+                  <div className="absolute right-[2%] top-[1%]">
                      {projectRole === UserRole.Manager && (
                         <>
                            {/* <MdStar className="mr-2 text-3xl text-yellow-500" /> */}
@@ -129,7 +130,9 @@ function ProjectCard({
                   </div>
                   <div className="bg-white-400 absolute left-[0%] flex h-full w-full items-center overflow-hidden overflow-ellipsis whitespace-nowrap rounded-3xl border-none border-white dark:!border-navy-700">
                      {/* <img className="h-full w-full rounded-full" src={avatar} alt="" /> */}
-                     <p className="ml-5 text-2xl font-bold text-white dark:text-white">{projectName}</p>
+                     <p className="ml-5 text-2xl font-bold text-white dark:text-white overflow-hidden overflow-ellipsis">
+                        {projectName}
+                     </p>
                   </div>
                   <div className="absolute right-[-5%] top-[70%] flex h-[47px] w-[47px] items-center justify-center rounded-full border-[4px] border-white bg-blue-400 dark:!border-navy-700 dark:!bg-navy-700">
                      {/* <img className="h-full w-full rounded-full" src={avatar} alt="" /> */}
@@ -147,7 +150,7 @@ function ProjectCard({
 
                {/* 프로젝트의 최신 릴리즈 노트 버전 */}
                <div className="mt-4 flex flex-col items-center">
-                  {(projectRecentRelease?.length > 0) ? (
+                  {projectRecentRelease?.length > 0 ? (
                      <h1 className="text-2xl font-bold text-navy-700 dark:text-white">{projectRecentRelease}</h1>
                   ) : (
                      <div className="flex items-center justify-center text-sm font-bold">

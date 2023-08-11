@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './css.css';
+import './scrollbar.css';
 
 import { FiSearch } from 'react-icons/fi';
 import LoadingComponent from './LoadingComponent ';
@@ -10,7 +10,9 @@ import Delete from 'assets/img/label/DELETE.png';
 import Update from 'assets/img/label/UPDATE.png';
 import Stop from 'assets/img/label/STOP.png';
 import Etc from 'assets/img/label/ETC.png';
+
 import api from 'context/api';
+import { useQuery } from 'react-query';
 
 interface Props {
    searchRelease: {
@@ -28,9 +30,9 @@ interface ReleaseList {
 
 const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
    const navigate = useNavigate();
-   const [releaseList, setReleaseList] = useState<ReleaseList[]>([]);
-   const [isLoading, setIsLoading] = useState(true);
    const [searchTerm, setSearchTerm] = useState('');
+   const [filteredReleaseList, setFilteredReleaseList] = useState<ReleaseList[]>([]);
+   const [isLoading, setIsLoading] = useState(true);
 
    const handleChangeSearchInput = (event: React.KeyboardEvent<HTMLInputElement>): void => {
       if (event.key === 'Enter') {
@@ -55,85 +57,84 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
       Etc,
    };
 
+   async function fetchData(): Promise<ReleaseList[]> {
+      try {
+         const response = await api.get(`project/${searchRelease.projectId}/release-note/label/filter`);
+         return response.data;
+      } catch (error) {
+         console.error('Error fetching release list:', error);
+         console.log('Mocking data');
+         // Mock data generation here
+         return mockFetchReleaseList();
+      }
+   }
+
+   const releaseList = useQuery<ReleaseList[]>(['searchRelease', searchRelease.projectId], fetchData);
+
    useEffect(() => {
-      console.log('Release Search Project id:', searchRelease.projectId);
-      const fetchData = async (): Promise<void> => {
-         //
-         try {
-            const response = await api.get(`project/${searchRelease.projectId}/release-note/label/filter`);
+      if (releaseList.isSuccess) {
+         // Filter the releaseList based on the label value
+         setFilteredReleaseList(releaseList.data.filter(release => release.label === searchRelease.label));
+         setIsLoading(false);
+      }
+   }, [releaseList.isSuccess, isLoading, searchRelease.label]);
 
-            const data: ReleaseList[] = response.data;
-            setReleaseList(data);
-         } catch (error) {
-            console.error('Error fetching release list:', error);
-            console.log('Mocking data');
+   const mockFetchReleaseList = (): ReleaseList[] => {
+      function generateRandomVersion(): string {
+         const x = Math.floor(Math.random() * 10);
+         const y = Math.floor(Math.random() * 10);
+         const z = Math.floor(Math.random() * 10);
+         return `${x}.${y}.${z}`;
+      }
+      // Simulate API response with mock data
+      const mockResponse: ReleaseList[] = [
+         {
+            label: 'Delete',
+            version: generateRandomVersion(),
+            releaseNoteId: 1,
+            context:
+               '시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.',
+         },
+         {
+            label: 'Delete',
+            version: generateRandomVersion(),
+            releaseNoteId: 2,
+            context: '시스템 내에서 악성 코드를 삭제했습니다.',
+         },
+         {
+            label: 'Delete',
+            version: generateRandomVersion(),
+            releaseNoteId: 3,
+            context: '시스템 내에서 악성 코드를 삭제했습니다.',
+         },
+         {
+            label: 'Delete',
+            version: generateRandomVersion(),
+            releaseNoteId: 4,
+            context: '시스템 내에서 악성 코드를 삭제했습니다.',
+         },
+         {
+            label: 'Delete',
+            version: generateRandomVersion(),
+            releaseNoteId: 5,
+            context: '시스템 내에서 악성 코드를 삭제했습니다.',
+         },
+         {
+            label: 'Delete',
+            version: generateRandomVersion(),
+            releaseNoteId: 6,
+            context: '시스템 내에서 악성 코드를 삭제했습니다.',
+         },
+         {
+            label: 'Delete',
+            version: generateRandomVersion(),
+            releaseNoteId: 7,
+            context: '시스템 내에서 악성 코드를 삭제했습니다.',
+         },
+      ];
 
-            function generateRandomVersion(): string {
-               const x = Math.floor(Math.random() * 10);
-               const y = Math.floor(Math.random() * 10);
-               const z = Math.floor(Math.random() * 10);
-               return `${x}.${y}.${z}`;
-            }
-
-            const mockResponse: ReleaseList[] = [
-               {
-                  label: 'Delete',
-                  version: generateRandomVersion(),
-                  releaseNoteId: 1,
-                  context:
-                     '시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.',
-               },
-               {
-                  label: 'Delete',
-                  version: generateRandomVersion(),
-                  releaseNoteId: 2,
-                  context: '시스템 내에서 악성 코드를 삭제했습니다.',
-               },
-               {
-                  label: 'Delete',
-                  version: generateRandomVersion(),
-                  releaseNoteId: 3,
-                  context: '시스템 내에서 악성 코드를 삭제했습니다.',
-               },
-               {
-                  label: 'Delete',
-                  version: generateRandomVersion(),
-                  releaseNoteId: 4,
-                  context: '시스템 내에서 악성 코드를 삭제했습니다.',
-               },
-               {
-                  label: 'Delete',
-                  version: generateRandomVersion(),
-                  releaseNoteId: 5,
-                  context: '시스템 내에서 악성 코드를 삭제했습니다.',
-               },
-               {
-                  label: 'Delete',
-                  version: generateRandomVersion(),
-                  releaseNoteId: 6,
-                  context: '시스템 내에서 악성 코드를 삭제했습니다.',
-               },
-               {
-                  label: 'Delete',
-                  version: generateRandomVersion(),
-                  releaseNoteId: 7,
-                  context: '시스템 내에서 악성 코드를 삭제했습니다.',
-               },
-            ];
-
-            setReleaseList(mockResponse);
-         } finally {
-            setIsLoading(false); // Set loading state to false after fetching
-         }
-      };
-
-      fetchData().catch(error => {
-         console.error('error fetch data', error);
-      });
-   }, [searchRelease]);
-
-   // Filter the releaseList based on the label value
-   const filteredReleaseList = releaseList.filter(release => release.label === searchRelease.label);
+      return mockResponse;
+   };
 
    function handleClickReleaseNote(releaseNoteId: number): void {
       // 추후 프론트 릴리즈 노트 보여주는 곳으로 맵핑
@@ -182,7 +183,9 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
                                  alt={searchRelease.label}
                                  className="h-[5vh] w-[10vh] rounded-xl"
                               />
-                              <p className="mt-3 pl-3">작성된 릴리즈 노트가 없습니다.</p>
+                              <div className="mt-2 text-black-400 flex h-full w-full items-center justify-center gap-10 text-xl font-bold dark:text-white">
+                                 생성된 릴리즈노트가 없습니다!!👻
+                              </div>
                            </td>
                         </tr>
                      ) : (
@@ -202,7 +205,9 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
                                        className="mb-1 mt-1 h-[5vh] w-[10vh] rounded-xl"
                                     />
                                  </div>
-                                 <div className="h-[6vh] overflow-hidden text-sm">{release.context}</div>
+                                 <div className="h-[6vh] overflow-hidden text-sm text-gray-800 dark:text-white">
+                                    {release.context}
+                                 </div>
                               </td>
                            </tr>
                         ))

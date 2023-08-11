@@ -2,7 +2,7 @@
 exports.__esModule = true;
 var react_1 = require("react");
 // Admin Imports
-var default_1 = require("views/admin/default");
+var default_1 = require("views/admin/default/MainPage");
 var marketplace_1 = require("views/admin/marketplace");
 var tables_1 = require("views/admin/tables");
 var note_1 = require("views/admin/note");

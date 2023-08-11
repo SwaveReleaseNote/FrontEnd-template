@@ -18,7 +18,7 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
       if (event.key === 'Enter') {
          navigate('/admin/project/searchResult', {
             state: {
-               searchTerm: searchTerm, // Removed the object wrapping from searchTerm
+               searchTerm: searchTerm,
             },
          });
          setSearchTerm('');
@@ -29,8 +29,9 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
       setSearchTerm(event.target.value);
    };
 
+
    return (
-      <nav className="sticky top-4 z-40 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/10 p-2 backdrop-blur-xl dark:bg-[#0b14374d]">
+      <nav className="mb-5 sticky top-4 z-40 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/10 p-2 backdrop-blur-xl dark:bg-[#0b14374d]">
          <div className="ml-[6px]">
             <div className="h-6 w-[224px] pt-1">
                <a
@@ -209,6 +210,7 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
             </Dropdown>
          </div>
       </nav>
+      
    );
 };
 

@@ -1,8 +1,9 @@
 import Card from '../../../../components/card';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoadingComponent from './LoadingComponent ';
 import api from 'context/api';
+import { useQuery } from 'react-query';
 
 interface Props {
    projectId: number;
@@ -18,77 +19,69 @@ interface Comment {
 }
 
 const RecentCommentList: React.FC<Props> = ({ projectId }) => {
-   const [commentList, setCommentList] = useState<Comment[]>([]);
-   const [isLoading, setIsLoading] = useState(true);
    const navigate = useNavigate();
 
-   useEffect(() => {
-      console.log('Search CommentList by Project id:', projectId);
-      const fetchData = async (): Promise<void> => {
-         try {
-            const response = await api.get(`project/${projectId}/release-note/recent-comments`);
-            console.log(JSON.stringify(response.data, null, '\t'));
-            setCommentList(response.data.comments);
-            console.log(JSON.stringify(commentList, null, '\t'));
-         } catch (error) {
-            console.error('Error fetching release comment list:', error);
-            console.log('Mocking data');
+   const fetchRecentComments = async (): Promise<Comment[]> => {
+      try {
+         const response = await api.get(`project/${projectId}/release-note/recent-comments`);
+         return response.data.comments;
+      } catch (error) {
+         console.error('Error fetching release comment list:', error);
+         return mockFechtRecentComments();
+      }
+   };
 
-            const mockResponse: Comment[] = [
-               {
-                  context: 'ASUS도 너프 해야한다.',
-                  lastModifiedDate: '2023-07-08',
-                  name: '김성국',
-                  releaseNoteId: 1,
-                  version: '1.0.0',
-               },
-               {
-                  context: 'ASUS도 너프 해야한다.',
-                  lastModifiedDate: '2023-07-08',
-                  name: '김성국',
-                  releaseNoteId: 2,
-                  version: '1.0.0',
-               },
-               {
-                  context: 'ASUS도 너프 해야한다.',
-                  lastModifiedDate: '2023-07-08',
-                  name: '김성국',
-                  releaseNoteId: 3,
-                  version: '1.0.0',
-               },
-               {
-                  context: 'ASUS도 너프 해야한다.',
-                  lastModifiedDate: '2023-07-08',
-                  name: '김성국',
-                  releaseNoteId: 4,
-                  version: '1.0.0',
-               },
-               {
-                  context: 'ASUS도 너프 해야한다.',
-                  lastModifiedDate: '2023-07-08',
-                  name: '김성국',
-                  releaseNoteId: 5,
-                  version: '1.0.0',
-               },
-               {
-                  context: 'ASUS도 너프 해야한다.',
-                  lastModifiedDate: '2023-07-08',
-                  name: '김성국',
-                  releaseNoteId: 6,
-                  version: '1.0.0',
-               },
-            ];
+   const { data: commentList, isLoading } = useQuery<Comment[]>(['recentComments', projectId], fetchRecentComments);
 
-            setCommentList(mockResponse);
-         } finally {
-            setIsLoading(false); // Set loading state to false after fetching
-         }
-      };
+   const mockFechtRecentComments = (): Comment[] => {
+      // Simulate API response with mock data
+      const mockResponse: Comment[] = [
+         {
+            context: 'ASUS도 너프 해야한다.',
+            lastModifiedDate: '2023-07-08',
+            name: '김성국',
+            releaseNoteId: 1,
+            version: '1.0.0',
+         },
+         {
+            context: 'ASUS도 너프 해야한다.',
+            lastModifiedDate: '2023-07-08',
+            name: '김성국',
+            releaseNoteId: 2,
+            version: '1.0.0',
+         },
+         {
+            context: 'ASUS도 너프 해야한다.',
+            lastModifiedDate: '2023-07-08',
+            name: '김성국',
+            releaseNoteId: 3,
+            version: '1.0.0',
+         },
+         {
+            context: 'ASUS도 너프 해야한다.',
+            lastModifiedDate: '2023-07-08',
+            name: '김성국',
+            releaseNoteId: 4,
+            version: '1.0.0',
+         },
+         {
+            context: 'ASUS도 너프 해야한다.',
+            lastModifiedDate: '2023-07-08',
+            name: '김성국',
+            releaseNoteId: 5,
+            version: '1.0.0',
+         },
+         {
+            context: 'ASUS도 너프 해야한다.',
+            lastModifiedDate: '2023-07-08',
+            name: '김성국',
+            releaseNoteId: 6,
+            version: '1.0.0',
+         },
+      ];
 
-      fetchData().catch(error => {
-         console.error('error fetch data', error);
-      });
-   }, [projectId]);
+      return mockResponse;
+   };
 
    function handleClickComment(releaseNoteId: number): void {
       // 추후 프론트 릴리즈 노트 보여주는 곳으로 맵핑
@@ -106,7 +99,7 @@ const RecentCommentList: React.FC<Props> = ({ projectId }) => {
             <Card extra={'w-full h-full p-3 mt-2'}>
                {/* Header */}
                <div className="overflow-y-scroll">
-                  {commentList.length > 0 ? (
+                  {(commentList != null) && commentList.length > 0 ? (
                      commentList.map(comment => (
                         <div
                            onClick={() => {
@@ -123,7 +116,7 @@ const RecentCommentList: React.FC<Props> = ({ projectId }) => {
                      ))
                   ) : (
                      <div className="text-black-400 flex h-full w-full items-center justify-center gap-10 text-xl font-bold dark:text-white">
-                        작성된 댓글이 없습니다
+                        -작성된 댓글이 없습니다-
                      </div>
                   )}
                </div>
