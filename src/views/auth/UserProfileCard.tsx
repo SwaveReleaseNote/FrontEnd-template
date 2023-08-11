@@ -16,7 +16,7 @@ function UserProfileCard(): ReactElement {
   const [mostViewed, setMostViewed] = useState("dolor sit amet.");
 
   useEffect(() => {
-    if (localStorage.getItem("token") == null) {
+    if (getCookie("id") == null) {
       navigate("/auth/sign-in");
     } else {
       console.log(localStorage.getItem("department"));
@@ -64,7 +64,6 @@ function UserProfileCard(): ReactElement {
         setEmail(localStorage.getItem("email"));
         setDepartment(localStorage.getItem("department"));
         alert("Save Complete");
-        window.location.reload();
       })
       .catch((error) => {
         console.error(error);
@@ -256,18 +255,29 @@ function UserProfileCard(): ReactElement {
             <span className="userprofileCard-close" onClick={handleModalClose}>
               &times;
             </span>
-            <h2>Select Department</h2>
+            <div className="mb-6 flex items-start justify-between">
+                     <h3 className="text-xl font-semibold">Change Password</h3>
+                     <button onClick={handlePasswordChangeModalButton} className="text-gray-500 hover:text-gray-700">
+                        <svg
+                           className="h-6 w-6"
+                           fill="none"
+                           stroke="currentColor"
+                           viewBox="0 0 24 24"
+                           xmlns="http://www.w3.org/2000/svg">
+                           <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M6 18L18 6M6 6l12 12"
+                           />
+                        </svg>
+                     </button>
+                  </div>
             {/* Department selection options */}
             <div className="modal-body">
             <form onSubmit={handleClickChangePasswordFormSubmit}>
               {/* Forgot password form */}
               <div className="mb-4">
-                <label
-                  htmlFor="forgotPasswordEmail"
-                  className="mb-2 block font-medium text-gray-800"
-                >
-                  Email
-                </label>
                 <input
                   type="password"
                   className="w-full rounded-md border px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
