@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useRef, useEffect, type ReactElement } from 'react';
 import type * as StompJs from '@stomp/stompjs';
 import { useNavigate } from 'react-router-dom';

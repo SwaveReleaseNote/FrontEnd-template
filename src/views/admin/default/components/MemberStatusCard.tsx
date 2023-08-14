@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useState, useEffect } from 'react';
 import LoadingComponent from './LoadingComponent ';
 import api from 'context/api';

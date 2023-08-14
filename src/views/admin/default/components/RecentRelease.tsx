@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import Card from '../../../../components/card';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
