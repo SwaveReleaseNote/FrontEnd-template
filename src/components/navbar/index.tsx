@@ -5,7 +5,7 @@ import imageSrc from 'assets/img/layout/Navbar.png';
 import { BsArrowBarUp } from 'react-icons/bs';
 import { RiMoonFill, RiSunFill } from 'react-icons/ri';
 import { IoMdNotificationsOutline, IoMdInformationCircleOutline } from 'react-icons/io';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 
 const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary?: boolean | string }): JSX.Element => {
    const navbarimage = imageSrc as string;
@@ -28,6 +28,27 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
    const handleChangeSearchInput = (event: React.ChangeEvent<HTMLInputElement>): void => {
       setSearchTerm(event.target.value);
    };
+
+   const [notificationMessage, setNotificationMessage] = useState([{
+      title: "New Update: Horizon UI Dashboard PRO",
+      message: "A new update for your downloaded item is available!",
+    }]);
+    useEffect(()=>{
+      setNotificationMessage([{
+         title: "New Update: Horizon UI Dashboard PRO",
+         message: "A new update for your downloaded item is available!",
+       },
+       {
+         title: "New Update: Horizon UI Dashboard PRO",
+         message: "A new update for your downloaded item is available!",
+       },
+       {
+         title: "New Update: Horizon UI Dashboard PRO",
+         message: "A new update for your downloaded item is available!",
+       },
+      ]);
+
+    },[]);
 
 
    return (
@@ -87,34 +108,21 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
                      <p className="text-base font-bold text-navy-700 dark:text-white">Notification</p>
                      <p className="text-sm font-bold text-navy-700 dark:text-white">Mark all read</p>
                   </div>
-
-                  <button className="flex w-full items-center">
+                  {notificationMessage.map((notification,index)=>(
+                     <button key={index} className="flex w-full items-center">
                      <div className="flex h-full w-[85px] items-center justify-center rounded-xl bg-gradient-to-b from-brandLinear to-brand-500 py-4 text-2xl text-white">
                         <BsArrowBarUp />
                      </div>
                      <div className="ml-2 flex h-full w-full flex-col justify-center rounded-lg px-1 text-sm">
                         <p className="mb-1 text-left text-base font-bold text-gray-900 dark:text-white">
-                           New Update: Horizon UI Dashboard PRO
+                          {notification.title}
                         </p>
                         <p className="font-base text-left text-xs text-gray-900 dark:text-white">
-                           A new update for your downloaded item is available!
+                           {notification.message}
                         </p>
                      </div>
                   </button>
-
-                  <button className="flex w-full items-center">
-                     <div className="flex h-full w-[85px] items-center justify-center rounded-xl bg-gradient-to-b from-brandLinear to-brand-500 py-4 text-2xl text-white">
-                        <BsArrowBarUp />
-                     </div>
-                     <div className="ml-2 flex h-full w-full flex-col justify-center rounded-lg px-1 text-sm">
-                        <p className="mb-1 text-left text-base font-bold text-gray-900 dark:text-white">
-                           New Update: Horizon UI Dashboard PRO
-                        </p>
-                        <p className="font-base text-left text-xs text-gray-900 dark:text-white">
-                           A new update for your downloaded item is available!
-                        </p>
-                     </div>
-                  </button>
+                  ))}
                </div>
             </Dropdown>
 
