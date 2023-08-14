@@ -1,10 +1,3 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
-// import MiniCalendar from 'components/calendar/MiniCalendar';
-// import WeeklyRevenue from 'views/admin/default/components/WeeklyRevenue';
-// import TotalSpent from 'views/admin/default/components/TotalSpent';
-// import PieChartCard from 'views/admin/default/components/PieChartCard';
-
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RecentRelease from './components/RecentRelease';
@@ -13,13 +6,12 @@ import ProjectCard from './components/ProjectCard';
 import LoadingComponent from './components/LoadingComponent ';
 import api from 'context/api';
 import { useQuery } from 'react-query';
-import axios from 'axios';
 
 enum UserRole {
    Subscriber = 'Subscriber',
    Developer = 'Developer',
    Manager = 'Manager',
-   None = 'None'
+   None = 'None',
 }
 
 interface Project {
@@ -56,10 +48,15 @@ const MainPage = (): JSX.Element => {
    const fetchProjects = async (): Promise<Project[]> => {
       try {
          const response = await api.get(`projects`);
+         console.log(response.data);
          return response.data;
-      } catch (error) {
-         console.error('Error fetching project List:', error);
-         console.log('Mocking data');
+      } catch (error: any) {
+         console.error('Error fetching projects', error);
+         let status = error.code;
+         if (error.response?.status != null) {
+            status = error.response.status;
+         }
+         navigate(`../error?status=${status as string}`);
          return mockFetchProjectList();
       }
    };
@@ -194,41 +191,32 @@ const MainPage = (): JSX.Element => {
       navigate('/admin/project/create');
    }
 
-     /* department 설정 */
-     const [showDepartmentRegisterModal, setShowDepartmentRegisterModal] = React.useState(false);
-     const [isDepartment, setIsDepartment] = React.useState(false);
-     const [department, setDepartment] = React.useState(localStorage.getItem('department'));
-  
-     React.useEffect(() => {
-        if (localStorage.getItem('department') === 'null') {
-           console.log('showdepartment');
-           setShowDepartmentRegisterModal(true);
-        }
-     }, []);
-  
-     const handleModalClose = (): void => {
-        console.log(isDepartment);
-        setIsDepartment(false);
-     };
-  
-     const handleSelectUserDepartmentChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
-        const { value } = event.target;
-        setDepartment(value);
-     };
+   /* department 설정 */
+   const [showDepartmentRegisterModal, setShowDepartmentRegisterModal] = React.useState(false);
+   const [isDepartment, setIsDepartment] = React.useState(false);
+   const [department, setDepartment] = React.useState(localStorage.getItem('department'));
 
-     const handleClickSaveChangeButton = (): void => {
-      axios
-         .patch(
-            'http://localhost:8080/api/user',
-            {
-               department: department,
-            },
-            {
-               headers: {
-                  Authorization: localStorage.getItem('token'),
-               },
-            },
-         )
+   useEffect(() => {
+      if (localStorage.getItem('department') === 'null') {
+         console.log('showdepartment');
+         setShowDepartmentRegisterModal(true);
+      }
+   }, []);
+
+   const handleModalClose = (): void => {
+      console.log(isDepartment);
+      setIsDepartment(false);
+   };
+
+   const handleSelectUserDepartmentChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+      const { value } = event.target;
+      setDepartment(value);
+   };
+
+   const handleClickSaveChangeButton = (): void => {
+      api.patch('/user', {
+         department: department,
+      })
          .then(response => {
             console.log(response.data); // Process the response as needed
             localStorage.setItem('department', department ?? '');
@@ -241,36 +229,34 @@ const MainPage = (): JSX.Element => {
       setShowDepartmentRegisterModal(false);
    };
 
-
    return (
       <div>
          <div className="pt-3">
-            <div>
-               <button
-                  onClick={handleClickListTabButton}
-                  className={`dark:text-white ml-10 rounded-t-3xl font-bold border-l-4 border-r-4 border-t-4 hover:border-indigo-200 ${
-                     isSubscribeOpen
-                        ? 'bg-white-200  dark:!bg-navy-600'
-                        : 'border-l-4  border-r-4 border-t-4 border-indigo-200 bg-gray-100 dark:!bg-navy-700'
-                  } p-2`}>
-                  Develop
-               </button>
-               <button
-                  onClick={handleClickListTabButton}
-                  className={`dark:text-white ml-4 rounded-t-3xl font-bold border-l-4 border-r-4 border-t-4 hover:border-indigo-200 ${
-                     isSubscribeOpen
-                        ? 'border-l-4  border-r-4 border-t-4 border-indigo-200 bg-gray-100 dark:!bg-navy-700'
-                        : 'bg-white-200  dark:!bg-navy-600'
-                  } p-2`}>
-                  Subsribe
-               </button>
-            </div>
-
-            <div className="items-right absolute right-[4.5%] top-[17%]">
+            <div className="flex justify-between">
+               <div className="flex">
+                  <button
+                     onClick={handleClickListTabButton}
+                     className={`dark:text-white ml-10 rounded-t-3xl font-bold border-l-4 border-r-4 border-t-4 hover:border-indigo-200 ${
+                        isSubscribeOpen
+                           ? 'bg-white-200  dark:!bg-navy-600'
+                           : 'border-l-4  border-r-4 border-t-4 border-indigo-200 bg-gray-100 dark:!bg-navy-700'
+                     } p-2`}>
+                     Develop
+                  </button>
+                  <button
+                     onClick={handleClickListTabButton}
+                     className={`dark:text-white ml-4 rounded-t-3xl font-bold border-l-4 border-r-4 border-t-4 hover:border-indigo-200 ${
+                        isSubscribeOpen
+                           ? 'border-l-4  border-r-4 border-t-4 border-indigo-200 bg-gray-100 dark:!bg-navy-700'
+                           : 'bg-white-200  dark:!bg-navy-600'
+                     } p-2`}>
+                     Subsribe
+                  </button>
+               </div>
                <button
                   onClick={handleClickProjectCreateButton}
                   type="button"
-                  className="text-black mb-2 mr-2 rounded-3xl bg-gray-200 px-5 py-2.5 text-sm font-bold hover:bg-gray-300 focus:ring-4 focus:ring-blue-300 dark:bg-navy-400 dark:text-white">
+                  className="flex text-black mb-2 mr-2 rounded-3xl bg-gray-200 px-5 py-2.5 text-sm font-bold hover:bg-gray-300 focus:ring-4 focus:ring-blue-300 dark:bg-navy-400 dark:text-white">
                   만들기
                </button>
             </div>
@@ -385,7 +371,7 @@ const MainPage = (): JSX.Element => {
             <RecentRelease />
          </div>
 
-        {showDepartmentRegisterModal && (
+         {showDepartmentRegisterModal && (
             <div className="userprofileCard-modal-overlay">
                <div className="userprofileCard-modal-content">
                   <span className="userprofileCard-close" onClick={handleModalClose}>
