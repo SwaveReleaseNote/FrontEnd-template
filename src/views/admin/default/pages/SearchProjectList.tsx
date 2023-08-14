@@ -271,10 +271,9 @@ const SearchProjectList: React.FC = () => {
       };
 
       return (
-         <div className="items-top flex">
-            <div className="mt-3 text-l flex h-[7vh] w-[13vh] justify-center rounded-2xl bg-gray-100 p-3 font-bold dark:!bg-navy-600">
+         <div className="flex">
+            <div className="text-l flex items-center h-[5vh] w-[13vh] justify-center rounded-2xl bg-gray-100 p-3 font-bold dark:!bg-navy-600">
                {searchType}
-               {/* 에 {searchTerm}가 포함된 프로젝트입니다. */}
             </div>
             <div className="m-3 w-[100vh] rounded-3xl bg-gray-0 p-5 dark:!bg-navy-600">
                {projects.length > 0 ? (

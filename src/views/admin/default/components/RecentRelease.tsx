@@ -53,11 +53,11 @@ const RecentRelease = (): JSX.Element => {
          return response.data;
       } catch (error: any) {
          console.error('Error fetching recent release note', error);
-         // let status = error.code;
-         // if (error.response?.status != null) {
-         //    status = error.response.status;
-         // }
-         // navigate(`../error?status=${status as string}`);
+         let status = error.code;
+         if (error.response?.status != null) {
+            status = error.response.status;
+         }
+         navigate(`../error?status=${status as string}`);
          return mockFetchRecentRelease();
       }
    };
@@ -160,6 +160,7 @@ const RecentRelease = (): JSX.Element => {
    // First Rendering
    useEffect(() => {
       console.log('Recent Release Page rendered');
+      console.log('recentReleaseNote', recentReleaseNote);
    }, [recentReleaseNote?.releaseNoteId]);
 
    function handleClickRecentRelease(releaseNoteId: number): void {
@@ -183,7 +184,7 @@ const RecentRelease = (): JSX.Element => {
          {isLoading ? (
             <LoadingComponent fontSize="m" />
          ) : (
-            <Card extra={'w-full h-full p-3 mt-2'}>
+            <Card extra={'w-full h-full p-20 mt-2'}>
                <div className="mb-8 mt-2 w-full">
                   <div className="text-xl font-bold text-navy-700 dark:text-white">
                      <p className="text-4xl">🆕Recent Release Note</p>
