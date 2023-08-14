@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useRef} from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navbar from 'components/navbar';
@@ -8,6 +9,9 @@ import axios from 'axios';
 import ProjectDashboard from 'views/admin/default/pages/ProjectDashboard';
 import * as StompJs from '@stomp/stompjs';
 import { getCookie } from '../../views/auth/cookie';
+import {useRecoilValue} from "recoil";
+import {noteFieldState} from "../../context/atom";
+import ReleaseNote from "../../views/admin/marketplace";
 
 export default function Admin(props: Record<string, any>): JSX.Element {
    const { ...rest } = props;
@@ -57,11 +61,17 @@ export default function Admin(props: Record<string, any>): JSX.Element {
    };
 
    const getRoutes = (routes: RoutesType[]): any => {
+      const note = useRecoilValue(noteFieldState)
+
       return routes.map((prop, key) => {
          if (prop.layout === '/admin') {
             if (prop.path === 'dashboard/:projectId/:role') {
                return <Route path={`/${prop.path}`} element={<ProjectDashboard />} key={key} />;
-            } else {
+            }
+            else if (prop.path === "release-note") {
+               return <Route path={`/${prop.path}`+"/"+note.releaseNoteId} element={<ReleaseNote />}/>
+            }
+            else {
                return <Route path={`/${prop.path}`} element={prop.component} key={key} />;
             }
          } else {
@@ -69,7 +79,6 @@ export default function Admin(props: Record<string, any>): JSX.Element {
          }
       });
    };
-
 
    React.useLayoutEffect(() => {
       // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions

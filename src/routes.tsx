@@ -82,13 +82,6 @@ const routes = [
     component: <SignIn />,
   },
   {
-    name: "NoteFiled Test",
-    layout: "/admin",
-    path: "release-note",
-    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
-    component: <ReleaseNote />,
-  },
-  {
     name: "Create Release Note",
     layout: "/admin",
     path: "create-note",
