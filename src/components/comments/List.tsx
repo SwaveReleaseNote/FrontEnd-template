@@ -17,18 +17,8 @@ interface Comment {
 export default function List(): JSX.Element {
   // 댓글 내용
   const [selectNote, setSelectNote] = useRecoilState(noteFieldState);
-  const [comments, setComments] = useState<Comment[]>([
-    {
-      context: "",
-      lastModifiedDate:"",
-      name:"",
-      releaseNoteId: 0,
-      version: ""
-    },
-  ]);
-  setComments(data.comment);
 
-  const view = comments?.map((comment) => {
+  const view = selectNote.comment.map((comment) => {
     return (
       <Card key={comment.releaseNoteId} extra={'w-full p-4 h-full'}>
         <div className="flex w-full items-center justify-between rounded-2xl bg-white p-3 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
