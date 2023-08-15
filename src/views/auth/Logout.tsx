@@ -2,7 +2,10 @@ import React, { useRef, useEffect, type ReactElement } from 'react';
 import type * as StompJs from '@stomp/stompjs';
 import { useNavigate } from 'react-router-dom';
 import { removeCookie } from './cookie';
+import { useQueryClient } from 'react-query';
+
 const Logout = (): ReactElement => {
+   const queryClient = useQueryClient();
    const navigate = useNavigate();
    // Logout으로 넘어오는지 log 확인
    console.log('sdafafsadfsads');
@@ -24,6 +27,8 @@ const Logout = (): ReactElement => {
          navigate('/auth/sign-in');
       } catch (error) {
          console.error(error);
+      } finally {
+         queryClient.clear();
       }
    }, []);
 
