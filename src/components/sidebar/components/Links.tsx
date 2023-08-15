@@ -46,13 +46,13 @@ export const SidebarLinks = (props: { routes: RoutesType[] }): JSX.Element => {
                 </span>
                 <div>
                   <p
-                        className={`leading-1 ml-4 flex ${activeRoute(route.path) === true
-                          ? "font-bold text-navy-700 dark:text-white"
+                      className={`leading-1 ml-4 flex ${activeRoute(route.path) === true 
+                          ? "font-bold text-navy-700 dark:text-white" 
                           : "font-medium text-gray-600"
-                          }`}
-                      >
-                        {route.name}
-                      </p>
+                      }`}
+                  >
+                    {route.name}
+                  </p>
                 </div>
               </li>
               {activeRoute(route.path) ? (
