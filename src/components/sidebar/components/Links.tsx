@@ -2,7 +2,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import DashIcon from "components/icons/DashIcon";
-import SidebarList from "./SidebarList";
 
 // chakra imports
 
@@ -44,9 +43,7 @@ export const SidebarLinks = (props: { routes: RoutesType[] }): JSX.Element => {
                   {route.icon ? route.icon : <DashIcon />}{" "}
                 </span>
                 <div>
-                  {
-                    route.name === "Release Note"
-                      ? <SidebarList routeName={route.name} activeRoute={activeRoute} />                      : <p
+                  <p
                         className={`leading-1 ml-4 flex ${activeRoute(route.path) === true
                           ? "font-bold text-navy-700 dark:text-white"
                           : "font-medium text-gray-600"
@@ -54,7 +51,6 @@ export const SidebarLinks = (props: { routes: RoutesType[] }): JSX.Element => {
                       >
                         {route.name}
                       </p>
-                  }
                 </div>
               </li>
               {activeRoute(route.path) ? (
