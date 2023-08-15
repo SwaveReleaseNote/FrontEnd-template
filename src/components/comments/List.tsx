@@ -17,6 +17,16 @@ interface Comment {
 export default function List(): JSX.Element {
   // 댓글 내용
   const [selectNote, setSelectNote] = useRecoilState(noteFieldState);
+  const [comments, setComments] = useState<Comment[]>([
+    {
+      context: "",
+      lastModifiedDate:"",
+      name:"",
+      releaseNoteId: 0,
+      version: ""
+    },
+  ]);
+  setComments(data.comment);
 
   const view = selectNote.comment.map((comment) => {
     return (

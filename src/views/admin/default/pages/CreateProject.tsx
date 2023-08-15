@@ -34,9 +34,12 @@ const CreateProject: React.FC = () => {
       try {
          const response = await api.get('users');
          return response.data;
-      } catch (error) {
-         console.error('Error fetching members:', error);
-         console.log('Mocking');
+      }  catch (error: any) {
+         let status = error.code;
+         if (error.response?.status != null) {
+            status = error.response.status;
+         }
+         navigate(`../error?status=${status as string}`);
          return mockFetchUserRequest();
       }
    };

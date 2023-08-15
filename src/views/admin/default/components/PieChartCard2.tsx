@@ -4,6 +4,7 @@ import Chart from 'chart.js/auto';
 import LoadingComponent from './LoadingComponent ';
 import api from 'context/api';
 import { useQuery } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 
 interface LabelNum {
    label: string;
@@ -17,6 +18,7 @@ interface Props {
 }
 
 const PieChartCard: React.FC<Props> = ({ projectId }) => {
+   const navigate = useNavigate();
    const chartRef = useRef<HTMLCanvasElement>(null);
    const chartInstance = useRef<Chart<'pie'> | null>(null);
    const [dataCount, setDataCount] = useState(0);
@@ -26,8 +28,13 @@ const PieChartCard: React.FC<Props> = ({ projectId }) => {
       try {
          const response = await api.get(`project/${projectId.id}/release-note/label/count`);
          return response.data;
-      } catch (error) {
+      } catch (error: any) {
          console.error('Error fetching project Pie Chart:', error);
+         let status = error.code;
+         if (error.response?.status != null) {
+            status = error.response.status;
+         }
+         navigate(`../error?status=${status as string}`);
          return mockFectchPieChart();
       }
    };

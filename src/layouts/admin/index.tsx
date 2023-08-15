@@ -5,13 +5,13 @@ import Navbar from 'components/navbar';
 import Sidebar from 'components/sidebar';
 import Footer from 'components/footer/Footer';
 import routes from 'routes';
-import axios from 'axios';
 import ProjectDashboard from 'views/admin/default/pages/ProjectDashboard';
 import * as StompJs from '@stomp/stompjs';
 import { getCookie } from '../../views/auth/cookie';
 import {useRecoilValue} from "recoil";
 import {noteFieldState} from "../../context/atom";
 import ReleaseNote from "../../views/admin/marketplace";
+import api from 'context/api';
 
 export default function Admin(props: Record<string, any>): JSX.Element {
    const { ...rest } = props;
@@ -94,11 +94,7 @@ export default function Admin(props: Record<string, any>): JSX.Element {
             // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
             async function fetchData() {
                try {
-                  const response = await axios.get(`http://localhost:8080/api/user`, {
-                     headers: {
-                        Authorization: getCookie('id'),
-                     },
-                  });
+                  const response = await api.get(`/user`)
    
                   // api의 응답을 제대로 받은 경우
                   /* axios 값 log 확인 */

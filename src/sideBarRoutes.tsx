@@ -3,7 +3,6 @@ import React from "react";
 // Admin Imports
 import MainDashboard from "views/admin/default/MainPage";
 import ReleaseNote from "views/admin/marketplace";
-import CreateReleaseNote from "views/admin/note";
 
 // Auth Imports
 import SignIn from "views/auth/SignIn";
@@ -19,21 +18,8 @@ import MyPage from "views/auth/MyPage";
 
 
 import CreateProject from "views/admin/default/pages/CreateProject";
-import ProjectDashboard from "views/admin/default/pages/ProjectDashboard";
-import SearchProjectList from "views/admin/default/pages/SearchProjectList";
-import ManageProject from "views/admin/default/pages/ManageProject";
 
-import Error from "error/Error";
-
-const routes = [
-  {
-    name: "Error",
-    layout: "/admin",
-    path: "/error",
-    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
-    component: <Error />,
-    secondary: true,
-  },
+const sideBarRoutes = [
   {
     name: "Release Note",
     layout: "/admin",
@@ -57,27 +43,6 @@ const routes = [
     component: <CreateProject />,
   },
   {
-    name: "Search ProjectList",
-    layout: "/admin",
-    path: "project/searchResult",
-    icon: <MdHome className="h-6 w-6" />,
-    component: <SearchProjectList />,
-  },
-  {
-    name: "Project Dashboard",
-    layout: "/admin",
-    path: "dashboard", 
-    icon: <MdHome className="h-6 w-6" />,
-    component: <ProjectDashboard />, 
-  },
-  {
-    name: "Project Manage",
-    layout: "/admin",
-    path: "project/manage/*", 
-    icon: <MdHome className="h-6 w-6" />,
-    component: <ManageProject />, 
-  },
-  {
     name: "My Page",
     layout: "/admin",
     path: "mypage",
@@ -91,12 +56,5 @@ const routes = [
     icon: <MdLock className="h-6 w-6" />,
     component: <SignIn />,
   },
-  {
-    name: "Create Release Note",
-    layout: "/admin",
-    path: "create-note",
-    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
-    component: <CreateReleaseNote />,
-  }
 ];
-export default routes;
+export default sideBarRoutes;

@@ -3,7 +3,16 @@ import React from 'react'
 import Input from './Input'
 import List from './List'
 
-export default function CommentIndex(): JSX.Element {
+interface Comment {
+    lastModifiedDate: string,
+    context: string,
+    name: string,
+    version: string,
+    releaseNoteId: number
+}
+export default function CommentIndex(props: Comment): JSX.Element {
+  const comment = props.context
+  console.log(comment)
   return (
     // TODO: 개발자냐 구독자냐에 따라 seen check 볼 수 있게 만들기
     <div className='relative flex flex-col rounded-[20px]

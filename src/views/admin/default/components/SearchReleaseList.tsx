@@ -34,8 +34,8 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
    const [searchTerm, setSearchTerm] = useState('');
    const [filteredReleaseList, setFilteredReleaseList] = useState<ReleaseList[]>([]);
    const [isLoading, setIsLoading] = useState(true);
-
-   const handleChangeSearchInput = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+   /* 릴리즈 노트 검색 했을 때 다른 페이지로 넘어갈지? 위의 글로버 바와 혼동 생길 수 있음
+   const handleKeyDownSearchInput = (event: React.KeyboardEvent<HTMLInputElement>): void => {
       if (event.key === 'Enter') {
          navigate('/admin/release/searchResult', {
             state: {
@@ -45,9 +45,11 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
          setSearchTerm('');
       }
    };
+   */
 
-   const handleKeyDownSearchInput = (event: React.ChangeEvent<HTMLInputElement>): void => {
+   const handleChangeSearchInput = (event: React.ChangeEvent<HTMLInputElement>): void => {
       setSearchTerm(event.target.value);
+      console.log(searchTerm);
    };
 
    const labelToIconMap: Record<string, string> = {
@@ -62,12 +64,22 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
       try {
          const response = await api.get(`project/${searchRelease.projectId}/release-note/label/filter`);
          return response.data;
-      } catch (error) {
+      } catch (error: any) {
          console.error('Error fetching release list:', error);
-         console.log('Mocking data');
-         // Mock data generation here
+         let status = error.code;
+         if (error.response?.status != null) {
+            status = error.response.status;
+         }
+         navigate(`../error?status=${status as string}`);
          return mockFetchReleaseList();
       }
+   }
+
+   function filterReleaseNotes(releaseNotes: ReleaseList[], searchTerm: string, label: string): ReleaseList[] {
+      console.log("releaseNotes", releaseNotes[0].context[0]);
+      const filteredNotes = releaseNotes.filter(release => release.label === label);
+
+      return filteredNotes?.filter(release => release.context[0].toLowerCase().includes(searchTerm.toLowerCase()));
    }
 
    const releaseList = useQuery<ReleaseList[]>(['searchRelease', searchRelease.projectId], fetchData);
@@ -75,10 +87,11 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
    useEffect(() => {
       if (releaseList.isSuccess) {
          // Filter the releaseList based on the label value
-         setFilteredReleaseList(releaseList.data.filter(release => release.label === searchRelease.label));
+         const filteredNotes = filterReleaseNotes(releaseList.data, searchTerm, searchRelease.label);
+         setFilteredReleaseList(filteredNotes);
          setIsLoading(false);
       }
-   }, [releaseList.isSuccess, isLoading, searchRelease.label]);
+   }, [releaseList.isSuccess, isLoading, searchRelease.label, searchTerm]);
 
    const mockFetchReleaseList = (): ReleaseList[] => {
       function generateRandomVersion(): string {
@@ -148,14 +161,14 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
    return (
       <div
          className={`!z-5 relative my-[5px] flex h-full w-full flex-col rounded-2xl bg-white bg-clip-border px-2 pb-6 pt-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none`}>
-         <div className="flex w-full items-center rounded-full bg-lightPrimary text-navy-700 dark:bg-navy-900 dark:text-white">
+         <div className="flex h-[5vh] w-full items-center rounded-full bg-lightPrimary text-navy-700 dark:bg-navy-900 dark:text-white">
             <p className="pl-3 pr-2 text-xl">
                <FiSearch className="h-4 w-4 text-gray-400 dark:text-white" />
             </p>
             <input
                value={searchTerm}
-               onChange={handleKeyDownSearchInput}
-               onKeyDown={handleChangeSearchInput}
+               onChange={handleChangeSearchInput}
+               // onKeyDown={handleKeyDownSearchInput}
                type="text"
                placeholder="릴리즈 노트 검색"
                className="block h-full w-full rounded-3xl bg-lightPrimary text-sm text-navy-700 outline-none placeholder:!text-gray-400 dark:bg-navy-900 dark:text-white dark:placeholder:!text-white"
@@ -173,7 +186,7 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
          {isLoading ? (
             <LoadingComponent fontSize="m" />
          ) : (
-            <div className="h-[70vh] overflow-auto">
+            <div className="h-[70vh] overflow-y-auto overflow-x-hidden">
                <table>
                   <tbody>
                      {filteredReleaseList.length === 0 ? (
@@ -185,7 +198,7 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
                                  className="h-[5vh] w-[10vh] rounded-xl"
                               />
                               <div className="mt-2 text-black-400 flex h-full w-full items-center justify-center gap-10 text-xl font-bold dark:text-white">
-                                 생성된 릴리즈노트가 없습니다!!👻
+                                 검색된 릴리즈노트가 없습니다!!👻
                               </div>
                            </td>
                         </tr>
@@ -206,7 +219,7 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
                                        className="mb-1 mt-1 h-[5vh] w-[10vh] rounded-xl"
                                     />
                                  </div>
-                                 <div className="h-[6vh] overflow-hidden text-sm text-gray-800 dark:text-white">
+                                 <div className="h-[6vh] w-[30vh] overflow-hidden overflow-ellipsis whitespace-nowrap text-sm text-gray-800 dark:text-white">
                                     {release.context}
                                  </div>
                               </td>

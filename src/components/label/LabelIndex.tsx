@@ -20,79 +20,74 @@ interface block {
     contexts: context[],
     label: string
 }
-export default function LabelIndex(): JSX.Element {
-    const [noteBlock, setNoteBlocks] = useRecoilState(noteFieldState);
+export default function LabelIndex(props: {contexts: context[], label: string}):JSX.Element {
 
-
-    const a = noteBlock.blocks.map((note) => {
-        switch (note.label) {
-            case 'New':
-                return (<div className='my-10'>
+    switch (props.label) {
+        case 'new':
+            return (<div className='my-10'>
                 <span>
                     <img className='my-5 rounded-xl w-1/12 max-w-lg shadow-xl' src={newLabel} />
                 </span>
-                    <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
-                        {note.contexts.map(context => (
-                            <p>{context.context}</p>
-                        ))}
-                    </div>
-                </div>)
-            case 'Update':
-                return (<div className='my-10'>
+                <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
+                    {props.contexts.map(context => (
+                        <p>{context.context}</p>
+                    ))}
+                </div>
+            </div>)
+        case 'update':
+            return (<div className='my-10'>
                 <span>
                     <img className='my-5 rounded-xl w-1/12 max-w-lg shadow-xl' src={updateLabel} />
                 </span>
-                    <div className=' break-words w-full text-clip mt-2 px-2 inline-block'>
-                        {note.contexts.map(context => (
-                            <p>{context.context}</p>
-                        ))}
-                    </div>
-                </div>)
-            case 'Delete':
-                return (
-                    <div className='my-10'>
+                <div className=' break-words w-full text-clip mt-2 px-2 inline-block'>
+                    {props.contexts.map(context => (
+                        <p>{context.context}</p>
+                    ))}
+                </div>
+            </div>)
+        case 'delete':
+            return (
+                <div className='my-10'>
                 <span>
                     <img className='my-5 rounded-xl w-1/12 max-w-lg shadow-xl' src={deleteLabel} />
                 </span>
-                        <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
-                            {note.contexts.map(context => (
-                                <p>{context.context}</p>
-                            ))}
-                        </div>
-                    </div>
-                )
-            case 'Stop':
-                return (
-                    <div className='my-10'>
+                <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
+                    {props.contexts.map(context => (
+                        <p>{context.context}</p>
+                    ))}
+                </div>
+            </div>
+            )
+        case 'stop':
+            return (
+                <div className='my-10'>
                 <span>
                     <img className='my-5 rounded-xl w-1/12 max-w-lg shadow-xl' src={stopLabel} />
                 </span>
-                        <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
-                            {note.contexts.map(context => (
-                                <p>{context.context}</p>
-                            ))}
-                        </div>
-                    </div>
-                )
-            case 'etc':
-                return (
-                    <div className='my-10'>
+                <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
+                    {props.contexts.map(context => (
+                        <p>{context.context}</p>
+                    ))}
+                </div>
+            </div>
+            )
+        case 'etc':
+            return (
+                <div className='my-10'>
                 <span>
                     <img className='my-5 rounded-xl w-1/12 max-w-lg shadow-xl' src={etcLabel} />
                 </span>
-                        <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
-                            {note.contexts.map(context => (
-                                <p>{context.context}</p>
-                            ))}
-                        </div>
-                    </div>
-                )
-        }
-    })
+                <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
+                    {props.contexts.map(context => (
+                        <p>{context.context}</p>
+                    ))}
+                </div>
+            </div>
+            )
+    }
     // new, update, delete, stop, etc
     return (
         <div>
-            {a}
         </div>
     )
 };
