@@ -75,10 +75,13 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
    }
 
    function filterReleaseNotes(releaseNotes: ReleaseList[], searchTerm: string, label: string): ReleaseList[] {
-      console.log("releaseNotes", releaseNotes[0].context[0]);
-      const filteredNotes = releaseNotes.filter(release => release.label === label);
+      if (releaseNotes !== undefined) {
+         const filteredNotes = releaseNotes.filter(release => release.label === label);
 
-      return filteredNotes?.filter(release => release.context[0].toLowerCase().includes(searchTerm.toLowerCase()));
+         return filteredNotes?.filter(release => release.context[0].toLowerCase().includes(searchTerm.toLowerCase()));
+      } else {
+         return releaseNotes;
+      }
    }
 
    const releaseList = useQuery<ReleaseList[]>(['searchRelease', searchRelease.projectId], fetchData);

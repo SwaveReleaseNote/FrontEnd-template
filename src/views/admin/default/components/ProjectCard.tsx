@@ -44,7 +44,7 @@ function ProjectCard({
       navigate(url);
    }
    
-   const deleteProjectMutation = useMutation(async () => await api.delete(`project/drop/${projectId}`), {
+   const deleteProjectMutation = useMutation(async () => await api.delete(`project/${projectId}/drop`), {
       onSuccess: async () => {
          setShowConfirmation(false);
 

@@ -104,7 +104,7 @@ const SignIn: React.FC = () => {
          email: loginData.login_email,
          password: loginData.login_password,
       })
-         .then(response => {
+         .then(async response => {
             // Handle successful response
             console.log(response.data);
             const token = response.data;
@@ -135,7 +135,7 @@ const SignIn: React.FC = () => {
             });
             client.current.activate();
             try {
-               void api.get(`user`).then(response => {
+               await api.get(`user`).then(response => {
                   // api의 응답을 제대로 받은경우
                   console.log(response);
                   console.log(response.data);
@@ -146,9 +146,11 @@ const SignIn: React.FC = () => {
                   window.localStorage.setItem('department', response.data.department);
                   window.localStorage.setItem('token', `Bearer ${String(token)}`);
                });
-               navigate('/admin');
             } catch (error) {
                console.error(error);
+            } finally {
+               console.log("get", window.localStorage.getItem('department'));
+               navigate('/admin');
             }
          })
          .catch(error => {
@@ -312,7 +314,7 @@ const SignIn: React.FC = () => {
                   <span className=" text-sm font-medium text-navy-700 dark:text-gray-600">Not registered yet?</span>
                   <a
                      onClick={handleRegisterModalButton}
-                     className="ml-1 text-sm font-medium text-brand-500 hover:text-brand-600 dark:text-white">
+                     className="hover:cursor-pointer ml-1 text-sm font-medium text-brand-500 hover:text-brand-600 dark:text-white">
                      Create an account
                   </a>
                </div>

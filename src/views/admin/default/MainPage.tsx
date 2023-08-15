@@ -43,6 +43,7 @@ const MainPage = (): JSX.Element => {
       manageDevelopOffset,
       manageDevelopOffset + limit,
    );
+
    const displayedSubscribeList = subscriberProjectList.slice(subscribeOffset, subscribeOffset + limit);
 
    const fetchProjects = async (): Promise<Project[]> => {
@@ -194,7 +195,7 @@ const MainPage = (): JSX.Element => {
    /* department 설정 */
    const [showDepartmentRegisterModal, setShowDepartmentRegisterModal] = React.useState(false);
    const [isDepartment, setIsDepartment] = React.useState(false);
-   const [department, setDepartment] = React.useState(localStorage.getItem('department'));
+   const [department, setDepartment] = React.useState('department1');
 
    useEffect(() => {
       if (localStorage.getItem('department') === 'null') {
@@ -220,7 +221,7 @@ const MainPage = (): JSX.Element => {
          .then(response => {
             console.log(response.data); // Process the response as needed
             localStorage.setItem('department', department ?? '');
-            setDepartment(localStorage.getItem('department'));
+            setDepartment(localStorage.getItem('department') as string);
          })
          .catch(error => {
             console.error(error);
@@ -380,7 +381,10 @@ const MainPage = (): JSX.Element => {
                   <h2>Select Department</h2>
                   {/* Department selection options */}
                   <div className="modal-body">
-                     <select name="department" value={department ?? ''} onChange={handleSelectUserDepartmentChange}>
+                     <select
+                        name="department"
+                        value={department ?? 'department1'}
+                        onChange={handleSelectUserDepartmentChange}>
                         <option value="Department 1">Department 1</option>
                         <option value="Department 2">Department 2</option>
                         <option value="Department 3">Department 3</option>

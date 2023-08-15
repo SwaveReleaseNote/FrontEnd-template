@@ -58,7 +58,7 @@ const Auth = (): JSX.Element => {
             });
             client.current.activate();
             try {
-               axios
+               await axios
                   .get(`http://localhost:8080/api/user`, {
                      headers: {
                         Authorization: token,
@@ -74,11 +74,13 @@ const Auth = (): JSX.Element => {
                      window.localStorage.setItem('info', '');
                      window.localStorage.setItem('department', response.data.department);
                      console.log(localStorage.getItem('email'));
+                     console.log(localStorage.getItem('department'));
                   });
-               navigate('/admin');
             } catch (error) {
                console.error(error);
                navigate('/');
+            } finally {
+               navigate('/admin');
             }
          } catch (error) {
             console.error(error);
