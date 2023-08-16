@@ -1,7 +1,7 @@
 import React, { useState, useEffect, type ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './UserProfileCard.css';
-import { getCookie } from './cookie';
+// import { getCookie } from './cookie';
 import api from 'context/api';
 
 function UserProfileCard(): ReactElement {
@@ -13,13 +13,11 @@ function UserProfileCard(): ReactElement {
    const [mostViewed, setMostViewed] = useState('dolor sit amet.');
 
    useEffect(() => {
-    const emailCookieKey = localStorage.getItem('email') as string;
-      if (getCookie(emailCookieKey) == null) {
+   //  const emailCookieKey = localStorage.getItem('email') as string;
+      if (localStorage.getItem('token') == null) {
          navigate('/auth/sign-in');
       } else {
          console.log(localStorage.getItem('department'));
-         const cookieId = getCookie('id');
-         console.log(cookieId);
          if (localStorage.getItem('department') === 'null') {
             console.log('showdepartment');
          }
