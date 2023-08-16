@@ -1,6 +1,5 @@
 pipeline {
-    agent any
-    tools { nodejs 'WS' }
+    agent { docker { image 'node:16-alpine' } }
 
     stages() {
         stage('git clone') {
