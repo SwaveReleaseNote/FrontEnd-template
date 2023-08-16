@@ -16,6 +16,35 @@ pipeline {
             }
         }
 
+        // stage('Build Front') {
+        //     steps {
+        //             script {
+        //                     def image = docker.build('hamgeonwook/release-front', '--file Dockerfile .')
+
+        //                     docker.withRegistry('https://registry.hub.docker.com/repository/docker/hamgeonwook/release-front/', 'docker-ham-credentials	') {
+        //                     image.tag("${env.BUILD_NUMBER}")
+        //                     image.push()
+        //                 }
+        //         }
+        //     }
+        //     // post {
+        //     //     success {
+        //     //         slackSend(
+        //     //             channel: '#jenkins',
+        //     //             color: '#00FF00',
+        //     //             message: "SUCCESS: Job ${env.JOB_NAME} Build Front"
+        //     //         )
+        //     //     }
+        //     //     failure {
+        //     //         slackSend(
+        //     //            channel: '#jenkins',
+        //     //            color: '#FF0000',
+        //     //            message: "FAIL: Job ${env.JOB_NAME} Build Front"
+        //     //         )
+        //     //     }
+        //     // }
+        // }
+
         stage('Build Nginx') {
             steps {
                 script {
@@ -27,76 +56,75 @@ pipeline {
                         nginxImage.push("latest")
                     }
                 }
-            post {
-                success {
-                    slackSend(
-                        channel: '#jenkins',
-                        color: '#00FF00',
-                        message: "SUCCESS: Job ${env.JOB_NAME} Build Nginx"
-                    )
-                }
-                failure {
-                    slackSend(
-                       channel: '#jenkins',
-                       color: '#FF0000',
-                       message: "FAIL: Job ${env.JOB_NAME} Build Nginx"
-                    )
-                }
-            }
+            // post {
+            //     success {
+            //         slackSend(
+            //             channel: '#jenkins',
+            //             color: '#00FF00',
+            //             message: "SUCCESS: Job ${env.JOB_NAME} Build Front"
+            //         )
+            //     }
+            //     failure {
+            //         slackSend(
+            //            channel: '#jenkins',
+            //            color: '#FF0000',
+            //            message: "FAIL: Job ${env.JOB_NAME} Build Front"
+            //         )
+            //     }
+            // }
             }
         }
 
         stage('AgroCD Manifest Update') {
-            steps {
-                git credentialsId: 'kjk7212',
-                        url: 'https://github.com/SwaveReleaseNote/argocd-front',
-                        branch: 'main'
+                            steps {
+                                git credentialsId: 'kjk7212',
+                                        url: 'https://github.com/SwaveReleaseNote/argocd-front',
+                                        branch: 'main'
 
-                sh "sed -i 's/# build-version:.*/# build-version: ${env.BUILD_NUMBER}/g' front.yaml"
-                sh "sed -i 's/release_note_front.*/release_note_front:${env.BUILD_NUMBER}/g' front.yaml"
-                sh "git add front.yaml"
-                sshagent(credentials: ['git-ssh']) {
-                    sh "git commit -m '[UPDATE] v${env.BUILD_NUMBER} image versioning'"
-                    sh "git remote set-url origin git@github.com:SwaveReleaseNote/argocd-front.git"
-                    sh "git push -u origin main"
-                }
-            }
+                                sh "sed -i 's/# build-version:.*/# build-version: ${env.BUILD_NUMBER}/g' front.yaml"
+                                sh "sed -i 's/release_note_front.*/release_note_front:${env.BUILD_NUMBER}/g' front.yaml"
+                                sh "git add front.yaml"
+                                sshagent(credentials: ['git-ssh']) {
+                                    sh "git commit -m '[UPDATE] v${env.BUILD_NUMBER} image versioning'"
+                                    sh "git remote set-url origin git@github.com:SwaveReleaseNote/argocd-front.git"
+                                    sh "git push -u origin main"
+                                }
+                            }
+                        }
 
-            post {
-                success {
-                    slackSend (
-                        channel: '#jenkins',
-                        color: '#00FF00',
-                        message: "SUCCESS: Job ${env.JOB_NAME} AgroCD Manifest Update"
-                    )
-                }
-                failure {
-                    slackSend (
-                    channel: '#jenkins',
-                    color: '#FF0000',
-                    message: "FAIL: Job ${env.JOB_NAME} AgroCD Manifest Update"
-                    )
-                }
-            }
-        }
-
+    //     post {
+    //         success {
+    //             slackSend (
+    //                 channel: '#jenkins',
+    //                 color: '#00FF00',
+    //                 message: "SUCCESS: Job ${env.JOB_NAME} AgroCD Manifest Update"
+    //             )
+    //         }
+    //         failure {
+    //             slackSend (
+    //                channel: '#jenkins',
+    //                color: '#FF0000',
+    //                message: "FAIL: Job ${env.JOB_NAME} AgroCD Manifest Update"
+    //             )
+    //         }
+    //     }
     }
 
-    post {
-        success {
-            slackSend(
-                channel: '#jenkins',
-                color: '#00FF00',
-                message: "SUCCESS: Job ${env.JOB_NAME}"
-            )
-        }
-        failure {
-            slackSend(
-                channel: '#jenkins',
-                color: '#FF0000',
-                message: "FAIL: Job ${env.JOB_NAME}"
-            )
-        }
-    }
+    // post {
+    //     success {
+    //         slackSend(
+    //             channel: '#jenkins',
+    //             color: '#00FF00',
+    //             message: "SUCCESS: Job ${env.JOB_NAME}"
+    //         )
+    //     }
+    //     failure {
+    //         slackSend(
+    //             channel: '#jenkins',
+    //             color: '#FF0000',
+    //             message: "FAIL: Job ${env.JOB_NAME}"
+    //         )
+    //     }
+    // }
 }
 
