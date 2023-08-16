@@ -1,6 +1,9 @@
 pipeline {
     agent any
-    tools { nodejs 'WS' }
+    tools {
+        nodejs "node:16-alpine"
+        git "git"
+    }
 
     stages() {
         stage('git clone') {
