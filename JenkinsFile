@@ -89,6 +89,7 @@ pipeline {
                 sh "git add front.yaml"
 
                 sh "git commit -m '[UPDATE] v${currentBuild.number} image versioning'"
+                sh "git config --global url.https://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@github.com/.insteadOf https://github.com/"
                 sh "git remote set-url origin https://github.com/SwaveReleaseNote/argocd-front.git"
                 sh "git push -u origin main"
         }
