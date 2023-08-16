@@ -92,7 +92,7 @@ pipeline {
                 sh "git config --global user.name 'tomy8964'"
                         
                 sh "git commit -m '[UPDATE] v${currentBuild.number} image versioning'"
-                sh "git remote set-url origin git@github.com:SwaveReleaseNote/argocd-front.git"
+                sh "git remote set-url origin https://github.com/SwaveReleaseNote/argocd-front.git"
                 sh "git push -u origin main"
         }
     //     post {
