@@ -7,7 +7,7 @@ import {createStompClient,activateStompClient} from "./stompClientUtils";
 interface TokenData {
    data: string;
    type: string;
- }
+}
 const Auth = (): JSX.Element => {
    const navigate = useNavigate();
 
@@ -30,23 +30,24 @@ const Auth = (): JSX.Element => {
          // url의 인가코드
          try {
             const res = await axios.post(
-               `http://back-service:8080/api/user/login-by-oauth?code=${code}&provider=${provider?.toString() ?? ''}`,
+               `http://61.109.214.110:80/api/user/login-by-oauth?code=${code}&provider=${provider?.toString() ?? ''}`,
             );
             // 인가코드를 백엔드로 보내고 헤더에서 엑세스 토큰 받아옴
             const parsedData: TokenData = JSON.parse(res.data.slice(5));
 
             const tokenData = parsedData.data.replace(/"/g, '');
             console.log(tokenData);
-            const token=`Bearer ${String(tokenData)}`
+            const token = `Bearer ${String(tokenData)}`;
             // 로컬스토리지에 저장
             window.localStorage.setItem('token', token);
             const expirationTime = new Date();
             expirationTime.setTime(expirationTime.getTime() + 30 * 60 * 1000);
+
             createStompClient(token);
             activateStompClient();
             try {
                await axios
-                  .get(`http://back-service:8080/api/user`, {
+                  .get(`http://61.109.214.110:80/api/user`, {
                      headers: {
                         Authorization: token,
                      },
@@ -55,7 +56,7 @@ const Auth = (): JSX.Element => {
                      // api의 응답을 제대로 받은경우
                      /* axios 값 log 확인 */
                      console.log(response.data);
-                     window.localStorage.setItem('user_id',response.data.id);
+                     window.localStorage.setItem('user_id', response.data.id);
                      window.localStorage.setItem('state', 'true');
                      window.localStorage.setItem('name', response.data.username);
                      window.localStorage.setItem('email', response.data.email);

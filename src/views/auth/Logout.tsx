@@ -10,6 +10,7 @@ const Logout = (): ReactElement => {
    // Logout으로 넘어오는지 log 확인
    console.log('sdafafsadfsads');
 
+
    const disconnect = (): void => {
       deactivateStompClient();
    };

@@ -25,7 +25,8 @@ interface TokenData {
  }
 const SignIn: React.FC = () => {
    const navigate = useNavigate();
-   const host = 'http://266e8974276247f4b3cad8498606fafb.kakaoiedge.com:80';
+   const host = 'http://61.109.214.110:80';
+
    const KAKAO_REST_API_KEY = '4646a32b25c060e42407ceb8c13ef14a';
    const KAKAO_REDIRECT_URI = host + '/oauth/callback/kakao';
    const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
@@ -112,8 +113,9 @@ const SignIn: React.FC = () => {
 
             
             const parsedData: TokenData = JSON.parse(response.data.slice(5));
-
+            console.log(parsedData);
             const token = parsedData.data.replace(/"/g, '');
+            console.log(token);
             if (response.data === 'Information Not valid') {
                alert('Information Not valid');
                console.error('error');
@@ -126,7 +128,7 @@ const SignIn: React.FC = () => {
             activateStompClient();
             try {
                await axios
-                  .get(`http://back-service:8080/api/user`, {
+                  .get(`http://61.109.214.110:80/api/user`, {
                      headers: {
                         Authorization: `Bearer ${String(token)}`,
                      },
