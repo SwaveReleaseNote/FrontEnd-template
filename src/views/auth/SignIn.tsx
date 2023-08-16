@@ -3,10 +3,10 @@ import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as StompJs from '@stomp/stompjs';
+import axios from 'axios';
 import './SignIn.css';
 import kakaobutton from 'assets/img/auth/kakao2.png';
 import { setCookie } from './cookie';
-import api from 'context/api';
 
 interface RegisterFormData {
    name: string;
@@ -69,11 +69,12 @@ const SignIn: React.FC = () => {
          registerPassword,
          registerConfirmPassword,
       });
-      api.post('user', {
-         name: registeName,
-         email: registerEmail,
-         password: registerPassword,
-      })
+      axios
+         .post('http://localhost:8080/api/user', {
+            name: registeName,
+            email: registerEmail,
+            password: registerPassword,
+         })
          .then(response => {
             // Handle successful response
             console.log(response.data);
@@ -100,10 +101,11 @@ const SignIn: React.FC = () => {
       event.preventDefault();
       console.log(loginData);
 
-      api.post('user/login-by-email', {
-         email: loginData.login_email,
-         password: loginData.login_password,
-      })
+      axios
+         .post('http://localhost:8080/api/user/login-by-email', {
+            email: loginData.login_email,
+            password: loginData.login_password,
+         })
          .then(response => {
             // Handle successful response
             console.log(response.data);
@@ -122,7 +124,6 @@ const SignIn: React.FC = () => {
                HttpOnly: true,
                secure: true,
             });
-            window.localStorage.setItem('token', `Bearer ${String(token)}`);
             client.current = new StompJs.Client({
                brokerURL: 'ws://localhost:8080/ws-stomp',
                // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -135,17 +136,23 @@ const SignIn: React.FC = () => {
             });
             client.current.activate();
             try {
-               void api.get(`user`).then(response => {
-                  // api의 응답을 제대로 받은경우
-                  console.log(response);
-                  console.log(response.data);
-                  window.localStorage.setItem('state', 'true');
-                  window.localStorage.setItem('name', response.data.username);
-                  window.localStorage.setItem('email', response.data.email);
-                  window.localStorage.setItem('info', '');
-                  window.localStorage.setItem('department', response.data.department);
-                  window.localStorage.setItem('token', `Bearer ${String(token)}`);
-               });
+               void axios
+                  .get(`http://localhost:8080/api/user`, {
+                     headers: {
+                        Authorization: `Bearer ${String(token)}`,
+                     },
+                  })
+                  .then(response => {
+                     // api의 응답을 제대로 받은경우
+                     console.log(response);
+                     console.log(response.data);
+                     window.localStorage.setItem('state', 'true');
+                     window.localStorage.setItem('name', response.data.username);
+                     window.localStorage.setItem('email', response.data.email);
+                     window.localStorage.setItem('info', '');
+                     window.localStorage.setItem('department', response.data.department);
+                     window.localStorage.setItem('token', `Bearer ${String(token)}`);
+                  });
                navigate('/admin');
             } catch (error) {
                console.error(error);
@@ -179,9 +186,10 @@ const SignIn: React.FC = () => {
    const [isAuthenticated, setIsAuthenticated] = useState(false); // 인증이 맞는지 체크
    const handleValidationButtonClick = (): void => {
       setShowAuthInput(true);
-      api.post('user/validation', {
-         email: registerEmail,
-      })
+      axios
+         .post('http://localhost:8080/api/user/validation', {
+            email: registerEmail,
+         })
          .then(response => {
             // Handle successful response
             console.log(response.data);
@@ -219,9 +227,10 @@ const SignIn: React.FC = () => {
       event.preventDefault();
       // Handle forgot password form submission
       console.log(forgotPasswordEmail);
-      api.post('user/temporary-password', {
-         email: forgotPasswordEmail,
-      })
+      axios
+         .post('http://localhost:8080/api/user/temporary-password', {
+            email: forgotPasswordEmail,
+         })
          .then(response => {
             // Handle successful response
             console.log(response.data);
@@ -321,9 +330,7 @@ const SignIn: React.FC = () => {
          {/* Register Modal */}
          {showRegisterModal && (
             <div className="fixed inset-0 z-10 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
-               <div
-                  className="relative mx-auto my-4 w-full max-w-3xl rounded-xl bg-white p-8 shadow-lg"
-                  style={{ right: '22%' }}>
+               <div className="relative mx-auto my-4 w-full max-w-3xl rounded-xl bg-white p-8 shadow-lg" style={{ right: '22%' }}>
                   <div className="mb-6 flex items-start justify-between">
                      <h3 className="text-xl font-semibold">Create an Account</h3>
                      <button onClick={handleRegisterModalButton} className="text-gray-500 hover:text-gray-700">
@@ -467,9 +474,7 @@ const SignIn: React.FC = () => {
          {/* Forgot Password Modal */}
          {showForgotPasswordModal && (
             <div className="fixed inset-0 z-10 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
-               <div
-                  className="relative mx-auto my-4 w-full max-w-3xl rounded-xl bg-white p-8 shadow-lg"
-                  style={{ right: '22%' }}>
+               <div className="relative mx-auto my-4 w-full max-w-3xl rounded-xl bg-white p-8 shadow-lg" style={{ right: '22%' }}>
                   <div className="mb-6 flex items-start justify-between">
                      <h3 className="text-xl font-semibold">Forgot Password</h3>
                      <button onClick={handleForgotPasswordModalButton} className="text-gray-500 hover:text-gray-700">

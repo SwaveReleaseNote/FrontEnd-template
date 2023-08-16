@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+/*eslint-disable*/
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from 'react-query';
@@ -11,7 +11,7 @@ enum UserRole {
    Subscriber = 'Subscriber',
    Developer = 'Developer',
    Manager = 'Manager',
-   None = 'None',
+   None = 'None'
 }
 
 interface TeamMember {
@@ -41,7 +41,7 @@ const SearchProjectList: React.FC = () => {
    const navigate = useNavigate();
    const [selectedCheckbox, setSelectedCheckbox] = useState('전체');
    const location = useLocation();
-   const [searchTerm, setSearchTerm] = useState('');
+   const searchTerm = location.state.searchTerm;
    const [showRoleCheck, setShowRoleCheck] = useState(false);
    const [isLoading, setIsLoading] = useState(true);
    const queryClient = useQueryClient();
@@ -54,13 +54,8 @@ const SearchProjectList: React.FC = () => {
          });
 
          return response.data;
-      } catch (error: any) {
+      } catch (error) {
          console.error('Error fetching search result:', error);
-         let status = error.code;
-         if (error.response?.status != null) {
-            status = error.response.status;
-         }
-         navigate(`../error?status=${status as string}`);
          return mockFetchSearchResult();
       }
    };
@@ -68,15 +63,10 @@ const SearchProjectList: React.FC = () => {
    const fetchUserRole = async (projectId: number): Promise<UserRole> => {
       try {
          const response = await api.get(`project/${projectId}/role`);
-         console.log(JSON.stringify(response.data, null, '\t'));
+         console.log(JSON.stringify(response.data, null, "\t"));
          return response.data;
-      } catch (error: any) {
+      } catch (error) {
          console.error('Error fetching user role:', error);
-         let status = error.code;
-         if (error.response?.status != null) {
-            status = error.response.status;
-         }
-         navigate(`../error?status=${status as string}`);
          return mockFetchUserRole();
       }
    };
@@ -204,9 +194,6 @@ const SearchProjectList: React.FC = () => {
    const searchResultQuery = useQuery(['searchResults', searchTerm], fetchSearchResults);
 
    useEffect(() => {
-      if (location.state.searchTerm != null) {
-         setSearchTerm(location.state.searchTerm);
-      }
       if (searchResultQuery.isSuccess) {
          setIsLoading(false);
       }
@@ -223,13 +210,8 @@ const SearchProjectList: React.FC = () => {
 
             navigate(url);
          }
-      } catch (error: any) {
+      } catch (error) {
          console.error('Error fetching user role:', error);
-         let status = error.code;
-         if (error.response?.status != null) {
-            status = error.response.status;
-         }
-         navigate(`../error?status=${status as string}`);
          alert('Server error. Please try again.');
       }
    };
@@ -240,21 +222,14 @@ const SearchProjectList: React.FC = () => {
 
    const handleClickYes = async (projectId: number, projectName: string): Promise<void> => {
       try {
-         console.log("projectId", projectId);
-         console.log("projectName", projectName);
-         const response = await api.post(`project/${projectId}/subscribe`);
-         console.log("response", response);
+         await api.post(`project/${projectId}/subscribe`);
          const queryString = `projectId=${projectId}&projectName=${projectName}`;
          const url = `/admin/dashboard?${queryString}`;
          await queryClient.refetchQueries('projects');
          navigate(url);
-      } catch (error: any) {
+      } catch (error) {
          console.error('Error Subscribe project:', error);
-         let status = error.code;
-         if (error.response?.status != null) {
-            status = error.response.status;
-         }
-         navigate(`../error?status=${status as string}`);
+         alert('Server error. Please try again.');
       } finally {
          setShowRoleCheck(false);
       }
@@ -271,9 +246,10 @@ const SearchProjectList: React.FC = () => {
       };
 
       return (
-         <div className="flex">
-            <div className="text-l flex items-center h-[5vh] w-[13vh] justify-center rounded-2xl bg-gray-100 p-3 font-bold dark:!bg-navy-600">
+         <div className="items-top flex">
+            <div className="mt-3 text-l flex h-[7vh] w-[13vh] justify-center rounded-2xl bg-gray-100 p-3 font-bold dark:!bg-navy-600">
                {searchType}
+               {/* 에 {searchTerm}가 포함된 프로젝트입니다. */}
             </div>
             <div className="m-3 w-[100vh] rounded-3xl bg-gray-0 p-5 dark:!bg-navy-600">
                {projects.length > 0 ? (

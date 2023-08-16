@@ -199,20 +199,12 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
                   <div className="mt-3 h-px w-full bg-gray-200 dark:bg-white/20 " />
 
                   <div className="ml-4 mt-3 flex flex-col">
-                     <div
-                        onClick={() => {
-                           navigate('/admin/MyPage');
-                        }}
-                        className="hover:cursor-pointer text-sm text-gray-800 dark:text-white hover:dark:text-white">
+                     <a href="/admin/mypage" className="text-sm text-gray-800 dark:text-white hover:dark:text-white">
                         My Page
-                     </div>
-                     <div
-                        onClick={() => {
-                           navigate('/user/logout');
-                        }}
-                        className="hover:cursor-pointer mt-3 text-sm font-medium text-red-500 hover:text-red-500">
+                     </a>
+                     <a href="/user/logout" className="mt-3 text-sm font-medium text-red-500 hover:text-red-500">
                         Log Out
-                     </div>
+                     </a>
                   </div>
                </div>
             </Dropdown>

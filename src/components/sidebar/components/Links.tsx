@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React from "react";
+import React, {useEffect} from "react";
 import { Link, useLocation } from "react-router-dom";
 import DashIcon from "components/icons/DashIcon";
 
@@ -11,6 +11,9 @@ export const SidebarLinks = (props: { routes: RoutesType[] }): JSX.Element => {
 
   const { routes } = props;
 
+  useEffect(() => {
+    console.log(location)
+  }, [location]);
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName: string) => {
     return location.pathname.includes(routeName);
@@ -27,7 +30,6 @@ export const SidebarLinks = (props: { routes: RoutesType[] }): JSX.Element => {
         route.layout === "/rtl"
       ) {
         return (
-          
           <Link key={index} to={route.layout + "/" + route.path}>
             <div className="relative mb-3 flex hover:cursor-pointer">
               <li
@@ -44,13 +46,13 @@ export const SidebarLinks = (props: { routes: RoutesType[] }): JSX.Element => {
                 </span>
                 <div>
                   <p
-                        className={`leading-1 ml-4 flex ${activeRoute(route.path) === true
-                          ? "font-bold text-navy-700 dark:text-white"
+                      className={`leading-1 ml-4 flex ${activeRoute(route.path) === true 
+                          ? "font-bold text-navy-700 dark:text-white" 
                           : "font-medium text-gray-600"
-                          }`}
-                      >
-                        {route.name}
-                      </p>
+                      }`}
+                  >
+                    {route.name}
+                  </p>
                 </div>
               </li>
               {activeRoute(route.path) ? (

@@ -1,8 +1,8 @@
+/*eslint-disable*/
 import React, { useState, useEffect } from 'react';
 import LoadingComponent from './LoadingComponent ';
 import api from 'context/api';
 import { useQuery } from 'react-query';
-import { useNavigate } from 'react-router-dom';
 
 interface Props {
    projectId: {
@@ -18,19 +18,14 @@ interface MemberStatus {
 
 const MemberStatusCard: React.FC<Props> = ({ projectId }) => {
    const [isLoading, setIsLoading] = useState(true);
-   const navigate = useNavigate();
 
    const fetchMemberStatus = async (): Promise<MemberStatus[]> => {
       try {
          const response = await api.get(`/project/memberStatus/${projectId.id}`);
          return response.data;
-      } catch (error: any) {
+      } catch (error) {
          console.error('Error fetching project Member Status:', error);
-         let status = error.code;
-         if (error.response?.status != null) {
-            status = error.response.status;
-         }
-         navigate(`../error?status=${status as string}`);
+         console.log('Mocking data');
          return mockFetchMemberStatus();
       }
    };
@@ -65,27 +60,27 @@ const MemberStatusCard: React.FC<Props> = ({ projectId }) => {
 
    return (
       <div
-         className={`!z-5 relative flex h-full w-full flex-col rounded-[20px] bg-white bg-clip-border px-6 pb-6 shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none`}>
+         className={`!z-5 relative flex h-full w-full flex-col rounded-[20px] bg-white bg-clip-border px-6 pb-6 shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none sm:overflow-x-auto`}>
          <div className="relative flex items-center justify-between pt-4">
             <div className="text-xl font-bold text-navy-700 dark:text-white">Member Status</div>
          </div>
-         <table className="mt-2 w-[90%] verflow-x-scroll xl:overflow-x-hidden">
+         <table className="mt-2 w-full overflow-x-scroll xl:overflow-x-hidden">
             <thead>
                <tr className="!border-px !border-gray-400 text-gray-500">
                   <th className="border-b-[1px] border-gray-200 pb-2 pt-4 text-start">NAME</th>
-                  <th className="border-b-[1px] border-gray-200 pb-2 pl-[10vh] pr-10 pt-4 text-start">STATUS</th>
+                  <th className="border-b-[1px] border-gray-200 pb-2 pl-10 pr-10 pt-4 text-start">STATUS</th>
                </tr>
             </thead>
          </table>
          {!isLoading ? (
-            <div className="overflow-auto" style={{ maxHeight: '35vh' }}>
+            <div className="overflow-auto" style={{ maxHeight: '250px' }}>
                <table>
                   <tbody>
                      {memberStatusQuery?.data?.map(member => (
                         // <tr key={member.memberName}>
                         <tr key={member.memberId}>
                            <td className="py-2">{member.memberName}</td>
-                           <td className="flex items-center py-2 pl-[10vh]">{member.online ? '온라인' : '오프라인'}</td>
+                           <td className="flex items-center py-2 pl-[50px]">{member.online ? '온라인' : '오프라인'}</td>
                            <td>
                               <div
                                  className={`ml-5 h-4 w-4 rounded-full ${

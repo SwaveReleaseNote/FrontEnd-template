@@ -1,61 +1,49 @@
-import React from "react";
+/*eslint-disable*/
+import React, {useEffect} from "react";
 import NoteField from "components/note/NoteField";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {noteFieldState, noteIdState} from "../../../context/atom";
+import data from "../../../components/label/mockData/NoteFiledMockData.json"
+import api from "../../../context/api";
 
-const ReleaseNote = ():JSX.Element => {
-  return (
-    <div className="h-full grid-cols-1 gap-5 2xl:grid-cols-3">
-      <div className="col-span-1 h-fit w-full xl:col-span-1 2xl:col-span-2">
-        {/* NFt Banner */}
-        {/* <Banner /> */}
+const ReleaseNote = (): JSX.Element => {
+    const [selectNote, setSelectNote] = useRecoilState(noteFieldState)
+    // 리코일을 사용하여 릴리즈 노트 클릭했을때 해당 릴리즈 노트로 가도록 설정
+    // useEffect(() => {
+    //     const fetchNote = async (): Promise<void> => {
+    //         try{
+    //             const response = await api.get(`project/release-note/${releaseNoteId}`)
+    //             const fetchData = response.data
+    //             setSelectNote(fetchData)
+    //
+    //             console.log(releaseNoteId + " 릴리즈 노트 데이터 가져옴")
+    //
+    //             // todo: 라우팅 해주자?
+    //         }
+    //         catch (error) {
+    //             console.error(error)
+    //         }
+    //     }
+    //
+    //     fetchNote().catch(error => {
+    //         console.log(error)
+    //     });
+    //
+    // }, [releaseNoteId]);
+    console.log("여기까지는 리렌더링 아님~")
+    return (
+        <div className="h-full grid-cols-1 gap-5 2xl:grid-cols-3">
+            <div className="col-span-1 h-fit w-full xl:col-span-1 2xl:col-span-2">
+                <div className=" z-20 grid grid-cols-1">
+                    <NoteField note={selectNote.version}/>
+                </div>
+            </div>
+            {/* right side section */}
 
-        {/* NFt Header */}
-        <div className="mb-4 mt-5 flex flex-col justify-between px-4 md:flex-row md:items-center">
-          <ul className="mt-4 flex items-center justify-between md:mt-0 md:justify-center md:!gap-5 2xl:!gap-12">
-            <li>
-              <a
-                className="text-base font-medium text-brand-500 hover:text-brand-500 dark:text-white"
-                href=" "
-              >
-              </a>
-            </li>
-            <li>
-              <a
-                className="text-base font-medium text-brand-500 hover:text-brand-500 dark:text-white"
-                href=" "
-              >
-              </a>
-            </li>
-            <li>
-              <a
-                className="text-base font-medium text-brand-500 hover:text-brand-500 dark:text-white"
-                href=" "
-              >
-              </a>
-            </li>
-            <li>
-              <a
-                className="text-base font-medium text-brand-500 hover:text-brand-500 dark:text-white"
-                href=" "
-              >
-                <a href=" "></a>
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div className=" z-20 grid grid-cols-1">
-          <NoteField />
-        </div>
-        {/* NFTs trending card */}
-        <div className="z-20 grid grid-cols-1 gap-5 md:grid-cols-3">
-          {/* TODO: NFTCard 대신 ReleaseNote가 들어갈 수 있도록 만들기 */}
-        </div>
-      </div>
-      {/* right side section */}
-
-      {/* <div className="col-span-1 h-full w-full rounded-xl 2xl:col-span-1">
+            {/* <div className="col-span-1 h-full w-full rounded-xl 2xl:col-span-1">
       </div> */}
-    </div>
-  );
+        </div>
+    );
 };
 
 export default ReleaseNote;
