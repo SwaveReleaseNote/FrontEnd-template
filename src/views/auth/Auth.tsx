@@ -4,7 +4,10 @@ import * as StompJs from '@stomp/stompjs';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { setCookie } from './cookie';
-
+interface TokenData {
+   data: string;
+   type: string;
+ }
 const Auth = (): JSX.Element => {
    const navigate = useNavigate();
 
@@ -31,24 +34,20 @@ const Auth = (): JSX.Element => {
                `http://localhost:8080/api/user/login-by-oauth?code=${code}&provider=${provider?.toString() ?? ''}`,
             );
             // 인가코드를 백엔드로 보내고 헤더에서 엑세스 토큰 받아옴
-            const token = res.headers.authorization;
-            console.log(token);
+            // const token = res.headers.authorization;
+            // console.log(token);
+            const parsedData: TokenData = JSON.parse(res.data.slice(5));
+
+            const tokenData = parsedData.data.replace(/"/g, '');
+            console.log(tokenData);
+            const token=`Bearer ${String(tokenData)}`
             // 로컬스토리지에 저장
             window.localStorage.setItem('token', token);
-            // setCookie("id", token);
             const expirationTime = new Date();
             expirationTime.setTime(expirationTime.getTime() + 30 * 60 * 1000);
 
-            setCookie('id', token, {
-               path: '/',
-               sameSite: 'strict',
-               expires: expirationTime,
-               HttpOnly: true,
-               secure: true,
-            });
             client.current = new StompJs.Client({
                brokerURL: 'ws://localhost:8080/ws-stomp',
-               // eslint-disable-next-line @typescript-eslint/no-empty-function
                connectHeaders: {
                   Authorization: token,
                },
@@ -68,12 +67,21 @@ const Auth = (): JSX.Element => {
                      // api의 응답을 제대로 받은경우
                      /* axios 값 log 확인 */
                      console.log(response.data);
+                     window.localStorage.setItem('user_id',response.data.id);
                      window.localStorage.setItem('state', 'true');
                      window.localStorage.setItem('name', response.data.username);
                      window.localStorage.setItem('email', response.data.email);
                      window.localStorage.setItem('info', '');
                      window.localStorage.setItem('department', response.data.department);
-                     console.log(localStorage.getItem('email'));
+                     const emailCookieKey = localStorage.getItem('email') as string;
+                     setCookie(emailCookieKey, token, {
+                        path: '/',
+                        sameSite: 'strict',
+                        expires: expirationTime,
+                        HttpOnly: true,
+                        secure: true,
+                     });
+
                   });
                navigate('/admin');
             } catch (error) {

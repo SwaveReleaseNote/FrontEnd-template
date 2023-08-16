@@ -9,9 +9,11 @@ import ProjectDashboard from 'views/admin/default/pages/ProjectDashboard';
 import * as StompJs from '@stomp/stompjs';
 import { getCookie } from '../../views/auth/cookie';
 import api from 'context/api';
+import EventSourceComponent from '../../views/auth/EventSourceComponent';
 import { useRecoilValue } from 'recoil';
 import {noteFieldState} from "../../context/atom";
 import ReleaseNote from "../../views/admin/marketplace";
+
 
 
 export default function Admin(props: Record<string, any>): JSX.Element {
@@ -21,11 +23,15 @@ export default function Admin(props: Record<string, any>): JSX.Element {
    const [currentRoute, setCurrentRoute] = React.useState('Main Dashboard');
    const client = useRef<StompJs.Client | null>(null);
 
-   const disconnect = (): void => {
+   const disconnect = async (): Promise<void> => {
       console.log('disconnect');
       if (client.current == null || !client.current.connected) return;
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      client.current.deactivate();
+
+      try {
+        await client.current.deactivate();
+      } catch (error) {
+        console.error('Error deactivating client:', error);
+      }
    };
 
    React.useEffect(() => {
@@ -86,34 +92,34 @@ export default function Admin(props: Record<string, any>): JSX.Element {
       // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
       if (window.PerformanceNavigationTiming) {
          console.info('window.performance works fine on this browser');
-
+         
          const perfNavigation = window.performance.getEntriesByType('navigation')[0];
          const entriesNavigationTiming = perfNavigation as PerformanceNavigationTiming;
          console.log(entriesNavigationTiming.type);
-         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-         if (entriesNavigationTiming.type === 'reload') {
+
+         if (entriesNavigationTiming.type === 'reload' || entriesNavigationTiming.type==='navigate') {
             console.log('reload type');
             // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
             async function fetchData() {
+               const emailCookieKey = localStorage.getItem('email') as string;
                try {
                   const response = await api.get(`/user`)
    
                   // api의 응답을 제대로 받은 경우
                   /* axios 값 log 확인 */
-                  console.log(response.data);
+                  console.log("axidsosagaas",response.data);
                   window.localStorage.setItem('state', 'true');
                   window.localStorage.setItem('name', response.data.username);
                   window.localStorage.setItem('email', response.data.email);
                   window.localStorage.setItem('info', '');
                   window.localStorage.setItem('department', response.data.department);
-                  window.localStorage.setItem('token', getCookie('id'));
+                  window.localStorage.setItem('token', getCookie(response.data.email));
                   console.log(localStorage.getItem('email'));
    
                   client.current = new StompJs.Client({
                      brokerURL: 'ws://localhost:8080/ws-stomp',
-                     // eslint-disable-next-line @typescript-eslint/no-empty-function
                      connectHeaders: {
-                        Authorization: localStorage.getItem('token') ?? '',
+                        Authorization: getCookie(emailCookieKey) ?? '',
                      },
                      onConnect: () => {
                         console.log('success');
@@ -127,8 +133,7 @@ export default function Admin(props: Record<string, any>): JSX.Element {
                }
             }
 
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            fetchData();
+            void fetchData();
          }
       }
    }, []);
@@ -136,14 +141,20 @@ export default function Admin(props: Record<string, any>): JSX.Element {
    document.documentElement.dir = 'ltr';
 
    window.addEventListener('unload', event => {
-      disconnect();
-      window.localStorage.clear();
-      alert('정말 종료하시겠습니까?');
+      disconnect()
+      .then(() => {
+        alert('정말 종료하시겠습니까?');
+      })
+      .catch(error => {
+        console.error('Error during disconnect:', error);
+      });
+  
    });
 
    
    return (
       <>
+      <EventSourceComponent />
          <div className="flex h-full w-full">
             {open ? (
                <Sidebar
