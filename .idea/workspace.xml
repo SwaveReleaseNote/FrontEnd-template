@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1add38cb-85f0-48f9-835c-e73c5060c10d" name="Changes" comment="Revert &quot;Merge branch 'develop' into bugfix/50-sidebar-routing-issue&quot;&#10;&#10;This reverts commit 5b85e683b21d2832a4fce750bb852f3951b66c49, reversing&#10;changes made to ed73be7aff257dcc4954c50942fc98f9d3ba75ec." />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="develop" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="SWAP_SIDES_IN_COMPARE_BRANCHES" value="true" />
+  </component>
+  <component name="GitToolBoxStore">
+    <option name="projectConfigVersion" value="5" />
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="29-feat-note-block" />
+                    <option name="lastUsedInstant" value="1692148528" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="develop" />
+                    <option name="lastUsedInstant" value="1692148501" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="develop-sidebar-resolve-conflict" />
+                    <option name="lastUsedInstant" value="1692148283" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="#2/develop-sidebar-resolve-conflict" />
+                    <option name="lastUsedInstant" value="1692148045" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="bugfix/50-sidebar-routing-issue-rewrite" />
+                    <option name="lastUsedInstant" value="1692147541" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "git-widget-placeholder": "29-feat-note-block",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "ts.external.directory.path": "/Applications/IntelliJ IDEA.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Revert &quot;Merge branch 'develop' into bugfix/50-sidebar-routing-issue&quot;&#10;&#10;This reverts commit 5b85e683b21d2832a4fce750bb852f3951b66c49, reversing&#10;changes made to ed73be7aff257dcc4954c50942fc98f9d3ba75ec." />
+    <option name="LAST_COMMIT_MESSAGE" value="Revert &quot;Merge branch 'develop' into bugfix/50-sidebar-routing-issue&quot;&#10;&#10;This reverts commit 5b85e683b21d2832a4fce750bb852f3951b66c49, reversing&#10;changes made to ed73be7aff257dcc4954c50942fc98f9d3ba75ec." />
+  </component>
+</project>
