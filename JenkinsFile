@@ -53,7 +53,7 @@ pipeline {
                     sh 'cp nginx.conf nginx/default.conf'
 
                     // Build and push the Nginx Docker image with the custom configuration
-                    def nginxImage = docker.build('kjk7212/nginx', '--file Dockerfile.nginx .')
+                    def nginxImage = docker.build('kjk7212/release_note_front', '--file Dockerfile.nginx .')
 
                     docker.withRegistry('https://registry.hub.docker.com/repository/docker/kjk7212/release_note_front/', 'dockerHubPwd') {
                         // nginxImage.tag("${env.BUILD_NUMBER}")
