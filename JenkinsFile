@@ -81,22 +81,16 @@ pipeline {
 
     stage('AgroCD Manifest Update') {
         steps {
-                git credentialsId: 'kjk7212',
-                    url: 'https://github.com/SwaveReleaseNote/argocd-front.git',
-                    branch: 'main'
+                git credentialsId: 'front-github',
+                url: 'https://github.com/SwaveReleaseNote/argocd-front',
+                branch: 'main'
 
                 sh "sed -i 's/# build-version:.*/# build-version: ${currentBuild.number}/' front.yaml"
                 sh "git add front.yaml"
 
-                sh "git commit -m '[UPDATE] front v${currentBuild.number} image versioning'"
-
-                sshagent(credentials: ['git-ssh']) {
-                    sh "git remote set-url origin git@github.com:SwaveReleaseNote/argocd-front.git"
-                    sh "git push -u origin main"
-                }
-
-                // sh "git remote set-url origin https://tomy8964:2536886a*@github.com/tomy8964/SwaveReleaseNote/argocd-front.git"
-                // sh "git push -u origin main"
+                sh "git commit -m '[UPDATE] v${currentBuild.number} image versioning'"
+                sh "git remote set-url origin https://github.com/SwaveReleaseNote/argocd-front.git"
+                sh "git push -u origin main"
         }
     //     post {
     //         success {
