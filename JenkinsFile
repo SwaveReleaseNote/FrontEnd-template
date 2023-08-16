@@ -1,5 +1,6 @@
 pipeline {
-    agent { docker { image 'node:16-alpine' } }
+    agent any
+    tools { nodejs 'WS' }
 
     stages() {
         stage('git clone') {
@@ -19,7 +20,7 @@ pipeline {
                     sh 'npm run build'
                     script {
                         image = docker.build('hamgeonwook/release-front')
-                        docker.withRegistry('https://registry.hub.docker.com/repository/docker/hamgeonwook/release-front/', 'docker-front-credentials') {
+                        docker.withRegistry('https://registry.hub.docker.com/repository/docker/hamgeonwook/release-front/', 'docker-hub-credentials') {
                             image.push("${env.BUILD_NUMBER}")
                         }
                 }
