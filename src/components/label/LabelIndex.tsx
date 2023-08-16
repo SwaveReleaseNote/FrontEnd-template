@@ -1,3 +1,4 @@
+/*eslint-disable*/
 /**
  * @description 라벨 컴포넌트 : 라벨과 Text를 보여준다
  */
@@ -7,62 +8,91 @@ import updateLabel from '../../assets/img/label/UPDATE.png'
 import deleteLabel from '../../assets/img/label/DELETE.png'
 import stopLabel from '../../assets/img/label/STOP.png'
 import etcLabel from '../../assets/img/label/ETC.png'
+import {useRecoilState} from "recoil";
+import {noteFieldState} from "../../context/atom";
 
-export default function LabelIndex(props: any):JSX.Element {
-    const block = props.NoteFieldBlock;
+interface context {
+    context: string,
+    index: number,
+    tag: string
+}
+interface block {
+    contexts: context[],
+    label: string
+}
+export default function LabelIndex(): JSX.Element {
+    const [noteBlock, setNoteBlocks] = useRecoilState(noteFieldState);
 
-    switch (block.label) {
-        case 'new':
-            return (<div className='my-10'>
+
+    const a = noteBlock.blocks.map((note) => {
+        switch (note.label) {
+            case 'New':
+                return (<div className='my-10'>
                 <span>
                     <img className='my-5 rounded-xl w-1/12 max-w-lg shadow-xl' src={newLabel} />
                 </span>
-                <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
-                    <p>{block.text}</p>
-                </div>
-            </div>)
-        case 'update':
-            return <div className='my-10'>
+                    <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
+                        {note.contexts.map(context => (
+                            <p>{context.context}</p>
+                        ))}
+                    </div>
+                </div>)
+            case 'Update':
+                return (<div className='my-10'>
                 <span>
                     <img className='my-5 rounded-xl w-1/12 max-w-lg shadow-xl' src={updateLabel} />
                 </span>
-                <div className=' break-words w-full text-clip mt-2 px-2 inline-block'>
-                    <p>{block.text}</p>
-
-                </div>
-            </div>
-        case 'delete':
-            return <div className='my-10'>
+                    <div className=' break-words w-full text-clip mt-2 px-2 inline-block'>
+                        {note.contexts.map(context => (
+                            <p>{context.context}</p>
+                        ))}
+                    </div>
+                </div>)
+            case 'Delete':
+                return (
+                    <div className='my-10'>
                 <span>
                     <img className='my-5 rounded-xl w-1/12 max-w-lg shadow-xl' src={deleteLabel} />
                 </span>
-                <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
-                    <p>{block.text}</p>
-                </div>
-            </div>
-        case 'stop':
-            return <div className='my-10'>
+                        <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
+                            {note.contexts.map(context => (
+                                <p>{context.context}</p>
+                            ))}
+                        </div>
+                    </div>
+                )
+            case 'Stop':
+                return (
+                    <div className='my-10'>
                 <span>
                     <img className='my-5 rounded-xl w-1/12 max-w-lg shadow-xl' src={stopLabel} />
                 </span>
-                <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
-                    <p>{block.text}</p>
-                </div>
-            </div>
-        case 'etc':
-            return <div className='my-10'>
+                        <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
+                            {note.contexts.map(context => (
+                                <p>{context.context}</p>
+                            ))}
+                        </div>
+                    </div>
+                )
+            case 'etc':
+                return (
+                    <div className='my-10'>
                 <span>
                     <img className='my-5 rounded-xl w-1/12 max-w-lg shadow-xl' src={etcLabel} />
                 </span>
-                <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
-                    <p>{block.text}</p>
-                </div>
-            </div>
-    }
+                        <div className='break-words w-full text-clip mt-2 px-2 inline-block'>
+                            {note.contexts.map(context => (
+                                <p>{context.context}</p>
+                            ))}
+                        </div>
+                    </div>
+                )
+        }
+    })
     // new, update, delete, stop, etc
     return (
         <div>
-            test
+            {a}
         </div>
     )
 };
