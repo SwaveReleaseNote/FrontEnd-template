@@ -53,7 +53,7 @@ pipeline {
 
                     docker.withRegistry('https://registry.hub.docker.com/repository/docker/kjk7212/release_note_front/', 'dockerHubPwd') {
                         nginxImage.tag("${env.BUILD_NUMBER}")
-                        nginxImage.push()
+                        nginxImage.push("latest")
                     }
                 }
             // post {
@@ -82,7 +82,7 @@ pipeline {
                                         branch: 'main'
 
                                 sh "sed -i 's/# build-version:.*/# build-version: ${env.BUILD_NUMBER}/g' front.yaml"
-                                sh "sed -i \'s/kjk7212/release_note_front.*|kjk7212/release_note_front ${env.BUILD_NUMBER}|g\' front.yaml"
+                                sh "sed -i 's/release_note_front.*/release_note_front ${env.BUILD_NUMBER}/g' front.yaml"
                                 sh "git add front.yaml"
                                 sshagent(credentials: ['git-ssh']) {
                                     sh "git commit -m '[UPDATE] v${env.BUILD_NUMBER} image versioning'"
