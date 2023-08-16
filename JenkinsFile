@@ -22,7 +22,8 @@ pipeline {
                             def image = docker.build('hamgeonwook/release-front', '--file Dockerfile .')
 
                             docker.withRegistry('https://registry.hub.docker.com/repository/docker/hamgeonwook/release-front/', 'docker-ham-credentials') {
-                            image.push("${env.BUILD_NUMBER}")
+                            image.tag("${env.BUILD_NUMBER}")
+                            image.push()
                         }
                 }
             }
@@ -55,6 +56,7 @@ pipeline {
                     def nginxImage = docker.build('hamgeonwook/nginx', '--file Dockerfile.nginx .')
 
                     docker.withRegistry('https://registry.hub.docker.com/repository/docker/hamgeonwook/nginx/', 'docker-ham-credentials') {
+                        nginxImage.tag("${env.BUILD_NUMBER}")
                         nginxImage.push()
                     }
                 }
