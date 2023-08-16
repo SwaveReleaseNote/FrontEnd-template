@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getCookie } from '../views/auth/cookie';
 const emailCookieKey = localStorage.getItem('token') as string;
 const api = axios.create({
-   baseURL: 'http://localhost:8080/api/',
+   baseURL: 'http://back-service:8080/api/',
    headers: {
       Authorization: getCookie(emailCookieKey),
       'Content-Type': 'application/json',

@@ -1,0 +1,133 @@
+pipeline {
+    agent any
+    tools {
+        nodejs "nodeJs"
+    }
+
+    stages() {
+        stage('git clone') {
+            steps() {
+                slackSend(
+                    channel: '#jenkins',
+                    color: '#FFFF00',
+                    message: "STARTED: Job ${env.JOB_NAME}"
+                )
+                git branch: '52-cypress-e2e-test', credentialsId: 'front-github', url: 'https://github.com/SwaveReleaseNote/FrontEnd-template/'
+            }
+        }
+
+        stage('Build Front') {
+            steps {
+                    script {
+                            def image = docker.build('hamgeonwook/release-front', '--file Dockerfile .')
+
+                            docker.withRegistry('https://registry.hub.docker.com/repository/docker/hamgeonwook/release-front/', 'docker-ham-credentials	') {
+                            // image.tag("${env.BUILD_NUMBER}")
+                            image.push()
+                        }
+                }
+            }
+            // post {
+            //     success {
+            //         slackSend(
+            //             channel: '#jenkins',
+            //             color: '#00FF00',
+            //             message: "SUCCESS: Job ${env.JOB_NAME} Build Front"
+            //         )
+            //     }
+            //     failure {
+            //         slackSend(
+            //            channel: '#jenkins',
+            //            color: '#FF0000',
+            //            message: "FAIL: Job ${env.JOB_NAME} Build Front"
+            //         )
+            //     }
+            // }
+        }
+
+        stage('Build Nginx') {
+            steps {
+                script {
+                    // Create the 'nginx' folder and copy 'nginx.conf' to it
+                    sh 'mkdir -p nginx'
+                    sh 'cp nginx.conf nginx/default.conf'
+
+                    // Build and push the Nginx Docker image with the custom configuration
+                    def nginxImage = docker.build('kjk7212/release_note_front', '--file Dockerfile.nginx .')
+
+                    docker.withRegistry('https://registry.hub.docker.com/repository/docker/kjk7212/release_note_front/', 'dockerHubPwd') {
+                        // nginxImage.tag("${env.BUILD_NUMBER}")
+                        nginxImage.push()
+                    }
+                }
+            // post {
+            //     success {
+            //         slackSend(
+            //             channel: '#jenkins',
+            //             color: '#00FF00',
+            //             message: "SUCCESS: Job ${env.JOB_NAME} Build Front"
+            //         )
+            //     }
+            //     failure {
+            //         slackSend(
+            //            channel: '#jenkins',
+            //            color: '#FF0000',
+            //            message: "FAIL: Job ${env.JOB_NAME} Build Front"
+            //         )
+            //     }
+            // }
+            }
+        }
+
+    stage('AgroCD Manifest Update') {
+        steps {
+                git credentialsId: 'kjk7212',
+                url: 'https://github.com/SwaveReleaseNote/argocd-front',
+                branch: 'main'
+
+                sh "sed -i 's/# build-version:.*/# build-version: ${currentBuild.number}/' front.yaml"
+                sh "git add front.yaml"
+
+                sshagent(credentials: ['git-ssh']) {
+                       sh "ssh-agent -v"
+                       sh "git commit -m '[UPDATE] v${currentBuild.number} image versioning'"
+                       sh "git remote set-url origin git@github.com:SwaveReleaseNote/argocd-front.git"
+                       sh "git push -u origin main"
+                }
+        }
+    //     post {
+    //         success {
+    //             slackSend (
+    //                 channel: '#jenkins',
+    //                 color: '#00FF00',
+    //                 message: "SUCCESS: Job ${env.JOB_NAME} AgroCD Manifest Update"
+    //             )
+    //         }
+    //         failure {
+    //             slackSend (
+    //                channel: '#jenkins',
+    //                color: '#FF0000',
+    //                message: "FAIL: Job ${env.JOB_NAME} AgroCD Manifest Update"
+    //             )
+    //         }
+    //     }
+    }
+
+    // post {
+    //     success {
+    //         slackSend(
+    //             channel: '#jenkins',
+    //             color: '#00FF00',
+    //             message: "SUCCESS: Job ${env.JOB_NAME}"
+    //         )
+    //     }
+    //     failure {
+    //         slackSend(
+    //             channel: '#jenkins',
+    //             color: '#FF0000',
+    //             message: "FAIL: Job ${env.JOB_NAME}"
+    //         )
+    //     }
+    // }
+}
+}

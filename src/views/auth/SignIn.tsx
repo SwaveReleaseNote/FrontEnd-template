@@ -25,7 +25,7 @@ interface TokenData {
  }
 const SignIn: React.FC = () => {
    const navigate = useNavigate();
-   const host = 'http://localhost:3000';
+   const host = 'http://back-service:3000';
    const KAKAO_REST_API_KEY = '4646a32b25c060e42407ceb8c13ef14a';
    const KAKAO_REDIRECT_URI = host + '/oauth/callback/kakao';
    const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
@@ -108,7 +108,7 @@ const SignIn: React.FC = () => {
          email: loginData.login_email,
          password: loginData.login_password,
       })
-         .then(response => {
+         .then(async response => {
             // Handle successful response
 
             
@@ -124,7 +124,8 @@ const SignIn: React.FC = () => {
             expirationTime.setTime(expirationTime.getTime() + 30 * 60 * 1000);
             
             client.current = new StompJs.Client({
-               brokerURL: 'ws://localhost:8080/ws-stomp',
+               brokerURL: 'ws://back-service:8080/ws-stomp',
+               // eslint-disable-next-line @typescript-eslint/no-empty-function
                connectHeaders: {
                   Authorization: `Bearer ${String(token)}`,
                },
@@ -159,9 +160,11 @@ const SignIn: React.FC = () => {
                         secure: true,
                      });
                   });
-               navigate('/admin');
             } catch (error) {
                console.error(error);
+            } finally {
+               console.log("get", window.localStorage.getItem('department'));
+               navigate('/admin');
             }
          })
          .catch(error => {
@@ -325,7 +328,7 @@ const SignIn: React.FC = () => {
                   <span className=" text-sm font-medium text-navy-700 dark:text-gray-600">Not registered yet?</span>
                   <a
                      onClick={handleRegisterModalButton}
-                     className="ml-1 text-sm font-medium text-brand-500 hover:text-brand-600 dark:text-white">
+                     className="hover:cursor-pointer ml-1 text-sm font-medium text-brand-500 hover:text-brand-600 dark:text-white">
                      Create an account
                   </a>
                </div>
