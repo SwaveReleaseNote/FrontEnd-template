@@ -5,7 +5,7 @@ let client: StompJs.Client | null = null;
 
 export const createStompClient = (token: string): void => {
   client = new StompJs.Client({
-    brokerURL: 'ws://back-service:8080/ws-stomp',
+    brokerURL: 'ws://61.109.214.110:80/api/alert/ws-stomp',
     connectHeaders: {
       Authorization: token,
     },
