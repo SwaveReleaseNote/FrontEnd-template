@@ -1,9 +1,39 @@
 @import url('https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap');
-
-body{
+.profilecard{
+	width: 200px; 
+	overflow: hidden;
+	background-color: #FFFFFF;
+	border-radius: 15px;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+	text-align: center;
+  margin-left: 25px;
+  margin-top: 30px;
+	-webkit-transition: .1s ease-in-out;
+	transition: .1s ease-in-out;
+}
+	.profilecard:first-of-type{
+		margin-right: 25px;
+	}
+ 
+	.profilecard:hover{
+		margin-top: -10px;
+		box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+	}
+profilecardbody{
    background-color: #f3f3f3;
 }
-
+.profilecardavatar{
+	height: 100px;
+	width: 100px;
+	margin: auto;
+	background-size: cover;
+	background-position: center;
+	background-color: #F1F1F1;
+	border-radius: 100%;
+}
+.profilecard .profilecardavatar{
+		background-image: url("https://webdevtrick.com/wp-content/uploads/shaan.jpg");
+	}
 .wrapper {
   display: flex;
   flex-direction: row;
@@ -18,7 +48,7 @@ body{
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
   text-align: center;
-  color: #fff;
+  color: black;
 }
 
 .wrapper .left img{

@@ -133,24 +133,34 @@ function UserProfileCard(): ReactElement {
    const handleModalClose = (): void => {
       setShowPasswordChangeModal(false);
    };
+   const headingStyles: React.CSSProperties = {
+    marginTop: '45px',
+    marginBottom: '5px',
+    fontSize: '25px',
+    font: "bold",
+    color: '#212121'
+  };
 
    return (
       <>
          <form onSubmit={handleUserUpdateFormSubmit}>
             <div className="wrapper h-full w-full" style={{ paddingTop: '10px' }}>
-               <div className="left">
-                  <h3>Name</h3>
+              <div className='left'>
+               <div className="profilecard">
+                <div className="profilecardavatar"></div>
+                  <h3 style={headingStyles}>Name</h3>
                   <input
                      type="text"
                      name="name"
                      value={userName ?? ''}
                      onChange={handleChangeUserInputChange}
                      style={{
-                        background: '#A5B4FC',
+                        background: '#FAFAFA',
                         textAlign: 'center',
                      }}
                   />
-               </div>
+                  </div>
+                  </div>
                <div className="right">
                   <div className="info">
                      <h3>Information</h3>

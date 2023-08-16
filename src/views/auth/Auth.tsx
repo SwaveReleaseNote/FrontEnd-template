@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-import React, { useRef, useEffect } from 'react';
-import * as StompJs from '@stomp/stompjs';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { setCookie } from './cookie';
+import {createStompClient,activateStompClient} from "./stompClientUtils";
 interface TokenData {
    data: string;
    type: string;
@@ -13,7 +13,6 @@ const Auth = (): JSX.Element => {
 
    /* 로그인 페이지에서 Auth로 넘어오는지 log 확인 */
    const { provider } = useParams<{ provider?: string }>();
-   const client = useRef<StompJs.Client | null>(null);
 
    useEffect(() => {
       (async () => {
@@ -34,8 +33,6 @@ const Auth = (): JSX.Element => {
                `http://61.109.214.110:80/api/user/login-by-oauth?code=${code}&provider=${provider?.toString() ?? ''}`,
             );
             // 인가코드를 백엔드로 보내고 헤더에서 엑세스 토큰 받아옴
-            // const token = res.headers.authorization;
-            // console.log(token);
             const parsedData: TokenData = JSON.parse(res.data.slice(5));
 
             const tokenData = parsedData.data.replace(/"/g, '');
@@ -46,20 +43,8 @@ const Auth = (): JSX.Element => {
             const expirationTime = new Date();
             expirationTime.setTime(expirationTime.getTime() + 30 * 60 * 1000);
 
-            client.current = new StompJs.Client({
-               brokerURL: 'ws://61.109.214.110:80/api/alert/ws-stomp',
-               // eslint-disable-next-line @typescript-eslint/no-empty-function
-               connectHeaders: {
-                  Authorization: token,
-               },
-               onConnect: () => {
-                  console.log('success');
-               },
-               onStompError: error => {
-                  console.error("stomp error: ", error);
-               },
-            });
-            client.current.activate();
+            createStompClient(token);
+            activateStompClient();
             try {
                await axios
                   .get(`http://61.109.214.110:80/api/user`, {
@@ -89,9 +74,10 @@ const Auth = (): JSX.Element => {
             } catch (error) {
                console.error(error);
                navigate('/');
-            } finally {
+            }finally {
                navigate('/admin');
             }
+
          } catch (error) {
             console.error(error);
             navigate('/');

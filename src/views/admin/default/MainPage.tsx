@@ -194,7 +194,7 @@ const MainPage = (): JSX.Element => {
 
      /* department 설정 */
      const [showDepartmentRegisterModal, setShowDepartmentRegisterModal] = React.useState(false);
-     const [department, setDepartment] = React.useState(localStorage.getItem('department'));
+     const [department, setDepartment] = React.useState('department1');
   
      React.useEffect(() => {
         if (localStorage.getItem('department') === 'null') {
@@ -212,22 +212,14 @@ const MainPage = (): JSX.Element => {
         setDepartment(value);
      };
 
-   useEffect(() => {
-      if (localStorage.getItem('department') === 'null') {
-         console.log('showdepartment');
-         setShowDepartmentRegisterModal(true);
-      }
-   }, []);
-
-   const handleClickSaveChangeButton = (): void => {
+     const handleClickSaveChangeButton = (): void => {
       api.patch('/user', {
          department: department,
       })
          .then(response => {
             console.log(response.data); // Process the response as needed
             localStorage.setItem('department', department ?? '');
-            setDepartment(localStorage.getItem('department'));
-            setShowDepartmentRegisterModal(false);
+            setDepartment(localStorage.getItem('department') as string);
          })
          .catch(error => {
             console.error(error);
