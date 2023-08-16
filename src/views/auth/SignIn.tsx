@@ -1,13 +1,13 @@
 import InputField from 'components/fields/InputField';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import * as StompJs from '@stomp/stompjs';
 import './SignIn.css';
 import kakaobutton from 'assets/img/auth/kakao2.png';
 import { setCookie } from './cookie';
 import api from 'context/api';
 import axios from 'axios';
+import {createStompClient,activateStompClient} from "../../views/auth/stompClientUtils";
 
 interface RegisterFormData {
    name: string;
@@ -25,7 +25,7 @@ interface TokenData {
  }
 const SignIn: React.FC = () => {
    const navigate = useNavigate();
-   const host = 'http://back-service:3000';
+   const host = 'http://266e8974276247f4b3cad8498606fafb.kakaoiedge.com:80';
    const KAKAO_REST_API_KEY = '4646a32b25c060e42407ceb8c13ef14a';
    const KAKAO_REDIRECT_URI = host + '/oauth/callback/kakao';
    const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
@@ -46,7 +46,6 @@ const SignIn: React.FC = () => {
       login_email: '',
       login_password: '',
    });
-   const client = useRef<StompJs.Client | null>(null);
 
    /* 회원가입 모달창 띄우기 */
    const handleRegisterModalButton = (): void => {
@@ -123,20 +122,11 @@ const SignIn: React.FC = () => {
             const expirationTime = new Date();
             expirationTime.setTime(expirationTime.getTime() + 30 * 60 * 1000);
             
-            client.current = new StompJs.Client({
-               brokerURL: 'ws://back-service:8080/ws-stomp',
-               // eslint-disable-next-line @typescript-eslint/no-empty-function
-               connectHeaders: {
-                  Authorization: `Bearer ${String(token)}`,
-               },
-               onConnect: () => {
-                  console.log('success');
-               },
-            });
-            client.current.activate();
+            createStompClient(`Bearer ${String(token)}`);
+            activateStompClient();
             try {
-               void axios
-                  .get(`http://localhost:8080/api/user`, {
+               await axios
+                  .get(`http://back-service:8080/api/user`, {
                      headers: {
                         Authorization: `Bearer ${String(token)}`,
                      },
@@ -149,6 +139,7 @@ const SignIn: React.FC = () => {
                      window.localStorage.setItem('name', response.data.username);
                      window.localStorage.setItem('email', response.data.email);
                      window.localStorage.setItem('info', '');
+                     window.localStorage.setItem('user_id',response.data.id);
                      window.localStorage.setItem('department', response.data.department);
                      window.localStorage.setItem('token', `Bearer ${String(token)}`);
                      const emailCookieKey = localStorage.getItem('email') as string;
@@ -166,6 +157,7 @@ const SignIn: React.FC = () => {
                console.log("get", window.localStorage.getItem('department'));
                navigate('/admin');
             }
+
          })
          .catch(error => {
             // Handle error

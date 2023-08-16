@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import NotificationComponent from "./NotificationComponent";
-interface MyData {
-  data: string;
-}
 
 const EventSourceComponent: React.FC = () => {
   const [inputText, setInputText] = useState({
@@ -21,20 +18,19 @@ const EventSourceComponent: React.FC = () => {
 
   useEffect(() => {
     const userId =localStorage.getItem("user_id") as string;
-    const eventSource = new EventSource(`http://localhost:8080/api/sse/emitter/${userId}`);
+    const eventSource = new EventSource(`http://back-service:8080/api/sse/emitter/${userId}`);
 
     eventSource.onmessage = event => {
       const eventData = JSON.parse(event.data);
       console.log('SSE data:', eventData);
-      const jsonData: MyData = JSON.parse(eventData.data);
-      console.log('SSE data:', jsonData.data);
-      const token = eventData.data.replace(/"/g, '');
-      console.log(token);
-      if(token!=="Token already distributed" && eventData.type!==''){
-      const parsedData = jsonData.data;
+      // console.log('SSE data:', jsonData.data);
+      // const type = eventData.data.replace(/"/g, '');
+      console.log(eventData.type);
+      if(eventData.type==='ALARM'){
+      // const parsedData = jsonData.data;
       onChange({
-        "title": eventData.type,
-        "message": parsedData,
+        "title": "새로운 알림이 왔습니다!!!",
+        "message": eventData.data,
       });
     }
     };
