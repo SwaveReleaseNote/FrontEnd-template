@@ -18,11 +18,9 @@ pipeline {
 
         stage('Build Front') {
             steps {
-                    sh 'npm install'
-                    sh 'npm run build'
                     script {
                             def image = docker.build('hamgeonwook/release-front', '--file Dockerfile .')
-                            
+
                             docker.withRegistry('https://registry.hub.docker.com/repository/docker/hamgeonwook/release-front/', 'docker-hub-credentials') {
                             image.push("${env.BUILD_NUMBER}")
                         }
