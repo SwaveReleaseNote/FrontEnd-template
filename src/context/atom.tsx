@@ -87,10 +87,9 @@ export const noteIdState = atom({
 export const filterDropdownOptions = atom({
     key: "filterDropdownOptions",
     default: [
-        'new',
-        'update',
-        'stop',
-        'delete',
-        'etc'
+        'H1',
+        'H2',
+        'H3',
+        'p'
     ]
 });
