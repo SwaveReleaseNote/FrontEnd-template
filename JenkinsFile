@@ -12,7 +12,7 @@ pipeline {
                     color: '#FFFF00',
                     message: "STARTED: Job ${env.JOB_NAME}"
                 )
-                git branch: 'main', credentialsId: 'front-github', url: 'https://github.com/SwaveReleaseNote/FrontEnd-template/'
+                git branch: 'develop', credentialsId: 'front-github', url: 'https://github.com/SwaveReleaseNote/FrontEnd-template/'
             }
         }
 
