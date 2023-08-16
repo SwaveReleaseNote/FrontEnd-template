@@ -52,7 +52,7 @@
     "pretty": "prettier --write \"./**/*.{js,jsx,json}\"",
     "cypress open": "cypress open",
     "cypress run": "cypress run",
-    "e2e": "start-server-and-test start http://localhost:3000 cypress:run"
+    "e2e": "start-server-and-test start http://61.109.216.132:80 cypress:run"
   },
   "eslintConfig": {
     "extends": [

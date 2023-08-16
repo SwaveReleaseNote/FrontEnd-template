@@ -117,7 +117,7 @@ export default function Admin(props: Record<string, any>): JSX.Element {
                   console.log(localStorage.getItem('email'));
    
                   client.current = new StompJs.Client({
-                     brokerURL: 'ws://localhost:3000/ws-stomp',
+                     brokerURL: 'ws://61.109.216.132:80/ws-stomp',
                      // eslint-disable-next-line @typescript-eslint/no-empty-functi
                      connectHeaders: {
                         Authorization: getCookie(emailCookieKey) ?? '',

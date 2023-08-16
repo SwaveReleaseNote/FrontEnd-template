@@ -124,7 +124,7 @@ const SignIn: React.FC = () => {
             expirationTime.setTime(expirationTime.getTime() + 30 * 60 * 1000);
             
             client.current = new StompJs.Client({
-               brokerURL: 'ws://localhost:3000/ws-stomp',
+               brokerURL: 'ws://61.109.216.132:80/ws-stomp',
                // eslint-disable-next-line @typescript-eslint/no-empty-function
                connectHeaders: {
                   Authorization: `Bearer ${String(token)}`,
@@ -136,7 +136,7 @@ const SignIn: React.FC = () => {
             client.current.activate();
             try {
                void axios
-                  .get(`http://localhost:3000/api/user`, {
+                  .get(`http://61.109.216.132:80/api/user`, {
                      headers: {
                         Authorization: `Bearer ${String(token)}`,
                      },

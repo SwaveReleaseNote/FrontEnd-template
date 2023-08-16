@@ -7,8 +7,6 @@ import { useQueryClient } from 'react-query';
 const Logout = (): ReactElement => {
    const queryClient = useQueryClient();
    const navigate = useNavigate();
-   // Logout으로 넘어오는지 log 확인
-   console.log('sdafafsadfsads');
    const client = useRef<StompJs.Client | null>(null);
 
    const disconnect = async (): Promise<void> => {
