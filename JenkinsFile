@@ -89,6 +89,7 @@ pipeline {
                 sh "git add front.yaml"
 
                 sshagent(credentials: ['git-ssh']) {
+                       sh "ssh-agent -v"
                        sh "git commit -m '[UPDATE] v${currentBuild.number} image versioning'"
                        sh "git remote set-url origin git@github.com:SwaveReleaseNote/argocd-front.git"
                        sh "git push -u origin main"
