@@ -99,7 +99,7 @@ export default function Admin(props: Record<string, any>): JSX.Element {
                   console.log(localStorage.getItem('email'));
    
                   client.current = new StompJs.Client({
-                     brokerURL: 'ws://localhost:8080/ws-stomp',
+                     brokerURL: 'ws://back-service:8080/ws-stomp',
                      // eslint-disable-next-line @typescript-eslint/no-empty-function
                      connectHeaders: {
                         Authorization: localStorage.getItem('token') ?? '',

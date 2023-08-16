@@ -2,7 +2,7 @@ describe('Email User Test', () => {
    /* ==== Test Created with Cypress Studio ==== */
    it('E-mail 로그인 테스트', function () {
       /* ==== Generated with Cypress Studio ==== */
-      cy.visit('localhost:3000');
+      cy.visit('back-service:3000');
       cy.get('#email').clear('g');
       cy.get('#email').type('gkarjsdnr@xptmxm.com');
       cy.get('#password').clear('a');
@@ -25,7 +25,7 @@ describe('Email User Test', () => {
    /* ==== Test Created with Cypress Studio ==== */
    it('회원정보(비밀번호, 부서) 수정 테스트', function () {
       /* ==== Generated with Cypress Studio ==== */
-      cy.visit('localhost:3000');
+      cy.visit('back-service:3000');
       cy.get('#email').clear('gkarjsdnr@xptmxm.com');
       cy.get('#email').type('gkarjsdnr@xptmxm.com');
       cy.get('#password').clear('ad');
@@ -67,7 +67,7 @@ describe('Email User Test', () => {
 
    /* ==== Test Created with Cypress Studio ==== */
    it('프로젝트 생성 테스트', function () {
-      cy.visit('localhost:3000');
+      cy.visit('back-service:3000');
       /* ==== Generated with Cypress Studio ==== */
       cy.get('#email').clear('gkarjsdnr@xptmxm.com');
       cy.get('#email').type('gkarjsdnr@xptmxm.com');
@@ -91,7 +91,7 @@ describe('Email User Test', () => {
    /* ==== Test Created with Cypress Studio ==== */
    it('프로젝트 관리', function () {
       /* ==== Generated with Cypress Studio ==== */
-      cy.visit('localhost:3000');
+      cy.visit('back-service:3000');
       cy.get('#email').clear('gkarjsdnr@xptmxm.com');
       cy.get('#email').type('gkarjsdnr@xptmxm.com');
       cy.get('#password').clear('a');
@@ -110,7 +110,7 @@ describe('Email User Test', () => {
       cy.get(':nth-child(1) > .flex > .dark\\:bg-gray-800').type('이');
       cy.get(':nth-child(5) > .ml-40').should('have.text', '추천하는 팀원이승섭+');
       cy.get('.dark\\:hover\\:bg-navy-300').click();
-      cy.visit('http://localhost:3000/admin/default');
+      cy.visit('http://back-service:3000/admin/default');
       cy.get('.mt-8 > .font-normal').click();
       cy.get('[href="/admin/default"] > .relative > .my-\\[3px\\] > div > .leading-1').click();
       cy.get('.bottom-\\[1\\%\\] > .text-xl').click();

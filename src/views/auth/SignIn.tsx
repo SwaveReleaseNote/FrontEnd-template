@@ -21,7 +21,7 @@ interface LoginFormData {
 
 const SignIn: React.FC = () => {
    const navigate = useNavigate();
-   const host = 'http://localhost:3000';
+   const host = 'http://back-service:3000';
    const KAKAO_REST_API_KEY = '4646a32b25c060e42407ceb8c13ef14a';
    const KAKAO_REDIRECT_URI = host + '/oauth/callback/kakao';
    const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
@@ -124,7 +124,7 @@ const SignIn: React.FC = () => {
             });
             window.localStorage.setItem('token', `Bearer ${String(token)}`);
             client.current = new StompJs.Client({
-               brokerURL: 'ws://localhost:8080/ws-stomp',
+               brokerURL: 'ws://back-service:8080/ws-stomp',
                // eslint-disable-next-line @typescript-eslint/no-empty-function
                connectHeaders: {
                   Authorization: token,
