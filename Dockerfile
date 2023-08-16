@@ -1,14 +1,14 @@
 # 1. Using the node image as the base image
-FROM node:16-alpine
-
-# 2. Install pnpm globally (you can remove this step if you already installed pnpm locally)
-RUN npm install -g pnpm
+FROM node:16-alpine as build
 
 # 3. Set the working directory inside the container
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # 4. Copy the package.json and package-lock.json (or pnpm-lock.yaml) to the working directory
 COPY package*.json ./
+
+# 2. Install pnpm globally (you can remove this step if you already installed pnpm locally)
+RUN npm install -g pnpm
 
 # 5. Install dependencies using pnpm
 RUN pnpm install
@@ -19,8 +19,20 @@ COPY . .
 # 7. Build your TypeScript code
 RUN pnpm build
 
-# 8. Expose the port your application is listening on (if applicable)
+# Use the official Nginx base image
+FROM nginx:latest
+
+# 이전 빌드 단계에서 빌드한 결과물을 /usr/share/nginx/html 으로 복사한다.
+COPY --from=build /app/build /usr/share/nginx/html
+
+# Remove the default Nginx configuration
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Copy your custom Nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/
+
+# Expose the port Nginx will listen on
 EXPOSE 3000
 
-# 9. Set the command to run your application
-CMD ["pnpm", "start"]
+# Start Nginx when the container is run
+CMD ["nginx", "-g", "daemon off;"]
