@@ -1,17 +1,13 @@
-/*eslint-disable*/
 import React, { useRef} from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navbar from 'components/navbar';
 import Sidebar from 'components/sidebar';
 import Footer from 'components/footer/Footer';
 import routes from 'routes';
-import axios from 'axios';
 import ProjectDashboard from 'views/admin/default/pages/ProjectDashboard';
 import * as StompJs from '@stomp/stompjs';
 import { getCookie } from '../../views/auth/cookie';
-import {useRecoilValue} from "recoil";
-import {noteFieldState} from "../../context/atom";
-import ReleaseNote from "../../views/admin/marketplace";
+import api from 'context/api';
 
 export default function Admin(props: Record<string, any>): JSX.Element {
    const { ...rest } = props;
@@ -61,17 +57,11 @@ export default function Admin(props: Record<string, any>): JSX.Element {
    };
 
    const getRoutes = (routes: RoutesType[]): any => {
-      const note = useRecoilValue(noteFieldState)
-
       return routes.map((prop, key) => {
          if (prop.layout === '/admin') {
             if (prop.path === 'dashboard/:projectId/:role') {
                return <Route path={`/${prop.path}`} element={<ProjectDashboard />} key={key} />;
-            }
-            else if (prop.path === "release-note") {
-               return <Route path={`/${prop.path}`+"/"+note.releaseNoteId} element={<ReleaseNote />}/>
-            }
-            else {
+            } else {
                return <Route path={`/${prop.path}`} element={prop.component} key={key} />;
             }
          } else {
@@ -79,6 +69,7 @@ export default function Admin(props: Record<string, any>): JSX.Element {
          }
       });
    };
+
 
    React.useLayoutEffect(() => {
       // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
@@ -94,11 +85,7 @@ export default function Admin(props: Record<string, any>): JSX.Element {
             // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
             async function fetchData() {
                try {
-                  const response = await axios.get(`http://localhost:8080/api/user`, {
-                     headers: {
-                        Authorization: getCookie('id'),
-                     },
-                  });
+                  const response = await api.get(`/user`)
    
                   // api의 응답을 제대로 받은 경우
                   /* axios 값 log 확인 */

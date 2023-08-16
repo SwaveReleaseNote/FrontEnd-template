@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import NotificationPopup from '../components/NotificationPopup';
@@ -64,9 +63,13 @@ const ManageProject: React.FC = () => {
       try {
          const response = await api.get('users');
          return response.data;
-      } catch (error) {
+      } catch (error: any) {
          console.error('Error fetching members:', error);
-         console.log('Mocking');
+         let status = error.code;
+         if (error.response?.status != null) {
+            status = error.response.status;
+         }
+         navigate(`../error?status=${status as string}`);
          return mockFetchUserRequest();
       }
    };
@@ -75,9 +78,13 @@ const ManageProject: React.FC = () => {
       try {
          const response = await api.get(`project/${projectId}/manage`);
          return response.data;
-      } catch (error) {
+      } catch (error: any) {
          console.error('Error fetching projectInfo:', error);
-         console.log('Mocking');
+         let status = error.code;
+         if (error.response?.status != null) {
+            status = error.response.status;
+         }
+         navigate(`../error?status=${status as string}`);
          return mockFetchProjectInfo();
       }
    };

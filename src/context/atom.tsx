@@ -77,9 +77,10 @@ export const sideBarState = atom({
   },
 });
 
-export const noteIdState = atom({
-    key: "noteIdState",
+export const noteBlockState = atom({
+    key: "noteBlockState",
     default: {
-        releaseNoteId: 0
+        id: 0,
+        content: '',
     }
 })
