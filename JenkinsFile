@@ -88,12 +88,12 @@ pipeline {
                 sh "sed -i 's/# build-version:.*/# build-version: ${currentBuild.number}/' front.yaml"
                 sh "git add front.yaml"
 
-                sshagent(credentials: ['git-ssh']) {
-                       sh "ssh-agent -v"
-                       sh "git commit -m '[UPDATE] v${currentBuild.number} image versioning'"
-                       sh "git remote set-url origin git@github.com:SwaveReleaseNote/argocd-front.git"
-                       sh "git push -u origin main"
-                }
+                sh "git config --global user.email 'tomy8964@naver.com'"
+                sh "git config --global user.name 'tomy8964'"
+
+                sh "git commit -m '[UPDATE] v${currentBuild.number} image versioning'"
+                sh "git remote set-url origin https://github.com/SwaveReleaseNote/FrontEnd-template.git"
+                sh "git push -u origin main"
         }
     //     post {
     //         success {
