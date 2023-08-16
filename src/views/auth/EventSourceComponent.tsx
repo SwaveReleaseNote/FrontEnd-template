@@ -18,7 +18,7 @@ const EventSourceComponent: React.FC = () => {
 
   useEffect(() => {
     const userId =localStorage.getItem("user_id") as string;
-    const eventSource = new EventSource(`http://61.109.214.110:80/api/alert/sse/emitter/${userId}`);
+    const eventSource = new EventSource(`http://61.109.214.110:80/api/sse/emitter/${userId}`);
 
 
     eventSource.onmessage = event => {
