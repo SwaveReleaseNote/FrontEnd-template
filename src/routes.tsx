@@ -1,9 +1,8 @@
 import React from "react";
 
 // Admin Imports
-import MainDashboard from "views/admin/default";
+import MainDashboard from "views/admin/default/MainPage";
 import ReleaseNote from "views/admin/marketplace";
-import DataTables from "views/admin/tables";
 import CreateReleaseNote from "views/admin/note";
 
 // Auth Imports
@@ -13,7 +12,6 @@ import SignIn from "views/auth/SignIn";
 import {
   MdHome,
   MdOutlineShoppingCart,
-  MdBarChart,
   MdPerson,
   MdLock,
 } from "react-icons/md";
@@ -58,31 +56,17 @@ const routes = [
   {
     name: "Project Dashboard",
     layout: "/admin",
-    path: "dashboard", 
+    path: "dashboard",
     icon: <MdHome className="h-6 w-6" />,
-    component: <ProjectDashboard />, 
+    component: <ProjectDashboard />,
   },
   {
     name: "Project Manage",
     layout: "/admin",
-    path: "project/manage/*", 
+    path: "project/manage/*",
     icon: <MdHome className="h-6 w-6" />,
-    component: <ManageProject />, 
+    component: <ManageProject />,
   },
-  {
-    name: "Data Tables",
-    layout: "/admin",
-    icon: <MdBarChart className="h-6 w-6" />,
-    path: "data-tables",
-    component: <DataTables />,
-  },
-  // {
-  //   name: "Profile",
-  //   layout: "/admin",
-  //   path: "profile",
-  //   icon: <MdPerson className="h-6 w-6" />,
-  //   component: <Profile />,
-  // },
   {
     name: "My Page",
     layout: "/admin",
@@ -96,13 +80,6 @@ const routes = [
     path: "sign-in",
     icon: <MdLock className="h-6 w-6" />,
     component: <SignIn />,
-  },
-  {
-    name: "NoteFiled Test",
-    layout: "/admin",
-    path: "release-note",
-    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
-    component: <ReleaseNote />,
   },
   {
     name: "Create Release Note",

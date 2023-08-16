@@ -1,42 +1,38 @@
-import React, { useEffect, type ReactElement } from 'react';
-import axios from 'axios';
-import { useNavigate } from "react-router-dom";
-import { getCookie } from "views/auth/cookie";
+import React, { useRef, useEffect, type ReactElement } from 'react';
+import type * as StompJs from '@stomp/stompjs';
+import { useNavigate } from 'react-router-dom';
+import { removeCookie } from './cookie';
+import { useQueryClient } from 'react-query';
 
 const Logout = (): ReactElement => {
-  const navigate = useNavigate();
-  // Logout으로 넘어오는지 log 확인
-  console.log("sdafafsadfsads");
+   const queryClient = useQueryClient();
+   const navigate = useNavigate();
+   // Logout으로 넘어오는지 log 확인
+   console.log('sdafafsadfsads');
+   const client = useRef<StompJs.Client | null>(null);
 
-  useEffect(() => {
-    try {
-      axios
-        .patch(
-          "http://localhost:8080/api/user/status",
-          {
-            loginState: false,
-          },
-          {
-            headers: {
-              Authorization: getCookie("id"),
-            },
-          }
-        )
-        .then((response) => {
-          console.log(response.data); // Process the response as needed
-        })
-        .catch((error) => {
-          console.error(error);
-          // Handle error cases here
-        });
-        window.localStorage.clear();
-        navigate("/auth/sign-in")
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
+   const disconnect = (): void => {
+      console.log('disconnect');
+      if (client.current == null || !client.current.connected) return;
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      client.current.deactivate();
+   };
 
-  return <></>; // Placeholder return statement as the component doesn't render anything
+   useEffect(() => {
+      try {
+         removeCookie('id',{path: '/'});
+         disconnect();
+         window.localStorage.clear();
+
+         navigate('/auth/sign-in');
+      } catch (error) {
+         console.error(error);
+      } finally {
+         queryClient.clear();
+      }
+   }, []);
+
+   return <></>; // Placeholder return statement as the component doesn't render anything
 };
 
 export default Logout;

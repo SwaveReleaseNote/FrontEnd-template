@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './css.css';
+import './scrollbar.css';
 
 import { FiSearch } from 'react-icons/fi';
 import LoadingComponent from './LoadingComponent ';
@@ -10,7 +10,9 @@ import Delete from 'assets/img/label/DELETE.png';
 import Update from 'assets/img/label/UPDATE.png';
 import Stop from 'assets/img/label/STOP.png';
 import Etc from 'assets/img/label/ETC.png';
+
 import api from 'context/api';
+import { useQuery } from 'react-query';
 
 interface Props {
    searchRelease: {
@@ -28,11 +30,11 @@ interface ReleaseList {
 
 const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
    const navigate = useNavigate();
-   const [releaseList, setReleaseList] = useState<ReleaseList[]>([]);
-   const [isLoading, setIsLoading] = useState(true);
    const [searchTerm, setSearchTerm] = useState('');
-
-   const handleChangeSearchInput = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+   const [filteredReleaseList, setFilteredReleaseList] = useState<ReleaseList[]>([]);
+   const [isLoading, setIsLoading] = useState(true);
+   /* 릴리즈 노트 검색 했을 때 다른 페이지로 넘어갈지? 위의 글로버 바와 혼동 생길 수 있음
+   const handleKeyDownSearchInput = (event: React.KeyboardEvent<HTMLInputElement>): void => {
       if (event.key === 'Enter') {
          navigate('/admin/release/searchResult', {
             state: {
@@ -42,9 +44,11 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
          setSearchTerm('');
       }
    };
+   */
 
-   const handleKeyDownSearchInput = (event: React.ChangeEvent<HTMLInputElement>): void => {
+   const handleChangeSearchInput = (event: React.ChangeEvent<HTMLInputElement>): void => {
       setSearchTerm(event.target.value);
+      console.log(searchTerm);
    };
 
    const labelToIconMap: Record<string, string> = {
@@ -55,85 +59,95 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
       Etc,
    };
 
-   useEffect(() => {
-      console.log('Release Search Project id:', searchRelease.projectId);
-      const fetchData = async (): Promise<void> => {
-         //
-         try {
-            const response = await api.get(`project/${searchRelease.projectId}/release-note/label/filter`);
-
-            const data: ReleaseList[] = response.data;
-            setReleaseList(data);
-         } catch (error) {
-            console.error('Error fetching release list:', error);
-            console.log('Mocking data');
-
-            function generateRandomVersion(): string {
-               const x = Math.floor(Math.random() * 10);
-               const y = Math.floor(Math.random() * 10);
-               const z = Math.floor(Math.random() * 10);
-               return `${x}.${y}.${z}`;
-            }
-
-            const mockResponse: ReleaseList[] = [
-               {
-                  label: 'Delete',
-                  version: generateRandomVersion(),
-                  releaseNoteId: 1,
-                  context:
-                     '시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.',
-               },
-               {
-                  label: 'Delete',
-                  version: generateRandomVersion(),
-                  releaseNoteId: 2,
-                  context: '시스템 내에서 악성 코드를 삭제했습니다.',
-               },
-               {
-                  label: 'Delete',
-                  version: generateRandomVersion(),
-                  releaseNoteId: 3,
-                  context: '시스템 내에서 악성 코드를 삭제했습니다.',
-               },
-               {
-                  label: 'Delete',
-                  version: generateRandomVersion(),
-                  releaseNoteId: 4,
-                  context: '시스템 내에서 악성 코드를 삭제했습니다.',
-               },
-               {
-                  label: 'Delete',
-                  version: generateRandomVersion(),
-                  releaseNoteId: 5,
-                  context: '시스템 내에서 악성 코드를 삭제했습니다.',
-               },
-               {
-                  label: 'Delete',
-                  version: generateRandomVersion(),
-                  releaseNoteId: 6,
-                  context: '시스템 내에서 악성 코드를 삭제했습니다.',
-               },
-               {
-                  label: 'Delete',
-                  version: generateRandomVersion(),
-                  releaseNoteId: 7,
-                  context: '시스템 내에서 악성 코드를 삭제했습니다.',
-               },
-            ];
-
-            setReleaseList(mockResponse);
-         } finally {
-            setIsLoading(false); // Set loading state to false after fetching
+   async function fetchData(): Promise<ReleaseList[]> {
+      try {
+         const response = await api.get(`project/${searchRelease.projectId}/release-note/label/filter`);
+         return response.data;
+      } catch (error: any) {
+         console.error('Error fetching release list:', error);
+         let status = error.code;
+         if (error.response?.status != null) {
+            status = error.response.status;
          }
-      };
+         navigate(`../error?status=${status as string}`);
+         return mockFetchReleaseList();
+      }
+   }
 
-      fetchData().catch(error => {
-         console.error('error fetch data', error);
-      });
-   }, [searchRelease]);
+   function filterReleaseNotes(releaseNotes: ReleaseList[], searchTerm: string, label: string): ReleaseList[] {
+      console.log("releaseNotes", releaseNotes[0].context[0]);
+      const filteredNotes = releaseNotes.filter(release => release.label === label);
 
-   // Filter the releaseList based on the label value
-   const filteredReleaseList = releaseList.filter(release => release.label === searchRelease.label);
+      return filteredNotes?.filter(release => release.context[0].toLowerCase().includes(searchTerm.toLowerCase()));
+   }
+
+   const releaseList = useQuery<ReleaseList[]>(['searchRelease', searchRelease.projectId], fetchData);
+
+   useEffect(() => {
+      if (releaseList.isSuccess) {
+         // Filter the releaseList based on the label value
+         const filteredNotes = filterReleaseNotes(releaseList.data, searchTerm, searchRelease.label);
+         setFilteredReleaseList(filteredNotes);
+         setIsLoading(false);
+      }
+   }, [releaseList.isSuccess, isLoading, searchRelease.label, searchTerm]);
+
+   const mockFetchReleaseList = (): ReleaseList[] => {
+      function generateRandomVersion(): string {
+         const x = Math.floor(Math.random() * 10);
+         const y = Math.floor(Math.random() * 10);
+         const z = Math.floor(Math.random() * 10);
+         return `${x}.${y}.${z}`;
+      }
+      // Simulate API response with mock data
+      const mockResponse: ReleaseList[] = [
+         {
+            label: 'Delete',
+            version: generateRandomVersion(),
+            releaseNoteId: 1,
+            context:
+               '시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.',
+         },
+         {
+            label: 'Delete',
+            version: generateRandomVersion(),
+            releaseNoteId: 2,
+            context: '시스템 내에서 악성 코드를 삭제했습니다.',
+         },
+         {
+            label: 'Delete',
+            version: generateRandomVersion(),
+            releaseNoteId: 3,
+            context: '시스템 내에서 악성 코드를 삭제했습니다.',
+         },
+         {
+            label: 'Delete',
+            version: generateRandomVersion(),
+            releaseNoteId: 4,
+            context: '시스템 내에서 악성 코드를 삭제했습니다.',
+         },
+         {
+            label: 'Delete',
+            version: generateRandomVersion(),
+            releaseNoteId: 5,
+            context: '시스템 내에서 악성 코드를 삭제했습니다.',
+         },
+         {
+            label: 'Delete',
+            version: generateRandomVersion(),
+            releaseNoteId: 6,
+            context: '시스템 내에서 악성 코드를 삭제했습니다.',
+         },
+         {
+            label: 'Delete',
+            version: generateRandomVersion(),
+            releaseNoteId: 7,
+            context: '시스템 내에서 악성 코드를 삭제했습니다.',
+         },
+      ];
+
+      return mockResponse;
+   };
 
    function handleClickReleaseNote(releaseNoteId: number): void {
       // 추후 프론트 릴리즈 노트 보여주는 곳으로 맵핑
@@ -146,14 +160,14 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
    return (
       <div
          className={`!z-5 relative my-[5px] flex h-full w-full flex-col rounded-2xl bg-white bg-clip-border px-2 pb-6 pt-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none`}>
-         <div className="flex w-full items-center rounded-full bg-lightPrimary text-navy-700 dark:bg-navy-900 dark:text-white">
+         <div className="flex h-[5vh] w-full items-center rounded-full bg-lightPrimary text-navy-700 dark:bg-navy-900 dark:text-white">
             <p className="pl-3 pr-2 text-xl">
                <FiSearch className="h-4 w-4 text-gray-400 dark:text-white" />
             </p>
             <input
                value={searchTerm}
-               onChange={handleKeyDownSearchInput}
-               onKeyDown={handleChangeSearchInput}
+               onChange={handleChangeSearchInput}
+               // onKeyDown={handleKeyDownSearchInput}
                type="text"
                placeholder="릴리즈 노트 검색"
                className="block h-full w-full rounded-3xl bg-lightPrimary text-sm text-navy-700 outline-none placeholder:!text-gray-400 dark:bg-navy-900 dark:text-white dark:placeholder:!text-white"
@@ -171,7 +185,7 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
          {isLoading ? (
             <LoadingComponent fontSize="m" />
          ) : (
-            <div className="h-[70vh] overflow-auto">
+            <div className="h-[70vh] overflow-y-auto overflow-x-hidden">
                <table>
                   <tbody>
                      {filteredReleaseList.length === 0 ? (
@@ -182,7 +196,9 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
                                  alt={searchRelease.label}
                                  className="h-[5vh] w-[10vh] rounded-xl"
                               />
-                              <p className="mt-3 pl-3">작성된 릴리즈 노트가 없습니다.</p>
+                              <div className="mt-2 text-black-400 flex h-full w-full items-center justify-center gap-10 text-xl font-bold dark:text-white">
+                                 검색된 릴리즈노트가 없습니다!!👻
+                              </div>
                            </td>
                         </tr>
                      ) : (
@@ -202,7 +218,9 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
                                        className="mb-1 mt-1 h-[5vh] w-[10vh] rounded-xl"
                                     />
                                  </div>
-                                 <div className="h-[6vh] overflow-hidden text-sm">{release.context}</div>
+                                 <div className="h-[6vh] w-[30vh] overflow-hidden overflow-ellipsis whitespace-nowrap text-sm text-gray-800 dark:text-white">
+                                    {release.context}
+                                 </div>
                               </td>
                            </tr>
                         ))

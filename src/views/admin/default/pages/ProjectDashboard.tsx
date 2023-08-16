@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import PieChartCard from '../components/PieChartCard2';
 import MemberStatusCard from '../components/MemberStatusCard';
 import RecentComment from '../components/RecentComment';
 import SearchRelease from '../components/SearchRelease';
-
+import { useQuery } from 'react-query';
 import api from 'context/api';
 
 enum UserRole {
    Subscriber = 'Subscriber',
    Developer = 'Developer',
    Manager = 'Manager',
+   None = 'None',
 }
 
 // 프론트에서 역할 이름을 주지 말고
@@ -21,35 +22,44 @@ const ProjectDashboard: React.FC = () => {
    const navigate = useNavigate();
    const location = useLocation();
    const searchParams = new URLSearchParams(location.search);
-   const projectId: string | null = searchParams.get("projectId");
-   const role = searchParams.get('role');
+   const projectId: string | null = searchParams.get('projectId');
    const projectName = searchParams.get('projectName');
-   const [isProjectDeleted, setIsProjectDeleted] = useState(false);
+
+   const fetchUserRole = async (projectId: number): Promise<UserRole> => {
+      try {
+         const response = await api.get(`project/${projectId}/role`);
+         return response.data;
+      } catch (error: any) {
+         console.error('Error fetching user role:', error);
+         let status = error.code;
+         if (error.response?.status != null) {
+            status = error.response.status;
+         }
+         navigate(`../error?status=${status as string}`);
+         return mockFetchUserRole();
+      }
+   };
+
+   const mockFetchUserRole = (): UserRole => {
+      return UserRole.Manager;
+   };
+
+   // Use the useQuery hook to fetch data
+   const checkUserRoleQuery = useQuery(
+      ['checkRole', projectId],
+      async () => await fetchUserRole(parseInt(projectId ?? '')),
+   );
 
    useEffect(() => {
-      console.log('projectId:', projectId);
-      console.log('role:', role);
+      if (checkUserRoleQuery.isSuccess) {
+         console.log(checkUserRoleQuery.data);
+      }
+   }, [checkUserRoleQuery.isSuccess]);
 
-      const fetchProjectData = async (): Promise<void> => {
-         try {
-            if (projectId !== null) {
-               const response = await api.get(`project/${projectId}`);
-
-               const projectData = response.data;
-               setIsProjectDeleted(projectData.isDeleted);
-               console.log(JSON.stringify(projectData, null, '\t'));
-            }
-         } catch (error) {
-            console.error('Error fetching project dashboard:', error);
-         }
-      };
-
-      fetchProjectData().catch(error => {
-         console.error('Error fetching project dashboard:', error);
-      });
-   }, [projectId, role]);
-
-   const handleClickManageButton = async (event: React.MouseEvent<HTMLButtonElement>, projectId: number):Promise<void> => {
+   const handleClickManageButton = async (
+      event: React.MouseEvent<HTMLButtonElement>,
+      projectId: number,
+   ): Promise<void> => {
       event.stopPropagation();
       navigate(`/admin/project/manage?projectId=${projectId}`);
       console.log('handleClickManageButton');
@@ -57,23 +67,23 @@ const ProjectDashboard: React.FC = () => {
 
    return (
       <>
-         {isProjectDeleted ? (
+         {checkUserRoleQuery.data === UserRole.None ? (
             <div className="mt-40 flex justify-center text-4xl font-bold text-red-600">
-               Oops! This project has been deleted.
+               Oops! 당신은 이 프로젝트를 볼 권한이 없습니다.
             </div>
          ) : (
             <div>
-               <div className="h-100% mt-4 flex w-auto justify-items-center gap-5 rounded-[20px] bg-white bg-clip-border p-6 text-4xl font-bold shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none sm:overflow-x-auto">
-                  <p className="w-[95vh] overflow-hidden">{projectName}</p>
-                  {role === UserRole.Manager && (
+               <div className="h-100% mt-4 flex w-auto justify-end gap-5 rounded-[20px] bg-white bg-clip-border p-6 text-4xl font-bold shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none sm:overflow-x-auto">
+                  <p className="w-[110vh] overflow-hidden h-[6vh]">{projectName}</p>
+                  {checkUserRoleQuery.data === UserRole.Manager && (
                      <button
                         onClick={event => {
                            event.stopPropagation();
                            handleClickManageButton(event, Number(projectId)).catch(error => {
-                            console.error("error click manage button",error);
+                              console.error('error click manage button', error);
                            });
                         }}
-                        className="text-xl">
+                        className="text-xl w-[30vh]">
                         프로젝트 관리⚙️
                      </button>
                   )}
@@ -82,28 +92,28 @@ const ProjectDashboard: React.FC = () => {
                   <div className="col-span-1">
                      <MemberStatusCard
                         projectId={{
-                           id: parseInt(projectId ?? ""),
+                           id: parseInt(projectId ?? ''),
                         }}
                      />
                   </div>
                   <div className="col-span-1">
                      <PieChartCard
                         projectId={{
-                           id: parseInt(projectId ?? ""),
+                           id: parseInt(projectId ?? ''),
                         }}
                      />
                   </div>
                   <div className="row-span-2">
                      <SearchRelease
                         projectId={{
-                           id: parseInt(projectId ?? ""),
+                           id: parseInt(projectId ?? ''),
                         }}
                      />
                   </div>
                   <div className="col-span-2">
                      <RecentComment
                         projectId={{
-                           id: parseInt(projectId ?? ""),
+                           id: parseInt(projectId ?? ''),
                         }}
                      />
                   </div>

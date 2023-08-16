@@ -18,7 +18,7 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
       if (event.key === 'Enter') {
          navigate('/admin/project/searchResult', {
             state: {
-               searchTerm: searchTerm, // Removed the object wrapping from searchTerm
+               searchTerm: searchTerm,
             },
          });
          setSearchTerm('');
@@ -29,8 +29,9 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
       setSearchTerm(event.target.value);
    };
 
+
    return (
-      <nav className="sticky top-4 z-40 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/10 p-2 backdrop-blur-xl dark:bg-[#0b14374d]">
+      <nav className="mb-5 sticky top-4 z-40 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/10 p-2 backdrop-blur-xl dark:bg-[#0b14374d]">
          <div className="ml-[6px]">
             <div className="h-6 w-[224px] pt-1">
                <a
@@ -198,17 +199,26 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
                   <div className="mt-3 h-px w-full bg-gray-200 dark:bg-white/20 " />
 
                   <div className="ml-4 mt-3 flex flex-col">
-                     <a href="/admin/mypage" className="text-sm text-gray-800 dark:text-white hover:dark:text-white">
+                     <div
+                        onClick={() => {
+                           navigate('/admin/MyPage');
+                        }}
+                        className="hover:cursor-pointer text-sm text-gray-800 dark:text-white hover:dark:text-white">
                         My Page
-                     </a>
-                     <a href="/user/logout" className="mt-3 text-sm font-medium text-red-500 hover:text-red-500">
+                     </div>
+                     <div
+                        onClick={() => {
+                           navigate('/user/logout');
+                        }}
+                        className="hover:cursor-pointer mt-3 text-sm font-medium text-red-500 hover:text-red-500">
                         Log Out
-                     </a>
+                     </div>
                   </div>
                </div>
             </Dropdown>
          </div>
       </nav>
+      
    );
 };
 

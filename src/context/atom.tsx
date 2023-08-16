@@ -3,22 +3,35 @@ import { atom } from 'recoil'
 export const noteFieldState = atom({
     key: "noteFieldState",
     default: {
-        id: 0,
-        version: "",
-        block: [
+        blocks: [
             {
-                id: 0,
-                label: "",
-                text: ""
+                contexts: [
+                    {
+                        context: "",
+                        index: 0,
+                        tag: ""
+                    }
+                ],
+                label: ""
             }
         ],
         comment: [
             {
-                id: 0,
-                writer: "",
-                content: ""
+                context: "",
+                lastModifiedDate:"",
+                name:"",
+                releaseNoteId: 0,
+                version: ""
             }
-        ]
+        ],
+        count: 0,
+        creator: "",
+        lastModified: "",
+        liked: 0,
+        releaseDate: "",
+        releaseNoteId: 0,
+        summary: "",
+        version: ""
     }
 });
 
@@ -33,9 +46,9 @@ export const labelState = atom({
 export const commentState = atom({
     key: "commentState",
     default: [{
-        writer: "",
-        content: "",
-        id: 0
+        id:0,
+        writer:"",
+        content:""
     }]
 })
 
@@ -64,11 +77,10 @@ export const sideBarState = atom({
     },
 });
 
-export const noteBlockState = atom({
-    key: "noteBlockState",
+export const noteIdState = atom({
+    key: "noteIdState",
     default: {
-        id: 0,
-        content: '',
+        releaseNoteId: 0
     }
 });
 

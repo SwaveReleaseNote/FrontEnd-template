@@ -1,8 +1,18 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useQuery, useQueryClient } from 'react-query';
 
 import LoadingComponent from '../components/LoadingComponent ';
 import api from 'context/api';
+import NotificationPopup from '../components/NotificationPopup';
+
+enum UserRole {
+   Subscriber = 'Subscriber',
+   Developer = 'Developer',
+   Manager = 'Manager',
+   None = 'None',
+}
 
 interface TeamMember {
    userId: number;
@@ -29,41 +39,55 @@ interface SearchResult {
 
 const SearchProjectList: React.FC = () => {
    const navigate = useNavigate();
-
-   const [searchResult, setSearchResult] = useState<SearchResult>();
    const [selectedCheckbox, setSelectedCheckbox] = useState('전체');
    const location = useLocation();
-   const searchTerm = location.state.searchTerm.searchTerm;
+   const [searchTerm, setSearchTerm] = useState('');
+   const [showRoleCheck, setShowRoleCheck] = useState(false);
    const [isLoading, setIsLoading] = useState(true);
+   const queryClient = useQueryClient();
 
-   useEffect(() => {
-      const fetchSearchResult = async (): Promise<void> => {
-         try {
-            const response = await api.post('project/search', {
-               keyword: searchTerm,
-            });
+   const fetchSearchResults = async (): Promise<SearchResult> => {
+      try {
+         console.log('setSearchTerm', searchTerm);
+         const response = await api.post('project/search', {
+            keyword: searchTerm,
+         });
 
-            const searchResult = response.data;
-            setSearchResult(searchResult);
-            setIsLoading(false);
-         } catch (error) {
-            console.error('Error fetching search result:', error);
-            mockFetchSearchResult();
-            setIsLoading(false);
+         return response.data;
+      } catch (error: any) {
+         console.error('Error fetching search result:', error);
+         let status = error.code;
+         if (error.response?.status != null) {
+            status = error.response.status;
          }
-      };
+         navigate(`../error?status=${status as string}`);
+         return mockFetchSearchResult();
+      }
+   };
 
-      // Call the async function to fetch search result
-      fetchSearchResult().catch(Error);
-   }, [searchTerm]);
+   const fetchUserRole = async (projectId: number): Promise<UserRole> => {
+      try {
+         const response = await api.get(`project/${projectId}/role`);
+         console.log(JSON.stringify(response.data, null, '\t'));
+         return response.data;
+      } catch (error: any) {
+         console.error('Error fetching user role:', error);
+         let status = error.code;
+         if (error.response?.status != null) {
+            status = error.response.status;
+         }
+         navigate(`../error?status=${status as string}`);
+         return mockFetchUserRole();
+      }
+   };
 
-   useEffect(() => {
-      console.log('selectedCheckbox:', selectedCheckbox);
-   }, [selectedCheckbox]);
+   const mockFetchUserRole = (): UserRole => {
+      return UserRole.None;
+   };
 
-   const mockFetchSearchResult = (): void => {
+   const mockFetchSearchResult = (): SearchResult => {
       // Simulate API response with mock data
-      setSearchResult({
+      const mockResponse: SearchResult = {
          titleSearch: [],
          descriptionSearch: [
             {
@@ -171,20 +195,73 @@ const SearchProjectList: React.FC = () => {
                ],
             },
          ],
-      });
-      console.log('mock fetch search result');
+      };
+
+      return mockResponse;
    };
 
-   const handleClickProjectName = (projectId: number, projectName: string): void => {
-      const queryString = `projectId=${projectId}&role=${encodeURIComponent('Subscriber')}&projectName=${projectName}`;
-      const url = `/admin/dashboard?${queryString}`;
+   // Use the useQuery hook to fetch data
+   const searchResultQuery = useQuery(['searchResults', searchTerm], fetchSearchResults);
 
-      navigate(url);
-      console.log('handleClickProjectCard');
+   useEffect(() => {
+      if (location.state.searchTerm != null) {
+         setSearchTerm(location.state.searchTerm);
+      }
+      if (searchResultQuery.isSuccess) {
+         setIsLoading(false);
+      }
+   }, [searchResultQuery.isSuccess]);
+
+   const handleClickProjectName = async (projectId: number, projectName: string): Promise<void> => {
+      try {
+         const userRoleResponse = await fetchUserRole(projectId);
+         if (userRoleResponse === UserRole.None) {
+            setShowRoleCheck(true);
+         } else {
+            const queryString = `projectId=${projectId}&projectName=${projectName}`;
+            const url = `/admin/dashboard?${queryString}`;
+
+            navigate(url);
+         }
+      } catch (error: any) {
+         console.error('Error fetching user role:', error);
+         let status = error.code;
+         if (error.response?.status != null) {
+            status = error.response.status;
+         }
+         navigate(`../error?status=${status as string}`);
+         alert('Server error. Please try again.');
+      }
    };
 
    const handleCheckboxChange = (value: string): void => {
       setSelectedCheckbox(value);
+   };
+
+   const handleClickYes = async (projectId: number, projectName: string): Promise<void> => {
+      try {
+         console.log("projectId", projectId);
+         console.log("projectName", projectName);
+         const response = await api.post(`project/${projectId}/subscribe`);
+         console.log("response", response);
+         const queryString = `projectId=${projectId}&projectName=${projectName}`;
+         const url = `/admin/dashboard?${queryString}`;
+         await queryClient.refetchQueries('projects');
+         navigate(url);
+      } catch (error: any) {
+         console.error('Error Subscribe project:', error);
+         let status = error.code;
+         if (error.response?.status != null) {
+            status = error.response.status;
+         }
+         navigate(`../error?status=${status as string}`);
+      } finally {
+         setShowRoleCheck(false);
+      }
+   };
+
+   const handleClickNo = (): void => {
+      setShowRoleCheck(false);
    };
 
    const renderProjects = (projects: ProjectInfo[], searchTerm: string, searchType: string): JSX.Element => {
@@ -194,20 +271,29 @@ const SearchProjectList: React.FC = () => {
       };
 
       return (
-         <div className="items-top flex">
-            <div className="text-l flex h-[7vh] w-auto rounded-2xl bg-gray-100 p-3 font-bold dark:!bg-navy-600">
+         <div className="flex">
+            <div className="text-l flex items-center h-[5vh] w-[13vh] justify-center rounded-2xl bg-gray-100 p-3 font-bold dark:!bg-navy-600">
                {searchType}
-               {/* 에 {searchTerm}가 포함된 프로젝트입니다. */}
             </div>
-            <div className="m-3 w-[100vh] rounded-3xl bg-gray-100 p-5 dark:!bg-navy-600">
+            <div className="m-3 w-[100vh] rounded-3xl bg-gray-0 p-5 dark:!bg-navy-600">
                {projects.length > 0 ? (
                   projects.map(project => (
-                     <div className="m-3 rounded-xl bg-gray-100 p-3 dark:!bg-navy-900" key={project.id}>
-                        <h2 className="text-2xl">
+                     <div className="rounded-xl bg-gray-0 p-3 dark:!bg-navy-900" key={project.id}>
+                        {showRoleCheck && (
+                           <NotificationPopup
+                              message="이 프로젝트를 구독하시겠습니까?"
+                              subMessage="이 프로젝트를 볼 권한이 없습니다."
+                              onConfirm={async () => {
+                                 await handleClickYes(project.id, project.name);
+                              }}
+                              onCancel={handleClickNo}
+                           />
+                        )}
+                        <h2 className="hover:underline hover:text-blue-600 text-2xl">
                            {/* 프로젝트 제목: */}
                            <span
                               onClick={() => {
-                                 handleClickProjectName(project.id, project.name);
+                                 void handleClickProjectName(project.id, project.name);
                               }}
                               className="text-blue-600 hover:cursor-pointer dark:text-blue-500"
                               dangerouslySetInnerHTML={{
@@ -215,41 +301,47 @@ const SearchProjectList: React.FC = () => {
                               }}
                            />
                         </h2>
-                        <p>
-                           {/* 프로젝트 개요: */}
-                           <span
-                              dangerouslySetInnerHTML={{
-                                 __html:
-                                    searchType === '개요'
-                                       ? highlightSearchTerm(project.description)
-                                       : project.description,
-                              }}
-                           />
-                        </p>
-                        <p>
-                           관리자:
-                           <span
-                              dangerouslySetInnerHTML={{
-                                 __html:
-                                    searchType === '관리자'
-                                       ? highlightSearchTerm(project.managerName)
-                                       : project.managerName,
-                              }}
-                           />
-                        </p>
-                        <p>
-                           팀원:
-                           {project.teamMembers.map(member => (
+                        <div className="mt-2 flex gap-5 overflow-hidden">
+                           <p className="ml-4 w-[40vh] h-[4vh] overflow-ellipsis">
+                              {/* 프로젝트 개요: */}
                               <span
-                                 className="p-1"
-                                 key={member.userId}
                                  dangerouslySetInnerHTML={{
                                     __html:
-                                       searchType === '개발자' ? highlightSearchTerm(member.username) : member.username,
+                                       searchType === '개요'
+                                          ? highlightSearchTerm(project.description)
+                                          : project.description,
                                  }}
                               />
-                           ))}
-                        </p>
+                           </p>
+                           <p>
+                              관리자:
+                              <span
+                                 className="p-1"
+                                 dangerouslySetInnerHTML={{
+                                    __html:
+                                       searchType === '관리자'
+                                          ? highlightSearchTerm(project.managerName)
+                                          : project.managerName,
+                                 }}
+                              />
+                           </p>
+                           <p>
+                              팀원:
+                              {project.teamMembers.map(member => (
+                                 <span
+                                    className="p-1"
+                                    key={member.userId}
+                                    dangerouslySetInnerHTML={{
+                                       __html:
+                                          searchType === '개발자'
+                                             ? highlightSearchTerm(member.username)
+                                             : member.username,
+                                    }}
+                                 />
+                              ))}
+                           </p>
+                        </div>
+                        <hr className="mt-1"></hr>
                      </div>
                   ))
                ) : (
@@ -263,9 +355,9 @@ const SearchProjectList: React.FC = () => {
    };
 
    return (
-      <div className="!z-5 relative flex flex-col rounded-[20px] bg-white bg-clip-border shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none">
+      <div className="items-center justify-center !z-5 relative flex flex-col rounded-[20px] bg-white bg-clip-border shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none">
          <header className="relative mt-10 flex items-center justify-center pt-4">
-            <div className="mb-10 flex text-3xl font-bold text-navy-700 dark:text-white">
+            <div className="mb-10 flex text-4xl font-bold text-navy-700 dark:text-white">
                {searchTerm}에 대한 검색 결과
             </div>
          </header>
@@ -328,9 +420,10 @@ const SearchProjectList: React.FC = () => {
             </label>
          </div>
          {/* 검색 분류 표시 */}
-         <div className="m-10 flex justify-center rounded-3xl bg-gray-100 pb-5 pt-5 dark:!bg-navy-600">
-            <p className="text-3xl font-bold">{selectedCheckbox}를 선택하셨습니다</p>
+         <div className="w-[60vh] m-10 flex justify-center rounded-3xl bg-gray-100 pb-5 pt-5 dark:!bg-navy-600">
+            <p className="text-xl font-bold">{selectedCheckbox}를 선택하셨습니다</p>
          </div>
+         <div className="bg-gray-500 w-[80%] h-[0.2vh] mb-10"></div>
          {/* 프로젝트 검색 결과 리스트 */}
          <div className="flex justify-center">
             {isLoading ? (
@@ -339,20 +432,27 @@ const SearchProjectList: React.FC = () => {
                <div className="flex justify-center">
                   {selectedCheckbox === '전체' && (
                      <div className="">
-                        <div className="">{renderProjects(searchResult?.titleSearch ?? [], searchTerm, '제목')};</div>
-                        <div>{renderProjects(searchResult?.titleSearch ?? [], searchTerm, '개요')};</div>
-                        <div>{renderProjects(searchResult?.titleSearch ?? [], searchTerm, '관리자')};</div>
-                        <div>{renderProjects(searchResult?.titleSearch ?? [], searchTerm, '개발자')};</div>
+                        <div className="">
+                           {renderProjects(searchResultQuery?.data?.titleSearch ?? [], searchTerm, '제목')}
+                        </div>
+                        <div>
+                           {renderProjects(searchResultQuery?.data?.descriptionSearch ?? [], searchTerm, '개요')}
+                        </div>
+                        <div>{renderProjects(searchResultQuery?.data?.managerSearch ?? [], searchTerm, '관리자')}</div>
+                        <div>
+                           {renderProjects(searchResultQuery?.data?.developerSearch ?? [], searchTerm, '개발자')}
+                        </div>
                      </div>
                   )}
-                  {selectedCheckbox === '제목' && renderProjects(searchResult?.titleSearch ?? [], searchTerm, '제목')};
-                  {selectedCheckbox === '개요' && renderProjects(searchResult?.titleSearch ?? [], searchTerm, '개요')};
+                  {selectedCheckbox === '제목' &&
+                     renderProjects(searchResultQuery?.data?.titleSearch ?? [], searchTerm, '제목')}
+                  {selectedCheckbox === '개요' &&
+                     renderProjects(searchResultQuery?.data?.descriptionSearch ?? [], searchTerm, '개요')}
                   {selectedCheckbox === '관리자' &&
-                     renderProjects(searchResult?.titleSearch ?? [], searchTerm, '관리자')}
-                  ;
+                     renderProjects(searchResultQuery?.data?.managerSearch ?? [], searchTerm, '관리자')}
+
                   {selectedCheckbox === '개발자' &&
-                     renderProjects(searchResult?.titleSearch ?? [], searchTerm, '개발자')}
-                  ;
+                     renderProjects(searchResultQuery?.data?.developerSearch ?? [], searchTerm, '개발자')}
                </div>
             )}
          </div>
