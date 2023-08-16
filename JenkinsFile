@@ -24,7 +24,6 @@ pipeline {
 
                     docker.withRegistry('https://registry.hub.docker.com/repository/docker/kjk7212/release_note_front/', 'dockerHubPwd') {
                         nginxImage.push("${env.BUILD_NUMBER}")
-                        // nginxImage.push("latest")
                     }
                 }
             }
