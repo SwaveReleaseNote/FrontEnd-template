@@ -31,7 +31,7 @@ const Auth = (): JSX.Element => {
          // url의 인가코드
          try {
             const res = await axios.post(
-               `http://61.109.216.132:80/api/user/login-by-oauth?code=${code}&provider=${provider?.toString() ?? ''}`,
+               `http://61.109.214.110:80/api/user/login-by-oauth?code=${code}&provider=${provider?.toString() ?? ''}`,
             );
             // 인가코드를 백엔드로 보내고 헤더에서 엑세스 토큰 받아옴
             // const token = res.headers.authorization;
@@ -47,7 +47,7 @@ const Auth = (): JSX.Element => {
             expirationTime.setTime(expirationTime.getTime() + 30 * 60 * 1000);
 
             client.current = new StompJs.Client({
-               brokerURL: 'ws://61.109.216.132:80/ws-stomp',
+               brokerURL: 'ws://61.109.214.110:80/ws-stomp',
                // eslint-disable-next-line @typescript-eslint/no-empty-function
                connectHeaders: {
                   Authorization: token,
@@ -59,7 +59,7 @@ const Auth = (): JSX.Element => {
             client.current.activate();
             try {
                await axios
-                  .get(`http://61.109.216.132:80/api/user`, {
+                  .get(`http://61.109.214.110:80/api/user`, {
                      headers: {
                         Authorization: token,
                      },
