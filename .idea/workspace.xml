@@ -4,7 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1add38cb-85f0-48f9-835c-e73c5060c10d" name="Changes" comment="Revert &quot;Merge branch 'develop' into bugfix/50-sidebar-routing-issue&quot;&#10;&#10;This reverts commit 5b85e683b21d2832a4fce750bb852f3951b66c49, reversing&#10;changes made to ed73be7aff257dcc4954c50942fc98f9d3ba75ec." />
+    <list default="true" id="1add38cb-85f0-48f9-835c-e73c5060c10d" name="Changes" comment="Merge branch 'develop' into 29-feat-note-block">
+      <change afterPath="$PROJECT_DIR$/src/components/noteEdit/AddBlock.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/noteEdit/EditableNote.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/noteEdit/InputText.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/context/atom.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/atom.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/admin/note/components/Date.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/admin/note/components/Date.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/admin/note/components/DropdownMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/admin/note/components/DropdownMenu.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/admin/note/components/SideMenubar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/admin/note/components/SideMenubar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/admin/note/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/admin/note/index.tsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,7 +26,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="develop" />
+        <entry key="$PROJECT_DIR$" value="noteblockbackup2" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -30,7 +43,11 @@
                 <list>
                   <RecentBranch>
                     <option name="branchName" value="29-feat-note-block" />
-                    <option name="lastUsedInstant" value="1692148528" />
+                    <option name="lastUsedInstant" value="1692150475" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="noteblockbackup2" />
+                    <option name="lastUsedInstant" value="1692150387" />
                   </RecentBranch>
                   <RecentBranch>
                     <option name="branchName" value="develop" />
@@ -44,10 +61,6 @@
                     <option name="branchName" value="#2/develop-sidebar-resolve-conflict" />
                     <option name="lastUsedInstant" value="1692148045" />
                   </RecentBranch>
-                  <RecentBranch>
-                    <option name="branchName" value="bugfix/50-sidebar-routing-issue-rewrite" />
-                    <option name="lastUsedInstant" value="1692147541" />
-                  </RecentBranch>
                 </list>
               </option>
               <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
@@ -57,18 +70,49 @@
       </RecentBranches>
     </option>
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": -1
+}]]></component>
+  <component name="ProjectId" id="2U2xJ6QTJCX2eqOBQYRNNaSCskS" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "git-widget-placeholder": "29-feat-note-block",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "ts.external.directory.path": "/Applications/IntelliJ IDEA.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external"
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;29-feat-note-block&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/gachonswacademy02/Desktop/FrontEnd-template/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1add38cb-85f0-48f9-835c-e73c5060c10d" name="Changes" comment="Merge branch 'develop' into 29-feat-note-block" />
+      <created>1692151402760</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1692151402760</updated>
+      <workItem from="1692151404858" duration="21044000" />
+      <workItem from="1692175847616" duration="6409000" />
+    </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Revert &quot;Merge branch 'develop' into bugfix/50-sidebar-routing-issue&quot;&#10;&#10;This reverts commit 5b85e683b21d2832a4fce750bb852f3951b66c49, reversing&#10;changes made to ed73be7aff257dcc4954c50942fc98f9d3ba75ec." />
