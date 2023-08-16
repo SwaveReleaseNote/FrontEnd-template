@@ -21,7 +21,7 @@ pipeline {
                     script {
                             def image = docker.build('hamgeonwook/release-front', '--file Dockerfile .')
 
-                            docker.withRegistry('https://registry.hub.docker.com/repository/docker/hamgeonwook/release-front/', 'docker-hub-credentials') {
+                            docker.withRegistry('https://registry.hub.docker.com/repository/docker/hamgeonwook/release-front/', 'docker-ham-credentials') {
                             image.push("${env.BUILD_NUMBER}")
                         }
                 }
@@ -31,17 +31,49 @@ pipeline {
             //         slackSend(
             //             channel: '#jenkins',
             //             color: '#00FF00',
-            //             message: "SUCCESS: Job ${env.JOB_NAME} Build User"
+            //             message: "SUCCESS: Job ${env.JOB_NAME} Build Front"
             //         )
             //     }
             //     failure {
             //         slackSend(
             //            channel: '#jenkins',
             //            color: '#FF0000',
-            //            message: "FAIL: Job ${env.JOB_NAME} Build User"
+            //            message: "FAIL: Job ${env.JOB_NAME} Build Front"
             //         )
             //     }
             // }
+        }
+
+        stage('Build Nginx') {
+            steps {
+                script {
+                    // Create the 'nginx' folder and copy 'nginx.conf' to it
+                    sh 'mkdir -p nginx'
+                    sh 'cp nginx.conf nginx/default.conf'
+
+                    // Build and push the Nginx Docker image with the custom configuration
+                    def nginxImage = docker.build('hamgeonwook/nginx', '--file Dockerfile.nginx .')
+
+                    docker.withRegistry('https://registry.hub.docker.com/repository/docker/hamgeonwook/nginx/', 'docker-ham-credentials') {
+                        nginxImage.push()
+                    }
+                }
+            post {
+                success {
+                    slackSend(
+                        channel: '#jenkins',
+                        color: '#00FF00',
+                        message: "SUCCESS: Job ${env.JOB_NAME} Build Front"
+                    )
+                }
+                failure {
+                    slackSend(
+                       channel: '#jenkins',
+                       color: '#FF0000',
+                       message: "FAIL: Job ${env.JOB_NAME} Build Front"
+                    )
+                }
+            }
         }
 
     // stage('AgroCD Manifest Update') {
