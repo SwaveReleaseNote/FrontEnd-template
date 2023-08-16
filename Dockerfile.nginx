@@ -11,7 +11,7 @@ COPY nginx.conf /etc/nginx/conf.d/
 COPY build /usr/share/nginx/html
 
 # Expose the port Nginx will listen on
-EXPOSE 80
+EXPOSE 3000
 
 # Start Nginx when the container is run
 CMD ["nginx", "-g", "daemon off;"]
