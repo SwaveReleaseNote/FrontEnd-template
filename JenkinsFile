@@ -16,35 +16,6 @@ pipeline {
             }
         }
 
-        // stage('Build Front') {
-        //     steps {
-        //             script {
-        //                     def image = docker.build('hamgeonwook/release-front', '--file Dockerfile .')
-
-        //                     docker.withRegistry('https://registry.hub.docker.com/repository/docker/hamgeonwook/release-front/', 'docker-ham-credentials	') {
-        //                     image.tag("${env.BUILD_NUMBER}")
-        //                     image.push()
-        //                 }
-        //         }
-        //     }
-        //     // post {
-        //     //     success {
-        //     //         slackSend(
-        //     //             channel: '#jenkins',
-        //     //             color: '#00FF00',
-        //     //             message: "SUCCESS: Job ${env.JOB_NAME} Build Front"
-        //     //         )
-        //     //     }
-        //     //     failure {
-        //     //         slackSend(
-        //     //            channel: '#jenkins',
-        //     //            color: '#FF0000',
-        //     //            message: "FAIL: Job ${env.JOB_NAME} Build Front"
-        //     //         )
-        //     //     }
-        //     // }
-        // }
-
         stage('Build Nginx') {
             steps {
                 script {
@@ -56,22 +27,22 @@ pipeline {
                         nginxImage.push("latest")
                     }
                 }
-            // post {
-            //     success {
-            //         slackSend(
-            //             channel: '#jenkins',
-            //             color: '#00FF00',
-            //             message: "SUCCESS: Job ${env.JOB_NAME} Build Front"
-            //         )
-            //     }
-            //     failure {
-            //         slackSend(
-            //            channel: '#jenkins',
-            //            color: '#FF0000',
-            //            message: "FAIL: Job ${env.JOB_NAME} Build Front"
-            //         )
-            //     }
-            // }
+            post {
+                success {
+                    slackSend(
+                        channel: '#jenkins',
+                        color: '#00FF00',
+                        message: "SUCCESS: Job ${env.JOB_NAME} Build Nginx"
+                    )
+                }
+                failure {
+                    slackSend(
+                       channel: '#jenkins',
+                       color: '#FF0000',
+                       message: "FAIL: Job ${env.JOB_NAME} Build Nginx"
+                    )
+                }
+            }
             }
         }
 
@@ -92,39 +63,39 @@ pipeline {
                             }
                         }
 
-    //     post {
-    //         success {
-    //             slackSend (
-    //                 channel: '#jenkins',
-    //                 color: '#00FF00',
-    //                 message: "SUCCESS: Job ${env.JOB_NAME} AgroCD Manifest Update"
-    //             )
-    //         }
-    //         failure {
-    //             slackSend (
-    //                channel: '#jenkins',
-    //                color: '#FF0000',
-    //                message: "FAIL: Job ${env.JOB_NAME} AgroCD Manifest Update"
-    //             )
-    //         }
-    //     }
+        post {
+            success {
+                slackSend (
+                    channel: '#jenkins',
+                    color: '#00FF00',
+                    message: "SUCCESS: Job ${env.JOB_NAME} AgroCD Manifest Update"
+                )
+            }
+            failure {
+                slackSend (
+                   channel: '#jenkins',
+                   color: '#FF0000',
+                   message: "FAIL: Job ${env.JOB_NAME} AgroCD Manifest Update"
+                )
+            }
+        }
     }
 
-    // post {
-    //     success {
-    //         slackSend(
-    //             channel: '#jenkins',
-    //             color: '#00FF00',
-    //             message: "SUCCESS: Job ${env.JOB_NAME}"
-    //         )
-    //     }
-    //     failure {
-    //         slackSend(
-    //             channel: '#jenkins',
-    //             color: '#FF0000',
-    //             message: "FAIL: Job ${env.JOB_NAME}"
-    //         )
-    //     }
-    // }
+    post {
+        success {
+            slackSend(
+                channel: '#jenkins',
+                color: '#00FF00',
+                message: "SUCCESS: Job ${env.JOB_NAME}"
+            )
+        }
+        failure {
+            slackSend(
+                channel: '#jenkins',
+                color: '#FF0000',
+                message: "FAIL: Job ${env.JOB_NAME}"
+            )
+        }
+    }
 }
 
