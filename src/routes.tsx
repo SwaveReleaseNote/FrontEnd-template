@@ -23,17 +23,7 @@ import ProjectDashboard from "views/admin/default/pages/ProjectDashboard";
 import SearchProjectList from "views/admin/default/pages/SearchProjectList";
 import ManageProject from "views/admin/default/pages/ManageProject";
 
-import Error from "error/Error";
-
 const routes = [
-  {
-    name: "Error",
-    layout: "/admin",
-    path: "/error",
-    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
-    component: <Error />,
-    secondary: true,
-  },
   {
     name: "Release Note",
     layout: "/admin",
@@ -43,7 +33,7 @@ const routes = [
     secondary: true,
   },
   {
-    name: "Main Page",
+    name: "Project Dashboard",
     layout: "/admin",
     path: "default",
     icon: <MdHome className="h-6 w-6" />,
@@ -66,16 +56,16 @@ const routes = [
   {
     name: "Project Dashboard",
     layout: "/admin",
-    path: "dashboard", 
+    path: "dashboard",
     icon: <MdHome className="h-6 w-6" />,
-    component: <ProjectDashboard />, 
+    component: <ProjectDashboard />,
   },
   {
     name: "Project Manage",
     layout: "/admin",
-    path: "project/manage/*", 
+    path: "project/manage/*",
     icon: <MdHome className="h-6 w-6" />,
-    component: <ManageProject />, 
+    component: <ManageProject />,
   },
   {
     name: "My Page",
@@ -90,13 +80,6 @@ const routes = [
     path: "sign-in",
     icon: <MdLock className="h-6 w-6" />,
     component: <SignIn />,
-  },
-  {
-    name: "NoteFiled Test",
-    layout: "/admin",
-    path: "release-note",
-    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
-    component: <ReleaseNote />,
   },
   {
     name: "Create Release Note",
