@@ -7,7 +7,7 @@ import { setCookie } from './cookie';
 interface TokenData {
    data: string;
    type: string;
- }
+}
 const Auth = (): JSX.Element => {
    const navigate = useNavigate();
 
@@ -40,20 +40,23 @@ const Auth = (): JSX.Element => {
 
             const tokenData = parsedData.data.replace(/"/g, '');
             console.log(tokenData);
-            const token=`Bearer ${String(tokenData)}`
+            const token = `Bearer ${String(tokenData)}`;
             // 로컬스토리지에 저장
             window.localStorage.setItem('token', token);
             const expirationTime = new Date();
             expirationTime.setTime(expirationTime.getTime() + 30 * 60 * 1000);
 
             client.current = new StompJs.Client({
-               brokerURL: 'ws://61.109.214.110:80/ws-stomp',
+               brokerURL: 'ws://61.109.214.110:80/api/alert/ws-stomp',
                // eslint-disable-next-line @typescript-eslint/no-empty-function
                connectHeaders: {
                   Authorization: token,
                },
                onConnect: () => {
                   console.log('success');
+               },
+               onStompError: error => {
+                  console.error("stomp error: ", error);
                },
             });
             client.current.activate();
@@ -68,7 +71,7 @@ const Auth = (): JSX.Element => {
                      // api의 응답을 제대로 받은경우
                      /* axios 값 log 확인 */
                      console.log(response.data);
-                     window.localStorage.setItem('user_id',response.data.id);
+                     window.localStorage.setItem('user_id', response.data.id);
                      window.localStorage.setItem('state', 'true');
                      window.localStorage.setItem('name', response.data.username);
                      window.localStorage.setItem('email', response.data.email);

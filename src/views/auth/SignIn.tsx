@@ -113,8 +113,9 @@ const SignIn: React.FC = () => {
 
             
             const parsedData: TokenData = JSON.parse(response.data.slice(5));
-
+            console.log(parsedData);
             const token = parsedData.data.replace(/"/g, '');
+            console.log(token);
             if (response.data === 'Information Not valid') {
                alert('Information Not valid');
                console.error('error');
@@ -124,7 +125,7 @@ const SignIn: React.FC = () => {
             expirationTime.setTime(expirationTime.getTime() + 30 * 60 * 1000);
             
             client.current = new StompJs.Client({
-               brokerURL: 'ws://61.109.214.110:80/ws-stomp',
+               brokerURL: 'ws://61.109.214.110:80/api/alert/ws-stomp',
                // eslint-disable-next-line @typescript-eslint/no-empty-function
                connectHeaders: {
                   Authorization: `Bearer ${String(token)}`,
