@@ -1,6 +1,6 @@
 /* eslint-disable */
 import {filterDropdownOptions} from 'context/atom';
-import {type KeyboardEvent, useRef, type MouseEvent, useState, useEffect} from 'react'
+import {type KeyboardEvent, useRef, type MouseEvent, useState, useEffect, SetStateAction} from 'react'
 import React from 'react';
 import {useRecoilState} from 'recoil';
 
@@ -14,7 +14,6 @@ export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
 
     const buttonRef = useRef<HTMLButtonElement>(null);
     const cursorPosition = props.cursorPosition;
-
     const handleChoiceLabelKeyPress = (event: KeyboardEvent<HTMLDivElement>): void => {
         // if(event.key === 'Home') { // 방향키 왼족
         //     console.log('왼')
@@ -36,20 +35,20 @@ export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
 
     const handleSelectLavelClickEvent = (event: MouseEvent<HTMLDivElement>): void => {
         switch (buttonRef.current?.textContent) {
-            case "new":
+            case "H1":
 
                 break;
-            case "update":
+            case "H2":
 
                 break;
-            case "stop":
+            case "H3":
 
                 break;
-            case "delete":
+            case "P":
 
                 break;
-            case "etc":
-
+            default:
+                props.onClose();
                 break;
         }
     }
