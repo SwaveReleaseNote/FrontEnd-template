@@ -26,22 +26,22 @@ pipeline {
                         }
                 }
             }
-            post {
-                success {
-                    slackSend(
-                        channel: '#jenkins',
-                        color: '#00FF00',
-                        message: "SUCCESS: Job ${env.JOB_NAME} Build User"
-                    )
-                }
-                failure {
-                    slackSend(
-                       channel: '#jenkins',
-                       color: '#FF0000',
-                       message: "FAIL: Job ${env.JOB_NAME} Build User"
-                    )
-                }
-            }
+            // post {
+            //     success {
+            //         slackSend(
+            //             channel: '#jenkins',
+            //             color: '#00FF00',
+            //             message: "SUCCESS: Job ${env.JOB_NAME} Build User"
+            //         )
+            //     }
+            //     failure {
+            //         slackSend(
+            //            channel: '#jenkins',
+            //            color: '#FF0000',
+            //            message: "FAIL: Job ${env.JOB_NAME} Build User"
+            //         )
+            //     }
+            // }
         }
 
     // stage('AgroCD Manifest Update') {
@@ -84,20 +84,20 @@ pipeline {
     // }
     }
 
-    post {
-        success {
-            slackSend(
-                channel: '#jenkins',
-                color: '#00FF00',
-                message: "SUCCESS: Job ${env.JOB_NAME}"
-            )
-        }
-        failure {
-            slackSend(
-                channel: '#jenkins',
-                color: '#FF0000',
-                message: "FAIL: Job ${env.JOB_NAME}"
-            )
-        }
-    }
+    // post {
+    //     success {
+    //         slackSend(
+    //             channel: '#jenkins',
+    //             color: '#00FF00',
+    //             message: "SUCCESS: Job ${env.JOB_NAME}"
+    //         )
+    //     }
+    //     failure {
+    //         slackSend(
+    //             channel: '#jenkins',
+    //             color: '#FF0000',
+    //             message: "FAIL: Job ${env.JOB_NAME}"
+    //         )
+    //     }
+    // }
 }
