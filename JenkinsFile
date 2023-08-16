@@ -58,21 +58,22 @@ pipeline {
                         nginxImage.push()
                     }
                 }
-            post {
-                success {
-                    slackSend(
-                        channel: '#jenkins',
-                        color: '#00FF00',
-                        message: "SUCCESS: Job ${env.JOB_NAME} Build Front"
-                    )
-                }
-                failure {
-                    slackSend(
-                       channel: '#jenkins',
-                       color: '#FF0000',
-                       message: "FAIL: Job ${env.JOB_NAME} Build Front"
-                    )
-                }
+            // post {
+            //     success {
+            //         slackSend(
+            //             channel: '#jenkins',
+            //             color: '#00FF00',
+            //             message: "SUCCESS: Job ${env.JOB_NAME} Build Front"
+            //         )
+            //     }
+            //     failure {
+            //         slackSend(
+            //            channel: '#jenkins',
+            //            color: '#FF0000',
+            //            message: "FAIL: Job ${env.JOB_NAME} Build Front"
+            //         )
+            //     }
+            // }
             }
         }
 
@@ -114,7 +115,7 @@ pipeline {
     //         }
     //     }
     // }
-    }
+    // }
 
     // post {
     //     success {
@@ -132,4 +133,5 @@ pipeline {
     //         )
     //     }
     // }
+}
 }
