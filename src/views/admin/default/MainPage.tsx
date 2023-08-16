@@ -192,10 +192,25 @@ const MainPage = (): JSX.Element => {
       navigate('/admin/project/create');
    }
 
-   /* department 설정 */
-   const [showDepartmentRegisterModal, setShowDepartmentRegisterModal] = React.useState(false);
-   const [isDepartment, setIsDepartment] = React.useState(false);
-   const [department, setDepartment] = React.useState('department1');
+     /* department 설정 */
+     const [showDepartmentRegisterModal, setShowDepartmentRegisterModal] = React.useState(false);
+     const [department, setDepartment] = React.useState(localStorage.getItem('department'));
+  
+     React.useEffect(() => {
+        if (localStorage.getItem('department') === 'null') {
+           console.log('showdepartment');
+           setShowDepartmentRegisterModal(true);
+        }
+     }, []);
+  
+     const handleModalClose = (): void => {
+        setShowDepartmentRegisterModal(false);
+     };
+  
+     const handleSelectUserDepartmentChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+        const { value } = event.target;
+        setDepartment(value);
+     };
 
    useEffect(() => {
       if (localStorage.getItem('department') === 'null') {
@@ -204,16 +219,6 @@ const MainPage = (): JSX.Element => {
       }
    }, []);
 
-   const handleModalClose = (): void => {
-      console.log(isDepartment);
-      setIsDepartment(false);
-   };
-
-   const handleSelectUserDepartmentChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
-      const { value } = event.target;
-      setDepartment(value);
-   };
-
    const handleClickSaveChangeButton = (): void => {
       api.patch('/user', {
          department: department,
@@ -221,7 +226,8 @@ const MainPage = (): JSX.Element => {
          .then(response => {
             console.log(response.data); // Process the response as needed
             localStorage.setItem('department', department ?? '');
-            setDepartment(localStorage.getItem('department') as string);
+            setDepartment(localStorage.getItem('department'));
+            setShowDepartmentRegisterModal(false);
          })
          .catch(error => {
             console.error(error);

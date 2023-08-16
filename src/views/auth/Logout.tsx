@@ -11,17 +11,28 @@ const Logout = (): ReactElement => {
    console.log('sdafafsadfsads');
    const client = useRef<StompJs.Client | null>(null);
 
-   const disconnect = (): void => {
+   const disconnect = async (): Promise<void> => {
       console.log('disconnect');
       if (client.current == null || !client.current.connected) return;
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      client.current.deactivate();
+
+      try {
+         await client.current.deactivate();
+      } catch (error) {
+         console.error('Error deactivating client:', error);
+      }
    };
 
    useEffect(() => {
       try {
-         removeCookie('id',{path: '/'});
-         disconnect();
+         const emailCookieKey = localStorage.getItem('email') as string;
+         removeCookie(emailCookieKey, { path: '/' });
+         disconnect()
+            .then(() => {
+               console.log("logout");
+            })
+            .catch(error => {
+               console.error('Error during disconnect:', error);
+            });
          window.localStorage.clear();
 
          navigate('/auth/sign-in');

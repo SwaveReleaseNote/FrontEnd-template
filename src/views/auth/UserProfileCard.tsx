@@ -13,7 +13,8 @@ function UserProfileCard(): ReactElement {
    const [mostViewed, setMostViewed] = useState('dolor sit amet.');
 
    useEffect(() => {
-      if (getCookie('id') == null) {
+    const emailCookieKey = localStorage.getItem('email') as string;
+      if (getCookie(emailCookieKey) == null) {
          navigate('/auth/sign-in');
       } else {
          console.log(localStorage.getItem('department'));
@@ -138,7 +139,6 @@ function UserProfileCard(): ReactElement {
          <form onSubmit={handleUserUpdateFormSubmit}>
             <div className="wrapper h-full w-full" style={{ paddingTop: '10px' }}>
                <div className="left">
-                  <img src="https://i.imgur.com/cMy8V5j.png" alt="user" width="100" />
                   <h3>Name</h3>
                   <input
                      type="text"
@@ -146,7 +146,7 @@ function UserProfileCard(): ReactElement {
                      value={userName ?? ''}
                      onChange={handleChangeUserInputChange}
                      style={{
-                        background: '#01dbdf',
+                        background: '#A5B4FC',
                         textAlign: 'center',
                      }}
                   />

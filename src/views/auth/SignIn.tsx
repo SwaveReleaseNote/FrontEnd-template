@@ -7,6 +7,7 @@ import './SignIn.css';
 import kakaobutton from 'assets/img/auth/kakao2.png';
 import { setCookie } from './cookie';
 import api from 'context/api';
+import axios from 'axios';
 
 interface RegisterFormData {
    name: string;
@@ -18,7 +19,10 @@ interface LoginFormData {
    login_email: string;
    login_password: string;
 }
-
+interface TokenData {
+   data: string;
+   type: string;
+ }
 const SignIn: React.FC = () => {
    const navigate = useNavigate();
    const host = 'http://back-service:3000';
@@ -106,8 +110,11 @@ const SignIn: React.FC = () => {
       })
          .then(async response => {
             // Handle successful response
-            console.log(response.data);
-            const token = response.data;
+
+            
+            const parsedData: TokenData = JSON.parse(response.data.slice(5));
+
+            const token = parsedData.data.replace(/"/g, '');
             if (response.data === 'Information Not valid') {
                alert('Information Not valid');
                console.error('error');
@@ -115,19 +122,12 @@ const SignIn: React.FC = () => {
             }
             const expirationTime = new Date();
             expirationTime.setTime(expirationTime.getTime() + 30 * 60 * 1000);
-            setCookie('id', `Bearer ${String(token)}`, {
-               path: '/',
-               sameSite: 'strict',
-               expires: expirationTime,
-               HttpOnly: true,
-               secure: true,
-            });
-            window.localStorage.setItem('token', `Bearer ${String(token)}`);
+            
             client.current = new StompJs.Client({
                brokerURL: 'ws://back-service:8080/ws-stomp',
                // eslint-disable-next-line @typescript-eslint/no-empty-function
                connectHeaders: {
-                  Authorization: token,
+                  Authorization: `Bearer ${String(token)}`,
                },
                onConnect: () => {
                   console.log('success');
@@ -135,17 +135,31 @@ const SignIn: React.FC = () => {
             });
             client.current.activate();
             try {
-               await api.get(`user`).then(response => {
-                  // api의 응답을 제대로 받은경우
-                  console.log(response);
-                  console.log(response.data);
-                  window.localStorage.setItem('state', 'true');
-                  window.localStorage.setItem('name', response.data.username);
-                  window.localStorage.setItem('email', response.data.email);
-                  window.localStorage.setItem('info', '');
-                  window.localStorage.setItem('department', response.data.department);
-                  window.localStorage.setItem('token', `Bearer ${String(token)}`);
-               });
+               void axios
+                  .get(`http://localhost:8080/api/user`, {
+                     headers: {
+                        Authorization: `Bearer ${String(token)}`,
+                     },
+                  })
+                  .then(response => {
+                     // api의 응답을 제대로 받은경우
+                     console.log(response);
+                     console.log(response.data);
+                     window.localStorage.setItem('state', 'true');
+                     window.localStorage.setItem('name', response.data.username);
+                     window.localStorage.setItem('email', response.data.email);
+                     window.localStorage.setItem('info', '');
+                     window.localStorage.setItem('department', response.data.department);
+                     window.localStorage.setItem('token', `Bearer ${String(token)}`);
+                     const emailCookieKey = localStorage.getItem('email') as string;
+                     setCookie(emailCookieKey, `Bearer ${String(token)}`, {
+                        path: '/',
+                        sameSite: 'strict',
+                        expires: expirationTime,
+                        HttpOnly: true,
+                        secure: true,
+                     });
+                  });
             } catch (error) {
                console.error(error);
             } finally {

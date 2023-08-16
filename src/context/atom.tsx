@@ -3,22 +3,35 @@ import {atom} from 'recoil'
 export const noteFieldState = atom({
     key: "noteFieldState",
     default: {
-        id:0,
-        version:"",
-        block: [
+        blocks: [
             {
-                id:0,
-                label:"",
-                text:""
+                contexts: [
+                    {
+                        context: "",
+                        index: 0,
+                        tag: ""
+                    }
+                ],
+                label: ""
             }
         ],
         comment: [
             {
-                id:0,
-                writer:"",
-                content:""
+                context: "",
+                lastModifiedDate:"",
+                name:"",
+                releaseNoteId: 0,
+                version: ""
             }
-        ]
+        ],
+        count: 0,
+        creator: "",
+        lastModified: "",
+        liked: 0,
+        releaseDate: "",
+        releaseNoteId: 0,
+        summary: "",
+        version: ""
     }
 });
 
@@ -33,23 +46,23 @@ export const labelState = atom({
 export const commentState = atom({
     key: "commentState",
     default: [{
+        id:0,
         writer:"",
-        content:"",
-        id:""
+        content:""
     }]
 })
 
 export const loginState = atom({
-  key: "loginState",
-  default: {
-    state: false,
-    id: -1,
-    name: "atom",
-    info: null,
-    email: null,
-    token: null,
-    department: "부서 0",
-  },
+    key: "loginState",
+    default: {
+        state: false,
+        id: -1,
+        name: "atom",
+        info: null,
+        email: null,
+        token: null,
+        department: "부서 0",
+    },
 });
 
 /**
@@ -57,17 +70,16 @@ export const loginState = atom({
  * 프로젝트 리스트, 릴리즈노트 리스트
  */
 export const sideBarState = atom({
-  key: "sideBarState",
-  default: {
-    projectList: [],
-    releaseNoteList: [],
-  },
+    key: "sideBarState",
+    default: {
+        projectList: [],
+        releaseNoteList: [],
+    },
 });
 
-export const noteBlockState = atom({
-    key: "noteBlockState",
+export const noteIdState = atom({
+    key: "noteIdState",
     default: {
-        id: 0,
-        content: '',
+        releaseNoteId: 0
     }
 })
