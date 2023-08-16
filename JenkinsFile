@@ -89,7 +89,7 @@ pipeline {
                 sh "git add front.yaml"
 
                 sh "git config --global user.email 'tomy8964@naver.com'"
-                sh "git config --global user.name 'tomy8964'"
+                sh "git config --global user.name 'Ham Geonwook'"
                         
                 sh "git commit -m '[UPDATE] v${currentBuild.number} image versioning'"
                 sh "git remote set-url origin https://github.com/SwaveReleaseNote/argocd-front.git"
