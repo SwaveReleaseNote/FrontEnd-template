@@ -29,7 +29,7 @@ const ProjectDashboard: React.FC = () => {
    const projectId: string | null = searchParams.get('projectId');
    const projectName = searchParams.get('projectName');
 
-   const [getProjectId, setGetProjectId] = useRecoilState(projectIdState);
+   // const [getProjectId, setGetProjectId] = useRecoilState(projectIdState);
 
    const fetchUserRole = async (projectId: number): Promise<UserRole> => {
       try {
