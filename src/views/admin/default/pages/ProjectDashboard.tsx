@@ -30,7 +30,6 @@ const ProjectDashboard: React.FC = () => {
    const projectName = searchParams.get('projectName');
 
    const [getProjectId, setGetProjectId] = useRecoilState(projectIdState);
-   setGetProjectId(projectId)
 
    const fetchUserRole = async (projectId: number): Promise<UserRole> => {
       try {
@@ -61,7 +60,10 @@ const ProjectDashboard: React.FC = () => {
       if (checkUserRoleQuery.isSuccess) {
          console.log(checkUserRoleQuery.data);
       }
-   }, [checkUserRoleQuery.isSuccess]);
+      
+      setGetProjectId(projectId)
+      
+   }, [checkUserRoleQuery.isSuccess, getProjectId]);
 
    const handleClickManageButton = async (
       event: React.MouseEvent<HTMLButtonElement>,
