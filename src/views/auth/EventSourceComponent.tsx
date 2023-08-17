@@ -15,11 +15,10 @@ const EventSourceComponent: React.FC = () => {
     setInputText(event);
     // No need to call onSetting here, it will be called in onMessage
   }
-
+  
   useEffect(() => {
     const userId =localStorage.getItem("user_id") as string;
-    const eventSource = new EventSource(`http://61.109.214.110:80/api/sse/emitter/${userId}`);
-
+    let eventSource = new EventSource(`http://61.109.214.110:80/api/sse/emitter/${userId}`);
 
     eventSource.onmessage = event => {
       const eventData = JSON.parse(event.data);
@@ -27,8 +26,10 @@ const EventSourceComponent: React.FC = () => {
       // console.log('SSE data:', jsonData.data);
       // const type = eventData.data.replace(/"/g, '');
       console.log(eventData.type);
-      if(eventData.type==='ALARM'){
+
+      if(eventData.type === "ALARM"){
       // const parsedData = jsonData.data;
+      console.log("ALARM 새로운 알림이 왔습니다.",eventSource);
       onChange({
         "title": "새로운 알림이 왔습니다!!!",
         "message": eventData.data,
@@ -36,12 +37,14 @@ const EventSourceComponent: React.FC = () => {
     }
     };
 
-    eventSource.onerror = error => {
-      console.error('SSE Error:', error);
+    eventSource.onerror = () => {
+      eventSource = new EventSource(`http://61.109.214.110:80/api/sse/emitter/${userId}`);
+      console.log("error",eventSource);
     };
 
     return () => {
-      eventSource.close();
+      eventSource = new EventSource(`http://61.109.214.110:80/api/sse/emitter/${userId}`);
+      console.log("return",eventSource);
     };
   }, []);
 
