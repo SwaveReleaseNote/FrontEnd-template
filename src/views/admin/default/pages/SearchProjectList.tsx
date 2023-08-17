@@ -294,8 +294,8 @@ const SearchProjectList: React.FC = () => {
                            <NotificationPopup
                               message="이 프로젝트를 구독하시겠습니까?"
                               subMessage="이 프로젝트를 볼 권한이 없습니다."
-                              onConfirm={async () => {
-                                 await handleClickYes(project.id, project.name);
+                              onConfirm={() => {
+                                 void handleClickYes(project.id, project.name);
                               }}
                               onCancel={handleClickNo}
                            />

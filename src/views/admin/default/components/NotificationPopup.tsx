@@ -1,9 +1,10 @@
+/*eslint-disable*/
 import React, { type ReactElement } from 'react';
 
 interface NotificationPopupProps {
    message: string;
    subMessage: string;
-   onConfirm: () => Promise<void>;
+   onConfirm: () => void;
    onCancel: () => void;
 }
 
@@ -16,9 +17,7 @@ function NotificationPopup({ message, subMessage, onConfirm, onCancel }: Notific
             <div className="mt-4 flex justify-end">
                <button
                   onClick={() => {
-                     onConfirm().catch(error => {
-                        console.error('Error fetching data:', error);
-                     });
+                     onConfirm();
                   }}>
                   Yes
                </button>
