@@ -8,9 +8,9 @@ import RecentComment from '../components/RecentComment';
 import SearchRelease from '../components/SearchRelease';
 import { useQuery } from 'react-query';
 import api from 'context/api';
-import {useRecoilState, useSetRecoilState} from "recoil";
-import project from "../../profile/components/Project";
-import {projectIdState} from "../../../../context/atom";
+// import {useRecoilState, useSetRecoilState} from "recoil";
+// import project from "../../profile/components/Project";
+// import {projectIdState} from "../../../../context/atom";
 
 enum UserRole {
    Subscriber = 'Subscriber',
