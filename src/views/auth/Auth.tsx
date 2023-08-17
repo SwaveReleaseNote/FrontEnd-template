@@ -36,9 +36,11 @@ const Auth = (): JSX.Element => {
             // const parsedData: TokenData = JSON.parse(res.data.slice(5));
 
             // const tokenData = parsedData.data.replace(/"/g, '');
-            const token = res.headers.authorization;
+            console.log(res.data);
+            const tokenData = res.data;
+            console.log(tokenData);
+            const token = `Bearer ${String(tokenData)}`;
             console.log(token);
-            // const token = `Bearer ${String(tokenData)}`;
             // 로컬스토리지에 저장
             window.localStorage.setItem('token', token);
             const expirationTime = new Date();
