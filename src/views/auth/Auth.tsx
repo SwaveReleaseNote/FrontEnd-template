@@ -4,10 +4,10 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { setCookie } from './cookie';
 import {createStompClient,activateStompClient} from "./stompClientUtils";
-interface TokenData {
-   data: string;
-   type: string;
-}
+// interface TokenData {
+//    data: string;
+//    type: string;
+// }
 const Auth = (): JSX.Element => {
    const navigate = useNavigate();
 
@@ -33,11 +33,12 @@ const Auth = (): JSX.Element => {
                `http://61.109.214.110:80/api/user/login-by-oauth?code=${code}&provider=${provider?.toString() ?? ''}`,
             );
             // 인가코드를 백엔드로 보내고 헤더에서 엑세스 토큰 받아옴
-            const parsedData: TokenData = JSON.parse(res.data.slice(5));
+            // const parsedData: TokenData = JSON.parse(res.data.slice(5));
 
-            const tokenData = parsedData.data.replace(/"/g, '');
-            console.log(tokenData);
-            const token = `Bearer ${String(tokenData)}`;
+            // const tokenData = parsedData.data.replace(/"/g, '');
+            const token = res.headers.authorization;
+            console.log(token);
+            // const token = `Bearer ${String(tokenData)}`;
             // 로컬스토리지에 저장
             window.localStorage.setItem('token', token);
             const expirationTime = new Date();
