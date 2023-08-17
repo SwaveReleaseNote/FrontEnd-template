@@ -19,10 +19,10 @@ interface LoginFormData {
    login_email: string;
    login_password: string;
 }
-interface TokenData {
-   data: string;
-   type: string;
- }
+// interface TokenData {
+//    data: string;
+//    type: string;
+//  }
 const SignIn: React.FC = () => {
    const navigate = useNavigate();
    const host = 'http://61.109.214.110:80';
@@ -112,9 +112,11 @@ const SignIn: React.FC = () => {
             // Handle successful response
 
             
-            const parsedData: TokenData = JSON.parse(response.data.slice(5));
-            console.log(parsedData);
-            const token = parsedData.data.replace(/"/g, '');
+            // const parsedData: TokenData = JSON.parse(response.data.slice(5));
+            // console.log(parsedData);
+            // const token = parsedData.data.replace(/"/g, '');
+            console.log(response.data);
+            const token = response.data;
             console.log(token);
             if (response.data === 'Information Not valid') {
                alert('Information Not valid');
