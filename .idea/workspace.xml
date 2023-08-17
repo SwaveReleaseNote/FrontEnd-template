@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1add38cb-85f0-48f9-835c-e73c5060c10d" name="Changes" comment="feat: 릴리즈 노트 생성 환경 사이드 바 수정">
+    <list default="true" id="1add38cb-85f0-48f9-835c-e73c5060c10d" name="Changes" comment="Merge branch 'develop' into showReleaseNote">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/sidebar/components/ProjectList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sidebar/components/ProjectList.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layouts/admin/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/admin/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -199,7 +199,15 @@
       <option name="project" value="LOCAL" />
       <updated>1692254037655</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Merge branch 'develop' into showReleaseNote">
+      <option name="closed" value="true" />
+      <created>1692255039590</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1692255039590</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -218,6 +226,7 @@
     <MESSAGE value="feat: 릴리즈 노트 path variable 설정을 위해 dashboard에서 리코일 저장" />
     <MESSAGE value="feat: 릴리즈 노트 생성 환경 사이드 바 수정" />
     <MESSAGE value="feat: 릴리즈노트 보는 화면" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: 릴리즈노트 보는 화면" />
+    <MESSAGE value="Merge branch 'develop' into showReleaseNote" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge branch 'develop' into showReleaseNote" />
   </component>
 </project>

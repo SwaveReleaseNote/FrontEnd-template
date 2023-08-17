@@ -64,6 +64,9 @@ export default function Admin(props: Record<string, any>): JSX.Element {
             else if (prop.path === "release-note") {
                return <Route path={`/${prop.path}`+"/"+note.releaseNoteId} element={<ReleaseNote />}/>
             }
+            else if (prop.path === "create-note") {
+               return <Route path={`/${prop.path}`} element={prop.component}/>
+            }
             else {
                return <Route path={`/${prop.path}`} element={prop.component} key={key} />;
             }
