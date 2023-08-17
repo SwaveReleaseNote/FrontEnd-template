@@ -11,7 +11,7 @@ enum UserRole {
    Subscriber = 'Subscriber',
    Developer = 'Developer',
    Manager = 'Manager',
-   None = 'None'
+   None = 'None',
 }
 
 interface ProjectCardProps {
@@ -43,13 +43,13 @@ function ProjectCard({
       const url = `/admin/dashboard?${queryString}`;
       navigate(url);
    }
-   
+
    const deleteProjectMutation = useMutation(async () => await api.delete(`project/${projectId}/drop`), {
       onSuccess: async () => {
          setShowConfirmation(false);
 
          await queryClient.refetchQueries('projects').then(() => {
-            navigate("../");
+            navigate('../');
          });
       },
       onError: error => {
@@ -83,7 +83,7 @@ function ProjectCard({
             <NotificationPopup
                message="이 프로젝트에서 탈퇴하시겠습니까??"
                subMessage="주의"
-               onConfirm={handleClickYes}
+               onConfirm={() => handleClickYes}
                onCancel={handleClickNo}
             />
          )}
