@@ -81,9 +81,7 @@ export const sideBarState = atom({
 
 export const noteIdState = atom({
     key: "noteIdState",
-    default: {
-        releaseNoteId: 0
-    }
+    default: 0
 });
 
 export const filterDropdownOptions = atom({

@@ -21,7 +21,6 @@ import CreateProject from "views/admin/default/pages/CreateProject";
 import ProjectDashboard from "views/admin/default/pages/ProjectDashboard";
 import SearchProjectList from "views/admin/default/pages/SearchProjectList";
 import ManageProject from "views/admin/default/pages/ManageProject";
-import EditableNote from "./components/noteEdit/EditableNote";
 
 const routes = [
   {
@@ -80,13 +79,6 @@ const routes = [
     path: "sign-in",
     icon: <MdLock className="h-6 w-6" />,
     component: <SignIn />,
-  },
-  {
-    name: "Create Release Note",
-    layout: "/admin",
-    path: "create-note",
-    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
-    component: <EditableNote />,
   }
 ];
 export default routes;
