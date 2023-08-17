@@ -18,7 +18,7 @@ const EventSourceComponent: React.FC = () => {
   
   useEffect(() => {
     const userId =localStorage.getItem("user_id") as string;
-    let eventSource = new EventSource(`http://61.109.214.110:80/api/sse/emitter/${userId}`);
+    let eventSource = new EventSource(`http://localhost:8080/api/sse/emitter/${userId}`);
 
     eventSource.onmessage = event => {
       const eventData = JSON.parse(event.data);
@@ -38,12 +38,12 @@ const EventSourceComponent: React.FC = () => {
     };
 
     eventSource.onerror = () => {
-      eventSource = new EventSource(`http://61.109.214.110:80/api/sse/emitter/${userId}`);
+      eventSource = new EventSource(`http://localhost:8080/api/sse/emitter/${userId}`);
       console.log("error",eventSource);
     };
 
     return () => {
-      eventSource = new EventSource(`http://61.109.214.110:80/api/sse/emitter/${userId}`);
+      eventSource = new EventSource(`http://localhost:8080/api/sse/emitter/${userId}`);
       console.log("return",eventSource);
     };
   }, []);

@@ -13,12 +13,12 @@ import {createNoteFieldForm} from "../../../../context/atom";
 // }
 
 export default function Version(props: {
-    currentVersion: string,
-    latestVersion: string,
-    setLatestVersion: React.Dispatch<SetStateAction<string>>
+    recentVersion: string,
+    updateVersion: string,
+    setUpdateVersion: React.Dispatch<SetStateAction<string>>
 }): JSX.Element {
     // 최신 버전 받아오기
-    const {latestVersion} = props;
+    const {updateVersion} = props;
 
     const [noteField, setNoteField] = useRecoilState(createNoteFieldForm)
     const [isActiveMajor, setIsActiveMajor] = useState<boolean>(false)
@@ -30,7 +30,9 @@ export default function Version(props: {
 
     // 버전 Major Minor Patch 파싱 후 세팅
     useEffect(() => {
-        const split = props.currentVersion.split(".", 3);
+        console.log("useEffect", major, minor, patch);
+        console.log("props.recentVersion", props.recentVersion);
+        const split = props.recentVersion.split(".", 3);
         console.log(split);
 
         setMajor(+split[0]);
@@ -43,16 +45,17 @@ export default function Version(props: {
     const nextPatch = major.toString() + '.' + minor.toString() + '.' + (patch + 1).toString();
 
     // note field 에 선택한 next version 누르기
-    const handleClickNextVersion = (nextVersion: string) => {
+    const handleClickNextVersion = (nextVersion: string, event:React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
         switch (nextVersion) {
             case 'Major':
-                props.setLatestVersion(nextMajor)
+                props.setUpdateVersion(nextMajor)
                 break;
             case 'Minor':
-                props.setLatestVersion(nextMinor)
+                props.setUpdateVersion(nextMinor)
                 break;
             case 'Patch':
-                props.setLatestVersion(nextPatch)
+                props.setUpdateVersion(nextPatch)
                 break;
         }
     }
@@ -65,7 +68,7 @@ export default function Version(props: {
         }
         setIsActiveMajor(true)
 
-        handleClickNextVersion('Major')
+        handleClickNextVersion('Major', event)
     }
 
     const handleClickMinor = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -76,7 +79,7 @@ export default function Version(props: {
         }
         setIsActiveMinor(true)
 
-        handleClickNextVersion('Minor')
+        handleClickNextVersion('Minor', event)
 
     }
 
@@ -87,11 +90,9 @@ export default function Version(props: {
             setIsActiveMajor(false)
         }
         setIsActivePatch(true)
-        handleClickNextVersion('Patch')
+        handleClickNextVersion('Patch', event)
 
     }
-
-    console.log(major, minor, patch);
 
     return (
         <Card extra={"w-full p-4 h-full mb-4"}>
@@ -103,7 +104,7 @@ export default function Version(props: {
                 </header>
                 {/* <hr className=' h-1 mt-3 mb-2 rounded bg-gray-200 dark:text-gray-400'/> */}
                 <p className='mt-3 text-lg font-medium text-gray-800 dark:text-white'>Current Version
-                    <span className='text-blue-700 dark:text-blue-500'> {props.currentVersion}</span></p>
+                    <span className='text-blue-700 dark:text-blue-500'> {props.recentVersion}</span></p>
                 <div className='grid grid-cols-2 w-[80%] text-center justify-between mt-5 mb-3 font-extrabold leading-none tracking-tight
         dark:text-white text-gray-800'>
                     <div className=''>

@@ -44,7 +44,8 @@ function InputText(): JSX.Element {
     const [contextsRecoilState, setContextsRecoilState] = useRecoilState(contextsState)
     const [blockRecoilState, setBlockRecoilState] = useRecoilState(blockState)
 
-    const addNewBlock = () => {
+    const addNewBlock = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
         setBlocks(prevState => {
             return [...prevState, {contexts: [{context: '', index: 0, tag: ''}], label: ''}]
         })
@@ -63,7 +64,7 @@ function InputText(): JSX.Element {
             {renderAddBlock()}
             <button
                 className="text-white bg-gradient-to-br from-purple-300 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-1 text-center mt-3 mr-2 mb-2"
-                onClick={() => addNewBlock()}
+                onClick={(event) => addNewBlock(event)}
             >
                 +
             </button>
