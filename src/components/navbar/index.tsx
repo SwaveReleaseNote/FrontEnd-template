@@ -24,27 +24,27 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
 
    const handleKeyDownSearchInput = async (event: React.KeyboardEvent<HTMLInputElement>): Promise<void> => {
       if (event.key === 'Enter') {
-         console.log("handle key enter");
+         console.log('handle key enter');
          try {
             console.log('refetch projects');
             await queryClient.refetchQueries(['searchResults', searchTerm]).then(() => {
-               console.log('searchTerm', searchTerm);
+               console.log('검색 창', searchTerm);
+               navigate('/admin/project/searchResult', {
+                  state: {
+                     searchTerm: searchTerm,
+                  },
+               });
+               setSearchTerm('');
             });
          } catch (error) {
             console.error(error);
-         } finally {
-            navigate('/admin/project/searchResult', {
-               state: {
-                  searchTerm: searchTerm,
-               },
-            });
-            setSearchTerm('');
          }
       }
    };
 
    const handleChangeSearchInput = (event: React.ChangeEvent<HTMLInputElement>): void => {
       setSearchTerm(event.target.value);
+      console.log(searchTerm);
    };
 
    /* 알림 */
@@ -159,7 +159,8 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
                <input
                   value={searchTerm}
                   onChange={handleChangeSearchInput}
-                  onKeyDown={() => handleKeyDownSearchInput}
+                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                  onKeyDown={handleKeyDownSearchInput}
                   type="text"
                   placeholder="프로젝트 검색..."
                   className="block h-full w-full rounded-full bg-lightPrimary text-sm font-medium text-navy-700 outline-none placeholder:!text-gray-400 dark:bg-navy-900 dark:text-white dark:placeholder:!text-white sm:w-fit"
