@@ -49,10 +49,11 @@ const SearchProjectList: React.FC = () => {
    const fetchSearchResults = async (searchTerm: string): Promise<SearchResult> => {
       try {
          setSearchTerm(searchTerm || "");
-         console.log('setSearchTerm', searchTerm);
+         console.log('fetchSearchResult', searchTerm);
          const response = await api.post('project/search', {
             keyword: searchTerm,
          });
+         console.log(response.data);
          return response.data;
       } catch (error: any) {
          console.error('Error fetching search result:', error);

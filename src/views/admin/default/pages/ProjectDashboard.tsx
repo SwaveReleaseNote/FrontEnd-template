@@ -61,9 +61,9 @@ const ProjectDashboard: React.FC = () => {
          console.log(checkUserRoleQuery.data);
       }
       
-      setGetProjectId(projectId)
+      // setGetProjectId(projectId);
       
-   }, [checkUserRoleQuery.isSuccess, getProjectId]);
+   }, [checkUserRoleQuery.isSuccess]);
 
    const handleClickManageButton = async (
       event: React.MouseEvent<HTMLButtonElement>,
