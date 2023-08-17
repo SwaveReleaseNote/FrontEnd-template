@@ -1,8 +1,6 @@
-/*eslint-disable*/
-
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQueryClient } from 'react-query';
 
 import LoadingComponent from '../components/LoadingComponent ';
 import api from 'context/api';
@@ -51,7 +49,7 @@ const SearchProjectList: React.FC = () => {
 
    const fetchSearchResults = async (searchTerm: string): Promise<SearchResult> => {
       try {
-         setSearchTerm(searchTerm || '');
+         setSearchTerm(searchTerm);
          console.log('백에서 데이터 가져오기', searchTerm);
          const response = await api.post(`search/${searchTerm}/open`);
          console.log(response.data);
@@ -211,15 +209,17 @@ const SearchProjectList: React.FC = () => {
       if (location.state.searchTerm != null) {
          setSearchTerm(location.state.searchTerm);
          console.log('검색 결과 페이지', location.state.searchTerm);
-         const fetchData = async () => {
+         const fetchData = async (): Promise<void> => {
             setIsLoading(true);
             const results = await fetchSearchResults(location.state.searchTerm);
             setSearchResults(results);
             setIsLoading(false);
          };
-         fetchData();
+         fetchData().catch(error => {
+            console.error(error);
+         });
       }
-   }, [isLoading, searchTerm, location.state.searchTerm, ]);
+   }, [isLoading, searchTerm, location.state.searchTerm]);
 
    const handleClickProjectName = async (projectId: number, projectName: string): Promise<void> => {
       try {
@@ -443,20 +443,13 @@ const SearchProjectList: React.FC = () => {
                <div className="flex justify-center">
                   {selectedCheckbox === '전체' && (
                      <div className="">
-                        <div className="">
-                           {renderProjects(searchResults?.titleSearch ?? [], searchTerm, '제목')}
-                        </div>
-                        <div>
-                           {renderProjects(searchResults?.descriptionSearch ?? [], searchTerm, '개요')}
-                        </div>
+                        <div className="">{renderProjects(searchResults?.titleSearch ?? [], searchTerm, '제목')}</div>
+                        <div>{renderProjects(searchResults?.descriptionSearch ?? [], searchTerm, '개요')}</div>
                         <div>{renderProjects(searchResults?.managerSearch ?? [], searchTerm, '관리자')}</div>
-                        <div>
-                           {renderProjects(searchResults?.developerSearch ?? [], searchTerm, '개발자')}
-                        </div>
+                        <div>{renderProjects(searchResults?.developerSearch ?? [], searchTerm, '개발자')}</div>
                      </div>
                   )}
-                  {selectedCheckbox === '제목' &&
-                     renderProjects(searchResults?.titleSearch ?? [], searchTerm, '제목')}
+                  {selectedCheckbox === '제목' && renderProjects(searchResults?.titleSearch ?? [], searchTerm, '제목')}
                   {selectedCheckbox === '개요' &&
                      renderProjects(searchResults?.descriptionSearch ?? [], searchTerm, '개요')}
                   {selectedCheckbox === '관리자' &&

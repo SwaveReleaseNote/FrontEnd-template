@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import React, { type ReactElement } from 'react';
 
 interface NotificationPopupProps {
