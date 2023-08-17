@@ -229,6 +229,8 @@ const SearchProjectList: React.FC = () => {
 
    const handleClickProjectName = async (projectId: number, projectName: string): Promise<void> => {
       try {
+         console.log("click project", projectId);
+         console.log("click project", projectName);
          const userRoleResponse = await fetchUserRole(projectId);
          if (userRoleResponse === UserRole.None) {
             setShowRoleCheck(true);
