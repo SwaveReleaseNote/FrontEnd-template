@@ -49,7 +49,7 @@ const SearchProjectList: React.FC = () => {
    const fetchSearchResults = async (searchTerm: string): Promise<SearchResult> => {
       try {
          setSearchTerm(searchTerm || "");
-         console.log('fetchSearchResult', searchTerm);
+         console.log('백에서 데이터 가져오기', searchTerm);
          const response = await api.post('project/search', {
             keyword: searchTerm,
          });

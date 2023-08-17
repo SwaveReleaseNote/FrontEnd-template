@@ -26,7 +26,7 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
       if (event.key === 'Enter') {
          console.log('handle key enter');
          try {
-            await queryClient.refetchQueries(['searchResults', searchTerm]).then(() => {
+            await queryClient.invalidateQueries(['searchResults', searchTerm]).then(() => {
                console.log('검색 창', searchTerm);
                navigate('/admin/project/searchResult', {
                   state: {
