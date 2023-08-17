@@ -219,7 +219,7 @@ const SearchProjectList: React.FC = () => {
             console.error(error);
          });
       }
-   }, [isLoading, searchTerm, location.state.searchTerm]);
+   }, [isLoading, location.state.searchTerm]);
 
    const handleClickProjectName = async (projectId: number, projectName: string): Promise<void> => {
       try {
