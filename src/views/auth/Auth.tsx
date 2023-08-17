@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { setCookie } from './cookie';
 import {createStompClient,activateStompClient} from "./stompClientUtils";
+import EventSourceComponent from './EventSourceComponent';
+
 // interface TokenData {
 //    data: string;
 //    type: string;
@@ -30,13 +32,13 @@ const Auth = (): JSX.Element => {
          // url의 인가코드
          try {
             const res = await axios.post(
-               `http://61.109.214.110:80/api/user/login-by-oauth?code=${code}&provider=${provider?.toString() ?? ''}`,
+               `http://266e8974276247f4b3cad8498606fafb.kakaoiedge.com:80/api/user/login-by-oauth?code=${code}&provider=${provider?.toString() ?? ''}`,
             );
             // 인가코드를 백엔드로 보내고 헤더에서 엑세스 토큰 받아옴
             // const parsedData: TokenData = JSON.parse(res.data.slice(5));
 
             // const tokenData = parsedData.data.replace(/"/g, '');
-            console.log(res.data);
+            console.log(res.headers.Authorization);
             const tokenData = res.data;
             console.log(tokenData);
             const token = `Bearer ${String(tokenData)}`;
@@ -50,7 +52,7 @@ const Auth = (): JSX.Element => {
             activateStompClient();
             try {
                await axios
-                  .get(`http://61.109.214.110:80/api/user`, {
+                  .get(`http://266e8974276247f4b3cad8498606fafb.kakaoiedge.com:80/api/user`, {
                      headers: {
                         Authorization: token,
                      },
@@ -66,6 +68,7 @@ const Auth = (): JSX.Element => {
                      window.localStorage.setItem('info', '');
                      window.localStorage.setItem('department', response.data.department);
                      const emailCookieKey = localStorage.getItem('email') as string;
+                     
                      setCookie(emailCookieKey, token, {
                         path: '/',
                         sameSite: 'strict',
@@ -78,7 +81,9 @@ const Auth = (): JSX.Element => {
                console.error(error);
                navigate('/');
             }finally {
+               
                navigate('/admin');
+
             }
 
          } catch (error) {
@@ -88,7 +93,7 @@ const Auth = (): JSX.Element => {
       })();
    }, [provider, navigate]);
 
-   return <></>; // Placeholder return statement as the component doesn't render anything
+   return <>   <EventSourceComponent /> </>; // Placeholder return statement as the component doesn't render anything
 };
 
 export default Auth;
