@@ -36,6 +36,7 @@ const Auth = (): JSX.Element => {
             // const parsedData: TokenData = JSON.parse(res.data.slice(5));
 
             // const tokenData = parsedData.data.replace(/"/g, '');
+            console.log(res.headers);
             const token = res.headers.authorization;
             console.log(token);
             // const token = `Bearer ${String(tokenData)}`;
