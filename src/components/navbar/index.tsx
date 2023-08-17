@@ -24,16 +24,21 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
 
    const handleKeyDownSearchInput = async (event: React.KeyboardEvent<HTMLInputElement>): Promise<void> => {
       if (event.key === 'Enter') {
-         navigate('/admin/project/searchResult', {
-            state: {
-               searchTerm: searchTerm,
-            },
-         });
-         await queryClient.refetchQueries(['searchResults', searchTerm]).then(() => {
-            console.log('refetch projects');
-            console.log('searchTerm');
-         });
-         setSearchTerm('');
+         try {
+            await queryClient.refetchQueries(['searchResults', searchTerm]).then(() => {
+               console.log('refetch projects');
+               console.log('searchTerm', searchTerm);
+            });
+         } catch (error) {
+            console.error(error);
+         } finally {
+            navigate('/admin/project/searchResult', {
+               state: {
+                  searchTerm: searchTerm,
+               },
+            });
+            setSearchTerm('');
+         }
       }
    };
 
