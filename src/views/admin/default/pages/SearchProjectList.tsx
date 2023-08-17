@@ -206,20 +206,28 @@ const SearchProjectList: React.FC = () => {
    // const searchResultQuery = useQuery(['searchResults', searchTerm], async () => await fetchSearchResults(searchTerm));
 
    useEffect(() => {
+      setIsLoading(true);
       if (location.state.searchTerm != null) {
          setSearchTerm(location.state.searchTerm);
          console.log('검색 결과 페이지', location.state.searchTerm);
          const fetchData = async (): Promise<void> => {
-            setIsLoading(true);
             const results = await fetchSearchResults(location.state.searchTerm);
             setSearchResults(results);
-            setIsLoading(false);
          };
-         fetchData().catch(error => {
-            console.error(error);
-         });
+         fetchData()
+            .catch(error => {
+               console.error(error);
+            })
+            .finally(() => {
+               setIsLoading(false);
+            });
       }
-   }, [isLoading, searchTerm, location.state.searchTerm]);
+   }, [location.state.searchTerm]);
+
+   
+   useEffect(() => {
+      console.log("useEffect");
+   }, [isLoading]);
 
    const handleClickProjectName = async (projectId: number, projectName: string): Promise<void> => {
       try {
