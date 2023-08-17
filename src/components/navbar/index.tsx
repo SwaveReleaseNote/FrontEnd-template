@@ -7,7 +7,7 @@ import { RiMoonFill, RiSunFill } from 'react-icons/ri';
 import { IoMdNotificationsOutline, IoMdInformationCircleOutline } from 'react-icons/io';
 import React, { useState, useEffect } from 'react';
 import api from 'context/api';
-import { useQueryClient } from 'react-query';
+// import { useQueryClient } from 'react-query';
 
 interface Notice {
    title: string;
@@ -20,21 +20,21 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
    const [darkmode, setDarkmode] = useState(false);
    const [searchTerm, setSearchTerm] = useState('');
    const navigate = useNavigate();
-   const queryClient = useQueryClient();
+   // const queryClient = useQueryClient();
 
    const handleKeyDownSearchInput = async (event: React.KeyboardEvent<HTMLInputElement>): Promise<void> => {
       if (event.key === 'Enter') {
          console.log('handle key enter');
          try {
-            await queryClient.invalidateQueries(['searchResults', searchTerm]).then(() => {
-               console.log('검색 창', searchTerm);
-               navigate('/admin/project/searchResult', {
-                  state: {
-                     searchTerm: searchTerm,
-                  },
-               });
-               setSearchTerm('');
+            // await queryClient.invalidateQueries(['searchResults', searchTerm]).then(() => {
+            // });
+            console.log('검색 창', searchTerm);
+            navigate('/admin/project/searchResult', {
+               state: {
+                  searchTerm: searchTerm,
+               },
             });
+            setSearchTerm('');
          } catch (error) {
             console.error(error);
          }
