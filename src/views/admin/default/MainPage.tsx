@@ -386,6 +386,9 @@ const MainPage = (): JSX.Element => {
                         <option value="Department 1">Department 1</option>
                         <option value="Department 2">Department 2</option>
                         <option value="Department 3">Department 3</option>
+                        <option value="인사">인사</option>
+                        <option value="개발">개발</option>
+                        <option value="전략기획">전략기획</option>
                      </select>
                   </div>
                   <button type="button" onClick={handleClickSaveChangeButton}>
