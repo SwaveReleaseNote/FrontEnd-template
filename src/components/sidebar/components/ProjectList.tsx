@@ -80,7 +80,7 @@ function ProjectList(): JSX.Element {
             console.error('오류오류')
             console.error('Error fetching project dashboard:', error);
         })
-    })
+    }, [])
 
     // // Mock Data Test
     // useEffect(() => {
