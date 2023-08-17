@@ -64,5 +64,6 @@ const sideBarRoutes = [
     icon: <MdOutlineShoppingCart className="h-6 w-6" />,
     component: <EditableNote />,
   }
+
 ];
 export default sideBarRoutes;

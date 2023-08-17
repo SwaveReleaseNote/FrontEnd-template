@@ -6,7 +6,7 @@ import {Link, useLocation} from "react-router-dom";
 import projectsMockData from "../mockData/noteListData.json"
 import noteMockData from "../../label/mockData/NoteFiledMockData.json"
 import {RecoilLoadable, useRecoilState} from "recoil";
-import {noteFieldState, noteIdState} from "../../../context/atom";
+import {noteFieldState, noteIdState, projectIdState} from "../../../context/atom";
 import routes from "../../../routes";
 import DashIcon from "../../icons/DashIcon";
 import {MdOutlineShoppingCart} from "react-icons/md";
@@ -56,6 +56,7 @@ function ProjectList(): JSX.Element {
 
     const [projects, setProjects] = useState<Project[]>();
     const [selectedProject, setSelectedProject] = useState<Project>();
+    const [selectedProjectId, setSelectedProjectId] = useRecoilState(projectIdState)
     const [selectNote, setSelectNote] = useRecoilState(noteFieldState);
     const [selectNoteId, setSelectNoteId] = useRecoilState(noteIdState);
     const [isSelect, setIsSelect] = useState(false);
@@ -91,7 +92,10 @@ function ProjectList(): JSX.Element {
     const handleSelectProject = (event: React.ChangeEvent<HTMLSelectElement>): void => {
         console.log("select 클릭함")
         projects?.map(p => {
-            p.projectName === event.target.value ? setSelectedProject(p) : null;
+            p.projectName === event.target.value
+                ? setSelectedProject(p)
+                : null;
+            setSelectedProjectId(p.projectId)
         })
         setIsSelect(true);
     };

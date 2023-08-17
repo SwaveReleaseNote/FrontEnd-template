@@ -96,6 +96,7 @@ export const filterDropdownOptions = atom({
 
 export const projectIdState = atom({
     key: "projectIdState",
+    default: 0
 });
 
 // 전체 릴리즈 노트 생성 post form

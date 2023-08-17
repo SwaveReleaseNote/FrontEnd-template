@@ -4,9 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1add38cb-85f0-48f9-835c-e73c5060c10d" name="Changes" comment="Merge branch 'develop' into showReleaseNote">
+    <list default="true" id="1add38cb-85f0-48f9-835c-e73c5060c10d" name="Changes" comment="Update ProjectDashboard.tsx">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/sidebar/components/ProjectList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sidebar/components/ProjectList.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/context/atom.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/atom.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/layouts/admin/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/admin/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sideBarRoutes.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sideBarRoutes.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,6 +18,11 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="ham &lt;tomy8964@naver.com&gt;" />
+      </list>
+    </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
         <entry key="$PROJECT_DIR$" value="develop" />
@@ -207,11 +216,30 @@
       <option name="project" value="LOCAL" />
       <updated>1692255039590</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Update ProjectDashboard.tsx">
+      <option name="closed" value="true" />
+      <created>1692256963947</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1692256963947</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Revert &quot;Merge branch 'develop' into bugfix/50-sidebar-routing-issue&quot;&#10;&#10;This reverts commit 5b85e683b21d2832a4fce750bb852f3951b66c49, reversing&#10;changes made to ed73be7aff257dcc4954c50942fc98f9d3ba75ec." />
@@ -227,6 +255,7 @@
     <MESSAGE value="feat: 릴리즈 노트 생성 환경 사이드 바 수정" />
     <MESSAGE value="feat: 릴리즈노트 보는 화면" />
     <MESSAGE value="Merge branch 'develop' into showReleaseNote" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge branch 'develop' into showReleaseNote" />
+    <MESSAGE value="Update ProjectDashboard.tsx" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update ProjectDashboard.tsx" />
   </component>
 </project>
