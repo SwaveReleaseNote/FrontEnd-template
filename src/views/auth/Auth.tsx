@@ -36,8 +36,8 @@ const Auth = (): JSX.Element => {
             // const parsedData: TokenData = JSON.parse(res.data.slice(5));
 
             // const tokenData = parsedData.data.replace(/"/g, '');
-            console.log(res.headers);
-            const token = res.headers.authorization;
+            console.log(res.data);
+            const token = response.data;
             console.log(token);
             // const token = `Bearer ${String(tokenData)}`;
             // 로컬스토리지에 저장
