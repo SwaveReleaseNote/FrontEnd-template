@@ -48,12 +48,11 @@ const SearchProjectList: React.FC = () => {
 
    const fetchSearchResults = async (searchTerm: string): Promise<SearchResult> => {
       try {
-         setSearchTerm(searchTerm);
+         setSearchTerm(searchTerm || "");
          console.log('setSearchTerm', searchTerm);
          const response = await api.post('project/search', {
             keyword: searchTerm,
          });
-
          return response.data;
       } catch (error: any) {
          console.error('Error fetching search result:', error);
@@ -209,11 +208,12 @@ const SearchProjectList: React.FC = () => {
    useEffect(() => {
       if (location.state.searchTerm != null) {
          setSearchTerm(location.state.searchTerm);
+         console.log("검색 결과 페이지", searchTerm);
       }
       if (searchResultQuery.isSuccess) {
          setIsLoading(false);
       }
-   }, [searchResultQuery.isSuccess]);
+   }, [searchResultQuery.isSuccess, searchTerm]);
 
    const handleClickProjectName = async (projectId: number, projectName: string): Promise<void> => {
       try {
