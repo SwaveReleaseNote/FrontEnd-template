@@ -13,7 +13,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="noteblockbackup2" />
+        <entry key="$PROJECT_DIR$" value="develop" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -29,6 +29,10 @@
               <option name="branches">
                 <list>
                   <RecentBranch>
+                    <option name="branchName" value="showReleaseNote" />
+                    <option name="lastUsedInstant" value="1692252617" />
+                  </RecentBranch>
+                  <RecentBranch>
                     <option name="branchName" value="29-feat-note-block" />
                     <option name="lastUsedInstant" value="1692150475" />
                   </RecentBranch>
@@ -43,10 +47,6 @@
                   <RecentBranch>
                     <option name="branchName" value="develop-sidebar-resolve-conflict" />
                     <option name="lastUsedInstant" value="1692148283" />
-                  </RecentBranch>
-                  <RecentBranch>
-                    <option name="branchName" value="#2/develop-sidebar-resolve-conflict" />
-                    <option name="lastUsedInstant" value="1692148045" />
                   </RecentBranch>
                 </list>
               </option>
@@ -72,21 +72,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "29-feat-note-block",
-    "js.last.introduce.type": "CONST",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "pnpm",
-    "ts.external.directory.path": "/Users/gachonswacademy02/Desktop/FrontEnd-template/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;showReleaseNote&quot;,
+    &quot;js.last.introduce.type&quot;: &quot;CONST&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/gachonswacademy02/Desktop/FrontEnd-template/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -188,7 +188,15 @@
       <option name="project" value="LOCAL" />
       <updated>1692249636543</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="feat: 릴리즈노트 보는 화면">
+      <option name="closed" value="true" />
+      <created>1692254037655</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1692254037655</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -206,6 +214,7 @@
     <MESSAGE value="feat: 릴리즈 노트 생성, 리코일을 통해 API post 요청" />
     <MESSAGE value="feat: 릴리즈 노트 path variable 설정을 위해 dashboard에서 리코일 저장" />
     <MESSAGE value="feat: 릴리즈 노트 생성 환경 사이드 바 수정" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: 릴리즈 노트 생성 환경 사이드 바 수정" />
+    <MESSAGE value="feat: 릴리즈노트 보는 화면" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: 릴리즈노트 보는 화면" />
   </component>
 </project>

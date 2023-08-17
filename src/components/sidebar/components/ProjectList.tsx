@@ -6,7 +6,7 @@ import {Link, useLocation} from "react-router-dom";
 import projectsMockData from "../mockData/noteListData.json"
 import noteMockData from "../../label/mockData/NoteFiledMockData.json"
 import {RecoilLoadable, useRecoilState} from "recoil";
-import {noteFieldState} from "../../../context/atom";
+import {noteFieldState, noteIdState} from "../../../context/atom";
 import routes from "../../../routes";
 import DashIcon from "../../icons/DashIcon";
 import {MdOutlineShoppingCart} from "react-icons/md";
@@ -57,37 +57,36 @@ function ProjectList(): JSX.Element {
     const [projects, setProjects] = useState<Project[]>();
     const [selectedProject, setSelectedProject] = useState<Project>();
     const [selectNote, setSelectNote] = useRecoilState(noteFieldState);
-    const [selectNoteId, setSelectNoteId] = useState<number>();
+    const [selectNoteId, setSelectNoteId] = useRecoilState(noteIdState);
     const [isSelect, setIsSelect] = useState(false);
 
     // api 로 받아온 데이터를 projects에 넣어준다
-    // useEffect(() => {
-    //
-    //     const fetchProjects = async (): Promise<void> => {
-    //         try{
-    //             const response = await api.get('project/release-note/version-list')
-    //             const projectList = response.data
-    //             console.log("프로젝트 리스트를 받아옵니다")
-    //             console.log(projectList)
-    //             setProjects(projectList);
-    //             setProjects(mockData.projects)
-    //         }
-    //         catch (error) {
-    //             console.error(error)
-    //         }
-    //     }
-    //
-    //     fetchProjects().catch(error => {
-    //         console.error('오류오류')
-    //         console.error('Error fetching project dashboard:', error);
-    //     })
-    // })
-
-    // Mock Data Test
     useEffect(() => {
-        setProjects(projectsMockData.projects)
-        console.log("프로젝트 set 되는 useEffect 실행됨~")
-    }, []);
+
+        const fetchProjects = async (): Promise<void> => {
+            try{
+                const response = await api.get('project/release-note/version-list')
+                const projectList = response.data
+                console.log("프로젝트 리스트를 받아옵니다")
+                console.log(projectList)
+                setProjects(projectList);
+            }
+            catch (error) {
+                console.error(error)
+            }
+        }
+
+        fetchProjects().catch(error => {
+            console.error('오류오류')
+            console.error('Error fetching project dashboard:', error);
+        })
+    })
+
+    // // Mock Data Test
+    // useEffect(() => {
+    //     setProjects(projectsMockData.projects)
+    //     console.log("프로젝트 set 되는 useEffect 실행됨~")
+    // }, []);
 
     const handleSelectProject = (event: React.ChangeEvent<HTMLSelectElement>): void => {
         console.log("select 클릭함")
@@ -97,14 +96,10 @@ function ProjectList(): JSX.Element {
         setIsSelect(true);
     };
 
-
     const handleSelectNote = (id: number) => {
         console.log("선택된 노트의 id = " + id)
-        setSelectNote(noteMockData)
-        console.log("mock data 에 넣어줌")
         setSelectNoteId(id);
     }
-
 
     return (
         <div className="bg-gray-50 dark:bg-gray-800">

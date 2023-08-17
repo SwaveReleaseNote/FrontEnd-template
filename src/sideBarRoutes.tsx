@@ -18,6 +18,7 @@ import MyPage from "views/auth/MyPage";
 
 
 import CreateProject from "views/admin/default/pages/CreateProject";
+import EditableNote from "./components/noteEdit/EditableNote";
 
 const sideBarRoutes = [
   {
@@ -56,5 +57,12 @@ const sideBarRoutes = [
     icon: <MdLock className="h-6 w-6" />,
     component: <SignIn />,
   },
+  {
+    name: "Create Release Note",
+    layout: "/admin",
+    path: "create-note",
+    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
+    component: <EditableNote />,
+  }
 ];
 export default sideBarRoutes;
