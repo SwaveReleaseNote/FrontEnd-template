@@ -5,7 +5,14 @@ import imageSrc from 'assets/img/layout/Navbar.png';
 import { BsArrowBarUp } from 'react-icons/bs';
 import { RiMoonFill, RiSunFill } from 'react-icons/ri';
 import { IoMdNotificationsOutline, IoMdInformationCircleOutline } from 'react-icons/io';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import api from 'context/api';
+import { useQueryClient } from 'react-query';
+
+interface Notice {
+   title: string;
+   message: string;
+}
 
 const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary?: boolean | string }): JSX.Element => {
    const navbarimage = imageSrc as string;
@@ -13,13 +20,18 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
    const [darkmode, setDarkmode] = useState(false);
    const [searchTerm, setSearchTerm] = useState('');
    const navigate = useNavigate();
+   const queryClient = useQueryClient();
 
-   const handleKeyDownSearchInput = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+   const handleKeyDownSearchInput = async (event: React.KeyboardEvent<HTMLInputElement>): Promise<void> => {
       if (event.key === 'Enter') {
          navigate('/admin/project/searchResult', {
             state: {
                searchTerm: searchTerm,
             },
+         });
+         await queryClient.refetchQueries(['searchResults', searchTerm]).then(() => {
+            console.log('refetch projects');
+            console.log('searchTerm');
          });
          setSearchTerm('');
       }
@@ -29,7 +41,87 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
       setSearchTerm(event.target.value);
    };
 
+   /* 알림 */
+   const [notificationMessage, setNotificationMessage] = useState([
+      {
+         title: '',
+         message: '',
+      },
+   ]);
+   const [inputText, setInputText] = useState({
+      title: '',
+      message: '',
+   });
 
+   const noticeList: Notice[] = [];
+   const [notificationDropdownVisible, setNotificationDropdownVisible] = useState(false);
+   const handleNotificationButtonClick = async (): Promise<Notice[]> => {
+      // Toggle the visibility of the notification dropdown
+      setNotificationDropdownVisible(prevVisible => !prevVisible);
+      if (notificationDropdownVisible) {
+         setNotificationMessage([
+            {
+               title: '',
+               message: '',
+            },
+         ]);
+      } else {
+         try {
+            const topicName = localStorage.getItem('user_id') as string;
+            const response = await api.get(`kafka/get-topic-all/${topicName}`);
+            console.log(response.data);
+            console.log(response.data.oldMessage);
+            const newNotifications: Notice[] = [];
+            for (const message of response.data.oldMessage) {
+               try {
+                  const messagejson = JSON.parse(message);
+                  newNotifications.push({
+                     title: messagejson.type,
+                     message: messagejson.content,
+                  });
+               } catch (error) {
+                  console.log('error');
+               }
+            }
+
+            setNotificationMessage(prevNotifications => [...prevNotifications, ...newNotifications]);
+         } catch (error: any) {
+            console.error('Error fetching projects', error);
+            return [
+               {
+                  title: 'New Update: Horizon UI Dashboard PRO',
+                  message: 'A new update for your downloaded item is available!',
+               },
+               {
+                  title: 'New Update: Horizon UI Dashboard PRO',
+                  message: 'A new update for your downloaded item is available!',
+               },
+               {
+                  title: 'New Update: Horizon UI Dashboard PRO',
+                  message: 'A new update for your downloaded item is available!',
+               },
+            ];
+         }
+      }
+
+      return noticeList;
+   };
+   useEffect(() => {
+      if (inputText.title !== '' && inputText.message !== '') {
+         console.log(inputText);
+         setNotificationMessage(prevMessages => [
+            ...prevMessages,
+            {
+               title: inputText.title,
+               message: inputText.message,
+            },
+         ]);
+         setInputText({
+            title: '',
+            message: '',
+         });
+      }
+   }, [inputText]);
    return (
       <nav className="mb-5 sticky top-4 z-40 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/10 p-2 backdrop-blur-xl dark:bg-[#0b14374d]">
          <div className="ml-[6px]">
@@ -61,7 +153,7 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
                <input
                   value={searchTerm}
                   onChange={handleChangeSearchInput}
-                  onKeyDown={handleKeyDownSearchInput}
+                  onKeyDown={() => handleKeyDownSearchInput}
                   type="text"
                   placeholder="프로젝트 검색..."
                   className="block h-full w-full rounded-full bg-lightPrimary text-sm font-medium text-navy-700 outline-none placeholder:!text-gray-400 dark:bg-navy-900 dark:text-white dark:placeholder:!text-white sm:w-fit"
@@ -76,7 +168,8 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
             {/* start Notification */}
             <Dropdown
                button={
-                  <p className="cursor-pointer">
+                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                  <p className="cursor-pointer" onClick={handleNotificationButtonClick}>
                      <IoMdNotificationsOutline className="h-4 w-4 text-gray-600 dark:text-white" />
                   </p>
                }
@@ -87,34 +180,29 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
                      <p className="text-base font-bold text-navy-700 dark:text-white">Notification</p>
                      <p className="text-sm font-bold text-navy-700 dark:text-white">Mark all read</p>
                   </div>
-
-                  <button className="flex w-full items-center">
-                     <div className="flex h-full w-[85px] items-center justify-center rounded-xl bg-gradient-to-b from-brandLinear to-brand-500 py-4 text-2xl text-white">
-                        <BsArrowBarUp />
-                     </div>
-                     <div className="ml-2 flex h-full w-full flex-col justify-center rounded-lg px-1 text-sm">
-                        <p className="mb-1 text-left text-base font-bold text-gray-900 dark:text-white">
-                           New Update: Horizon UI Dashboard PRO
-                        </p>
-                        <p className="font-base text-left text-xs text-gray-900 dark:text-white">
-                           A new update for your downloaded item is available!
-                        </p>
-                     </div>
-                  </button>
-
-                  <button className="flex w-full items-center">
-                     <div className="flex h-full w-[85px] items-center justify-center rounded-xl bg-gradient-to-b from-brandLinear to-brand-500 py-4 text-2xl text-white">
-                        <BsArrowBarUp />
-                     </div>
-                     <div className="ml-2 flex h-full w-full flex-col justify-center rounded-lg px-1 text-sm">
-                        <p className="mb-1 text-left text-base font-bold text-gray-900 dark:text-white">
-                           New Update: Horizon UI Dashboard PRO
-                        </p>
-                        <p className="font-base text-left text-xs text-gray-900 dark:text-white">
-                           A new update for your downloaded item is available!
-                        </p>
-                     </div>
-                  </button>
+                  <div className="overflow-y-auto max-h-[300px]">
+                     {' '}
+                     {/* Add scrolling container */}
+                     {notificationMessage.map(
+                        (notification, index) =>
+                           notification.title !== '' &&
+                           notification.message !== '' && (
+                              <button key={index} className="flex w-full items-center">
+                                 <div className="flex h-full w-[85px] items-center justify-center rounded-xl bg-gradient-to-b from-brandLinear to-brand-500 py-4 text-2xl text-white">
+                                    <BsArrowBarUp />
+                                 </div>
+                                 <div className="ml-2 flex h-full w-full flex-col justify-center rounded-lg px-1 text-sm">
+                                    <p className="mb-1 text-left text-base font-bold text-gray-900 dark:text-white">
+                                       {notification.title}
+                                    </p>
+                                    <p className="font-base text-left text-xs text-gray-900 dark:text-white">
+                                       {notification.message}
+                                    </p>
+                                 </div>
+                              </button>
+                           ),
+                     )}
+                  </div>
                </div>
             </Dropdown>
 
@@ -218,7 +306,6 @@ const Navbar = (props: { onOpenSidenav: () => void; brandText: string; secondary
             </Dropdown>
          </div>
       </nav>
-      
    );
 };
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, type ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './UserProfileCard.css';
-import { getCookie } from './cookie';
+// import { getCookie } from './cookie';
 import api from 'context/api';
 
 function UserProfileCard(): ReactElement {
@@ -13,12 +13,11 @@ function UserProfileCard(): ReactElement {
    const [mostViewed, setMostViewed] = useState('dolor sit amet.');
 
    useEffect(() => {
-      if (getCookie('id') == null) {
+   //  const emailCookieKey = localStorage.getItem('email') as string;
+      if (localStorage.getItem('token') == null) {
          navigate('/auth/sign-in');
       } else {
          console.log(localStorage.getItem('department'));
-         const cookieId = getCookie('id');
-         console.log(cookieId);
          if (localStorage.getItem('department') === 'null') {
             console.log('showdepartment');
          }
@@ -112,7 +111,7 @@ function UserProfileCard(): ReactElement {
       event.preventDefault();
       // Handle forgot password form submission
       console.log(password);
-      api.patch('http://localhost:8080/api/user/password', {
+      api.patch('http://61.109.214.110:80/api/user/password', {
          password: password,
       })
          .then(response => {
@@ -132,25 +131,34 @@ function UserProfileCard(): ReactElement {
    const handleModalClose = (): void => {
       setShowPasswordChangeModal(false);
    };
+   const headingStyles: React.CSSProperties = {
+    marginTop: '45px',
+    marginBottom: '5px',
+    fontSize: '25px',
+    font: "bold",
+    color: '#212121'
+  };
 
    return (
       <>
          <form onSubmit={handleUserUpdateFormSubmit}>
             <div className="wrapper h-full w-full" style={{ paddingTop: '10px' }}>
-               <div className="left">
-                  <img src="https://i.imgur.com/cMy8V5j.png" alt="user" width="100" />
-                  <h3>Name</h3>
+              <div className='left'>
+               <div className="profilecard">
+                <div className="profilecardavatar"></div>
+                  <h3 style={headingStyles}>Name</h3>
                   <input
                      type="text"
                      name="name"
                      value={userName ?? ''}
                      onChange={handleChangeUserInputChange}
                      style={{
-                        background: '#01dbdf',
+                        background: '#FAFAFA',
                         textAlign: 'center',
                      }}
                   />
-               </div>
+                  </div>
+                  </div>
                <div className="right">
                   <div className="info">
                      <h3>Information</h3>
@@ -189,6 +197,9 @@ function UserProfileCard(): ReactElement {
                               <option value="Department 1">Department 1</option>
                               <option value="Department 2">Department 2</option>
                               <option value="Department 3">Department 3</option>
+                              <option value="인사">인사</option>
+                              <option value="개발">개발</option>
+                              <option value="전략기획">전략기획</option>
                            </select>
                         </div>
                         <div className="data">

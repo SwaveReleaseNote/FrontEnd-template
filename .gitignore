@@ -26,3 +26,7 @@ yarn-error.log*
 
 # dist 폴더 제외
 */dist
+# cypress
+cypress/screenshots
+cypress/videos
+cypress/log

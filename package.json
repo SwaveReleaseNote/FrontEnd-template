@@ -14,6 +14,7 @@
     "@stomp/stompjs": "^7.0.0",
     "@tanstack/react-table": "^8.9.3",
     "@types/chart.js": "^2.9.37",
+    "@types/eventsource": "^1.1.11",
     "@types/node": "^12.20.55",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.2.7",
@@ -47,9 +48,12 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "jest",
+    "jest": "jest",
     "eject": "react-scripts eject",
-    "pretty": "prettier --write \"./**/*.{js,jsx,json}\""
+    "pretty": "prettier --write \"./**/*.{js,jsx,json}\"",
+    "cypress open": "cypress open",
+    "cypress run": "cypress run",
+    "e2e": "start-server-and-test start http://61.109.214.110:80 cypress:run"
   },
   "eslintConfig": {
     "extends": [
@@ -87,21 +91,25 @@
     "@typescript-eslint/parser": "^6.2.0",
     "autoprefixer": "^10.4.14",
     "axios-mock-adapter": "^1.21.5",
+    "cypress": "^12.17.3",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-standard-with-typescript": "^37.0.0",
+    "eslint-plugin-cypress": "^2.14.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jest-dom": "^5.0.1",
     "eslint-plugin-n": "^16.0.1",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.33.0",
     "eslint-plugin-unused-imports": "^3.0.0",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^29.6.1",
     "jest-environment-jsdom": "^29.6.2",
     "postcss": "^8.4.25",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.2.8",
     "react-scripts": "5.0.1",
+    "start-server-and-test": "^2.0.0",
     "tailwindcss": "^3.3.2",
     "ts-jest": "^29.1.1",
     "typescript": "^4.9.5"

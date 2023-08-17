@@ -1,12 +1,13 @@
 import InputField from 'components/fields/InputField';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import * as StompJs from '@stomp/stompjs';
 import './SignIn.css';
 import kakaobutton from 'assets/img/auth/kakao2.png';
 import { setCookie } from './cookie';
 import api from 'context/api';
+import axios from 'axios';
+import {createStompClient,activateStompClient} from "../../views/auth/stompClientUtils";
 
 interface RegisterFormData {
    name: string;
@@ -18,10 +19,14 @@ interface LoginFormData {
    login_email: string;
    login_password: string;
 }
-
+// interface TokenData {
+//    data: string;
+//    type: string;
+//  }
 const SignIn: React.FC = () => {
    const navigate = useNavigate();
-   const host = 'http://localhost:3000';
+   const host = 'http://61.109.214.110:80';
+
    const KAKAO_REST_API_KEY = '4646a32b25c060e42407ceb8c13ef14a';
    const KAKAO_REDIRECT_URI = host + '/oauth/callback/kakao';
    const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
@@ -42,7 +47,6 @@ const SignIn: React.FC = () => {
       login_email: '',
       login_password: '',
    });
-   const client = useRef<StompJs.Client | null>(null);
 
    /* 회원가입 모달창 띄우기 */
    const handleRegisterModalButton = (): void => {
@@ -104,10 +108,16 @@ const SignIn: React.FC = () => {
          email: loginData.login_email,
          password: loginData.login_password,
       })
-         .then(response => {
+         .then(async response => {
             // Handle successful response
+
+            
+            // const parsedData: TokenData = JSON.parse(response.data.slice(5));
+            // console.log(parsedData);
+            // const token = parsedData.data.replace(/"/g, '');
             console.log(response.data);
             const token = response.data;
+            console.log(token);
             if (response.data === 'Information Not valid') {
                alert('Information Not valid');
                console.error('error');
@@ -115,41 +125,43 @@ const SignIn: React.FC = () => {
             }
             const expirationTime = new Date();
             expirationTime.setTime(expirationTime.getTime() + 30 * 60 * 1000);
-            setCookie('id', `Bearer ${String(token)}`, {
-               path: '/',
-               sameSite: 'strict',
-               expires: expirationTime,
-               HttpOnly: true,
-               secure: true,
-            });
-            window.localStorage.setItem('token', `Bearer ${String(token)}`);
-            client.current = new StompJs.Client({
-               brokerURL: 'ws://localhost:8080/ws-stomp',
-               // eslint-disable-next-line @typescript-eslint/no-empty-function
-               connectHeaders: {
-                  Authorization: token,
-               },
-               onConnect: () => {
-                  console.log('success');
-               },
-            });
-            client.current.activate();
+            
+            createStompClient(`Bearer ${String(token)}`);
+            activateStompClient();
             try {
-               void api.get(`user`).then(response => {
-                  // api의 응답을 제대로 받은경우
-                  console.log(response);
-                  console.log(response.data);
-                  window.localStorage.setItem('state', 'true');
-                  window.localStorage.setItem('name', response.data.username);
-                  window.localStorage.setItem('email', response.data.email);
-                  window.localStorage.setItem('info', '');
-                  window.localStorage.setItem('department', response.data.department);
-                  window.localStorage.setItem('token', `Bearer ${String(token)}`);
-               });
-               navigate('/admin');
+               await axios
+                  .get(`http://61.109.214.110:80/api/user`, {
+                     headers: {
+                        Authorization: `Bearer ${String(token)}`,
+                     },
+                  })
+                  .then(response => {
+                     // api의 응답을 제대로 받은경우
+                     console.log(response);
+                     console.log(response.data);
+                     window.localStorage.setItem('state', 'true');
+                     window.localStorage.setItem('name', response.data.username);
+                     window.localStorage.setItem('email', response.data.email);
+                     window.localStorage.setItem('info', '');
+                     window.localStorage.setItem('user_id',response.data.id);
+                     window.localStorage.setItem('department', response.data.department);
+                     window.localStorage.setItem('token', `Bearer ${String(token)}`);
+                     const emailCookieKey = localStorage.getItem('email') as string;
+                     setCookie(emailCookieKey, `Bearer ${String(token)}`, {
+                        path: '/',
+                        sameSite: 'strict',
+                        expires: expirationTime,
+                        HttpOnly: true,
+                        secure: true,
+                     });
+                  });
             } catch (error) {
                console.error(error);
+            } finally {
+               console.log("get", window.localStorage.getItem('department'));
+               navigate('/admin');
             }
+
          })
          .catch(error => {
             // Handle error
@@ -312,7 +324,7 @@ const SignIn: React.FC = () => {
                   <span className=" text-sm font-medium text-navy-700 dark:text-gray-600">Not registered yet?</span>
                   <a
                      onClick={handleRegisterModalButton}
-                     className="ml-1 text-sm font-medium text-brand-500 hover:text-brand-600 dark:text-white">
+                     className="hover:cursor-pointer ml-1 text-sm font-medium text-brand-500 hover:text-brand-600 dark:text-white">
                      Create an account
                   </a>
                </div>

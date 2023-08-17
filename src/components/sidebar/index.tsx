@@ -3,7 +3,7 @@
 import {HiX} from "react-icons/hi";
 import Links from "./components/Links";
 
-import routes from "routes";
+import routes from "sideBarRoutes";
 import ProjectList from "./components/ProjectList";
 
 /**
