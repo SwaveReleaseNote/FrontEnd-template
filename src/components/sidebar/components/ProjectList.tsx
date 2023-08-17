@@ -13,15 +13,15 @@ import {MdOutlineShoppingCart} from "react-icons/md";
 import ReleaseNote from "../../../views/admin/marketplace";
 
 interface Note {
-    releaseNoteId: number,
-    version: string;
+    version: string,
+    releaseNoteId: number
 }
 
 interface Project {
     projectId: number,
     projectName: string,
     releaseNoteVersionList: Note[],
-    subscribe: boolean;
+    isSubscribe: boolean;
 }
 
 interface Route {
