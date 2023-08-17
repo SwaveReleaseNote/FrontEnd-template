@@ -84,7 +84,7 @@ function EditableNote() {
         event.preventDefault()
 
         try {
-            const response = await api.post(`project/${projectId}/releaseNote`, noteFieldForm)
+            const response = await api.post(`project/${projectId}/release-note`, noteFieldForm)
             console.log(response.data)
 
             navigate('../default')

@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1add38cb-85f0-48f9-835c-e73c5060c10d" name="Changes" comment="Update ProjectDashboard.tsx">
+    <list default="true" id="1add38cb-85f0-48f9-835c-e73c5060c10d" name="Changes" comment="Merge remote-tracking branch 'origin/develop' into develop">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/sidebar/components/ProjectList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sidebar/components/ProjectList.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/context/atom.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/atom.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/admin/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/admin/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sideBarRoutes.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/sideBarRoutes.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -224,7 +219,15 @@
       <option name="project" value="LOCAL" />
       <updated>1692256963947</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Merge remote-tracking branch 'origin/develop' into develop">
+      <option name="closed" value="true" />
+      <created>1692259216430</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1692259216430</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -256,6 +259,7 @@
     <MESSAGE value="feat: 릴리즈노트 보는 화면" />
     <MESSAGE value="Merge branch 'develop' into showReleaseNote" />
     <MESSAGE value="Update ProjectDashboard.tsx" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update ProjectDashboard.tsx" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/develop' into develop" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/develop' into develop" />
   </component>
 </project>
