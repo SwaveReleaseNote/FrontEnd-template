@@ -37,11 +37,11 @@ const ProjectDashboard: React.FC = () => {
          return response.data;
       } catch (error: any) {
          console.error('Error fetching user role:', error);
-         let status = error.code;
-         if (error.response?.status != null) {
-            status = error.response.status;
-         }
-         navigate(`../error?status=${status as string}`);
+         // let status = error.code;
+         // if (error.response?.status != null) {
+         //    status = error.response.status;
+         // }
+         // navigate(`../error?status=${status as string}`);
          return mockFetchUserRole();
       }
    };
