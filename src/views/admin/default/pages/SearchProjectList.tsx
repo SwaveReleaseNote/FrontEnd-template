@@ -215,6 +215,17 @@ const SearchProjectList: React.FC = () => {
       }
    }, [searchResultQuery.isSuccess, searchTerm]);
 
+   
+   useEffect(() => {
+      if (location.state.searchTerm != null) {
+         setSearchTerm(location.state.searchTerm);
+         console.log("검색 결과 페이지", searchTerm);
+      }
+      if (searchResultQuery.isSuccess) {
+         setIsLoading(false);
+      }
+   }, [location.state.searchTerm]);
+
    const handleClickProjectName = async (projectId: number, projectName: string): Promise<void> => {
       try {
          const userRoleResponse = await fetchUserRole(projectId);
