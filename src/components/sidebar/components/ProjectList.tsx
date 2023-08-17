@@ -112,20 +112,21 @@ function ProjectList(): JSX.Element {
                     {/* 프로젝트 리스트 옵션 부분 */}
                     <select
                         onChange={event => handleSelectProject(event)}
+                        placeholder="프로젝트를 선택해주세요"
                         value={selectedProject?.projectName}
                     >
                         {projects?.map(projectOptions => (
                             <option
                                 className="font-bold text-navy-700 dark:text-white leading-1 ml-4 flex"
                                 value={projectOptions.projectName}
-                                key={projectOptions.projectName}
+                                key={projectOptions.projectId}
                             >
                                 {projectOptions.projectName}
                             </option>
                         ))}
                     </select>
                 </li>
-                {isSelect && (
+                {(
                     <div className=" align-middle">
                         {/*릴리즈 노트 리스트*/}
                         {selectedProject?.releaseNoteVersionList.map(note => (

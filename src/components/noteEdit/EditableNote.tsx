@@ -87,7 +87,7 @@ function EditableNote() {
             const response = await api.post(`project/${projectId}/release-note`, noteFieldForm)
             console.log(response.data)
 
-            navigate('../default')
+            navigate('../')
         }
         catch (error) {
             console.log(error)
