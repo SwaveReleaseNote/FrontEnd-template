@@ -87,13 +87,6 @@ const routes = [
     path: "create-note",
     icon: <MdOutlineShoppingCart className="h-6 w-6" />,
     component: <EditableNote />,
-  },
-  {
-    name: "Create Release Note 2",
-    layout: "/admin",
-    path: "create-note-editable",
-    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
-    component: <EditableNote />,
   }
 ];
 export default routes;

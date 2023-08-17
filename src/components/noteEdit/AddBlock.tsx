@@ -9,6 +9,8 @@ import Stop from '../../assets/img/label/STOP.png'
 import etc from '../../assets/img/label/ETC.png'
 import DropdownMenu from "../../views/admin/note/components/DropdownMenu";
 import {useRecoilState} from "recoil";
+import {blockState, contextsState} from "../../context/atom";
+import project from "../../views/admin/profile/components/Project";
 
 
 interface context {
@@ -22,7 +24,7 @@ interface block {
     label: string,
 }
 
-function AddBlock(props: {block: block, setBlocks: React.Dispatch<React.SetStateAction<block[]>>, index: number}) : JSX.Element {
+function AddBlock(props: {block: block, blocks: block[], setBlocks: React.Dispatch<React.SetStateAction<block[]>>, index: number}) : JSX.Element {
 
     const [contexts, setContexts] = useState<context[]>([{context: '', index: 0, tag: ''}]);
     const [selectedLabel, setSelectedLabel] = useState<string>('');
@@ -32,10 +34,22 @@ function AddBlock(props: {block: block, setBlocks: React.Dispatch<React.SetState
     const focusingNewText = useRef<HTMLTextAreaElement>(null);
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
     const [cursorPosition, setCursorPosition] = useState({top: 0, left: 0});
+    const [blockRecoilState, setBlockRecoilState] = useRecoilState(blockState)
 
     useEffect(() => {
         textRefs.current[contexts.length-1]?.current?.focus()
-    }, [contexts]);
+
+        // block 업데이트
+        const updatedBlock = props.blocks.map((block, blockIndex) =>
+            blockIndex === props.index
+                ? {...block, contexts: contexts, label: selectedLabel}
+                : block
+        )
+        props.setBlocks(updatedBlock)
+
+        setBlockRecoilState(props.blocks)
+        console.log(blockRecoilState)
+    }, [contexts, selectedLabel]);
 
     // section 내부에서 text area 생성되도록 만들기
     const addContext = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -57,7 +71,6 @@ function AddBlock(props: {block: block, setBlocks: React.Dispatch<React.SetState
         )
         setContexts(updateContext)
 
-        console.log(textRefs.current[contextIndex])
     }
 
     const handleSelectLabel = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -108,17 +121,18 @@ function AddBlock(props: {block: block, setBlocks: React.Dispatch<React.SetState
             <hr className="mt-5"/>
             {/* 라벨 선택 부분*/}
             <div className="flex w-full justify-between mt-5">
-                <select
-                    onChange={event => handleSelectLabel(event)} value={selectedLabel}
-                >
-                    {optionLabelList.map((label) => (
-                        <option value={label} key={label}>
-                            {label}
-                        </option>
-                    ))}
-                </select>
-                {showLabelImage(selectedLabel)}
-
+                <div className='flex-col'>
+                    <select
+                        onChange={event => handleSelectLabel(event)} value={selectedLabel}
+                    >
+                        {optionLabelList.map((label) => (
+                            <option value={label} key={label}>
+                                {label}
+                            </option>
+                        ))}
+                    </select>
+                    {showLabelImage(selectedLabel)}
+                </div>
                 <button>
                     x
                 </button>

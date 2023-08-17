@@ -4,19 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1add38cb-85f0-48f9-835c-e73c5060c10d" name="Changes" comment="Merge branch 'develop' into 29-feat-note-block">
-      <change afterPath="$PROJECT_DIR$/src/components/noteEdit/AddBlock.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/noteEdit/EditableNote.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/noteEdit/InputText.tsx" afterDir="false" />
+    <list default="true" id="1add38cb-85f0-48f9-835c-e73c5060c10d" name="Changes" comment="feat: 릴리즈 노트 생성 환경 파일">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/calendar/MiniCalendar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/calendar/MiniCalendar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/noteEdit/AddBlock.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/noteEdit/AddBlock.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/noteEdit/EditableNote.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/noteEdit/EditableNote.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/noteEdit/InputText.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/noteEdit/InputText.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/context/atom.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/atom.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/admin/default/pages/ProjectDashboard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/admin/default/pages/ProjectDashboard.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/views/admin/note/components/Date.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/admin/note/components/Date.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/admin/note/components/DropdownMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/admin/note/components/DropdownMenu.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/views/admin/note/components/SideMenubar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/admin/note/components/SideMenubar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/admin/note/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/admin/note/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/admin/note/components/Version.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/admin/note/components/Version.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,9 +72,10 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": -1
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: -1
+}</component>
   <component name="ProjectId" id="2U2xJ6QTJCX2eqOBQYRNNaSCskS" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -84,20 +84,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;29-feat-note-block&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Users/gachonswacademy02/Desktop/FrontEnd-template/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "29-feat-note-block",
+    "js.last.introduce.type": "CONST",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "pnpm",
+    "ts.external.directory.path": "/Users/gachonswacademy02/Desktop/FrontEnd-template/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -107,8 +108,59 @@
       <option name="presentableId" value="Default" />
       <updated>1692151402760</updated>
       <workItem from="1692151404858" duration="21044000" />
-      <workItem from="1692175847616" duration="6409000" />
+      <workItem from="1692175847616" duration="12663000" />
+      <workItem from="1692227532779" duration="9487000" />
+      <workItem from="1692237041390" duration="10017000" />
     </task>
+    <task id="LOCAL-00001" summary="feat: 작성 페이지 라우팅">
+      <option name="closed" value="true" />
+      <created>1692199910172</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1692199910172</updated>
+    </task>
+    <task id="LOCAL-00002" summary="feat: 필요없는 Index 제외">
+      <option name="closed" value="true" />
+      <created>1692199929653</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1692199929653</updated>
+    </task>
+    <task id="LOCAL-00003" summary="feat: 릴리즈 노트 생성 컴포넌트">
+      <option name="closed" value="true" />
+      <created>1692200163974</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1692200163974</updated>
+    </task>
+    <task id="LOCAL-00004" summary="feat: 릴리즈 노트 생성 드롭다운 tag 작성">
+      <option name="closed" value="true" />
+      <created>1692200187135</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1692200187135</updated>
+    </task>
+    <task id="LOCAL-00005" summary="feat: 릴리즈 노트 생성 recoil atom 작성">
+      <option name="closed" value="true" />
+      <created>1692200210310</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1692200210310</updated>
+    </task>
+    <task id="LOCAL-00006" summary="feat: 릴리즈 노트 생성 환경 파일">
+      <option name="closed" value="true" />
+      <created>1692200221941</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1692200221941</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -116,6 +168,12 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Revert &quot;Merge branch 'develop' into bugfix/50-sidebar-routing-issue&quot;&#10;&#10;This reverts commit 5b85e683b21d2832a4fce750bb852f3951b66c49, reversing&#10;changes made to ed73be7aff257dcc4954c50942fc98f9d3ba75ec." />
-    <option name="LAST_COMMIT_MESSAGE" value="Revert &quot;Merge branch 'develop' into bugfix/50-sidebar-routing-issue&quot;&#10;&#10;This reverts commit 5b85e683b21d2832a4fce750bb852f3951b66c49, reversing&#10;changes made to ed73be7aff257dcc4954c50942fc98f9d3ba75ec." />
+    <MESSAGE value="feat: 작성 페이지 라우팅" />
+    <MESSAGE value="feat: 필요없는 Index 제외" />
+    <MESSAGE value="feat: 릴리즈 노트 생성 컴포넌트" />
+    <MESSAGE value="feat: 릴리즈 노트 생성 드롭다운 tag 작성" />
+    <MESSAGE value="feat: 릴리즈 노트 생성 recoil atom 작성" />
+    <MESSAGE value="feat: 릴리즈 노트 생성 환경 파일" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: 릴리즈 노트 생성 환경 파일" />
   </component>
 </project>
