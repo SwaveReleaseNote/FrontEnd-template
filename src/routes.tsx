@@ -3,7 +3,6 @@ import React from "react";
 // Admin Imports
 import MainDashboard from "views/admin/default/MainPage";
 import ReleaseNote from "views/admin/marketplace";
-import CreateReleaseNote from "views/admin/note";
 
 // Auth Imports
 import SignIn from "views/auth/SignIn";
@@ -22,6 +21,7 @@ import CreateProject from "views/admin/default/pages/CreateProject";
 import ProjectDashboard from "views/admin/default/pages/ProjectDashboard";
 import SearchProjectList from "views/admin/default/pages/SearchProjectList";
 import ManageProject from "views/admin/default/pages/ManageProject";
+import EditableNote from "./components/noteEdit/EditableNote";
 
 const routes = [
   {
@@ -86,7 +86,7 @@ const routes = [
     layout: "/admin",
     path: "create-note",
     icon: <MdOutlineShoppingCart className="h-6 w-6" />,
-    component: <CreateReleaseNote />,
+    component: <EditableNote />,
   }
 ];
 export default routes;

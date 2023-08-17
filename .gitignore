@@ -23,6 +23,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+
+# dist 폴더 제외
+*/dist
 # cypress
 cypress/screenshots
 cypress/videos
