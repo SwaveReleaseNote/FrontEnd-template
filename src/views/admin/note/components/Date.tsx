@@ -5,10 +5,10 @@ import MiniCalendar from 'components/calendar/MiniCalendar'
 export default function Date():JSX.Element {
   return (
     <Card extra={"w-full p-4 h-full"}>
-      <div className=' flex flex-col items-center'>
+      <div className=' flex w-full flex-col items-center'>
         <header className="relative flex items-center justify-between pt-4">
           <div className="text-2xl font-bold text-navy-700 dark:text-white">
-            Date Card Test
+            Select Release Date
           </div>
         </header>
         <hr className=' mt-3 flex w-full mb-5 dark:text-gray-800' />

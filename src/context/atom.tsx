@@ -1,4 +1,6 @@
+/*eslint-disable*/
 import {atom} from 'recoil'
+import project from "../views/admin/profile/components/Project";
 
 export const noteFieldState = atom({
     key: "noteFieldState",
@@ -18,8 +20,8 @@ export const noteFieldState = atom({
         comment: [
             {
                 context: "",
-                lastModifiedDate:"",
-                name:"",
+                lastModifiedDate: "",
+                name: "",
                 releaseNoteId: 0,
                 version: ""
             }
@@ -38,17 +40,17 @@ export const noteFieldState = atom({
 export const labelState = atom({
     key: "labelState",
     default: [{
-        label:"",
-        text:""
+        label: "",
+        text: ""
     }]
 })
 
 export const commentState = atom({
     key: "commentState",
     default: [{
-        id:0,
-        writer:"",
-        content:""
+        id: 0,
+        writer: "",
+        content: ""
     }]
 })
 
@@ -82,4 +84,74 @@ export const noteIdState = atom({
     default: {
         releaseNoteId: 0
     }
+});
+
+export const filterDropdownOptions = atom({
+    key: "filterDropdownOptions",
+    default: [
+        'H1',
+        'H2',
+        'H3',
+        'p'
+    ]
+});
+
+export const projectIdState = atom({
+    key: "projectIdState",
+});
+
+// 전체 릴리즈 노트 생성 post form
+export const createNoteFieldForm = atom({
+    key: "createNoteFieldForm",
+    default: {
+        blocks: [
+            {
+                contexts: [
+                    {
+                        context: "",
+                        index: 0,
+                        tag: ""
+                    }
+                ],
+                label: "",
+            }
+        ],
+        releaseDate: "",
+        version: ""
+    }
+})
+
+// 달력에서 날짜 선택
+export const dateState = atom({
+    key: "dateState",
+    default: 'YYYY-MM-DD'
+})
+
+// block State
+export const blockState = atom({
+    key: "blockState",
+    default: [
+        {
+            contexts: [
+                {
+                    context: "",
+                    index: 0,
+                    tag: ""
+                }
+            ],
+            label: "",
+        },
+    ]
+})
+
+// contexts State
+export const contextsState = atom({
+    key: "contextsState",
+    default: [
+        {
+            context: "",
+            index: 0,
+            tag: ""
+        }
+    ]
 })

@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -7,6 +8,9 @@ import RecentComment from '../components/RecentComment';
 import SearchRelease from '../components/SearchRelease';
 import { useQuery } from 'react-query';
 import api from 'context/api';
+import {useRecoilState, useSetRecoilState} from "recoil";
+import project from "../../profile/components/Project";
+import {projectIdState} from "../../../../context/atom";
 
 enum UserRole {
    Subscriber = 'Subscriber',
@@ -24,6 +28,9 @@ const ProjectDashboard: React.FC = () => {
    const searchParams = new URLSearchParams(location.search);
    const projectId: string | null = searchParams.get('projectId');
    const projectName = searchParams.get('projectName');
+
+   const [getProjectId, setGetProjectId] = useRecoilState(projectIdState);
+   setGetProjectId(projectId)
 
    const fetchUserRole = async (projectId: number): Promise<UserRole> => {
       try {
