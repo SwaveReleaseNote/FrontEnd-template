@@ -1,26 +1,33 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-export default function SideMenubar(props: { width: number; children: React.ReactNode }): JSX.Element {
+interface SideMenuProps {
+    width: number;
+    children: React.ReactNode
+}
+
+// todo: 사이드 바 메뉴 닫았다가 킬 경우 선택했던 값들이 사라지는 문제
+
+export default function SideMenubar(props: SideMenuProps): JSX.Element {
     const width: number = props.width;
     const [isOpen, setOpen] = useState(false);
-    const [xPosition, setX] = useState(-width);
+    const [xPosition, setX] = useState(width);
     const side = useRef<HTMLDivElement>(null);
 
     const handleSideMenubarOpen = (): void => {
-        if (xPosition < 0) {
-            setX(0);
+        if (!isOpen) {
+            setX(width);
             setOpen(true);
         } else {
-            setX(-280);
+            setX(width);
             setOpen(false);
         }
     };
 
     const handleSideMenubarClose = (event: MouseEvent): void => {
         const sideArea = side.current;
-        const sideCildren = side.current?.contains(event.target as Node);
-        if (isOpen && (sideArea !== null && sideCildren !== null)) {
-            setX(-280);
+        const sideChildren = side.current?.contains(event.target as Node);
+        if (isOpen && (sideArea !== null && sideChildren !== null)) {
+            setX(width);
             setOpen(false);
         }
     };
@@ -34,11 +41,16 @@ export default function SideMenubar(props: { width: number; children: React.Reac
     }, []);
 
     return (
-        <div ref={side} className='relative mt-5 justify-end flex' style={{ transform: `translatex(${-xPosition}px)` }}>
-            <button onClick={handleSideMenubarOpen} className='text-2xl'>
-                {isOpen ? <span className='top-0'>X</span> : <span>⚙️</span>}
+        <div ref={side} className='mt-5 fixed ease-in-out'
+             style={{ width: `${width}px`, height: '100%', transform: `translatex(${-xPosition}px)`}}>
+            <button onClick={handleSideMenubarOpen}
+                    className='text-2xl'
+            >
+                {isOpen
+                    ? <span className='top-0'>X</span>
+                    : <span>⚙️</span>}
             </button>
-            <div>{isOpen && props.children}</div>
+            <div className='relative'>{isOpen && props.children}</div>
         </div>
     );
 }
