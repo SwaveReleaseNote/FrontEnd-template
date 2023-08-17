@@ -46,8 +46,9 @@ const SearchProjectList: React.FC = () => {
    const [isLoading, setIsLoading] = useState(true);
    const queryClient = useQueryClient();
 
-   const fetchSearchResults = async (): Promise<SearchResult> => {
+   const fetchSearchResults = async (searchTerm: string): Promise<SearchResult> => {
       try {
+         setSearchTerm(searchTerm);
          console.log('setSearchTerm', searchTerm);
          const response = await api.post('project/search', {
             keyword: searchTerm,
@@ -60,7 +61,8 @@ const SearchProjectList: React.FC = () => {
          if (error.response?.status != null) {
             status = error.response.status;
          }
-         navigate(`../error?status=${status as string}`);
+         // navigate(`../error?status=${status as string}`);
+         console.log(status);
          return mockFetchSearchResult();
       }
    };
@@ -76,7 +78,8 @@ const SearchProjectList: React.FC = () => {
          if (error.response?.status != null) {
             status = error.response.status;
          }
-         navigate(`../error?status=${status as string}`);
+         // navigate(`../error?status=${status as string}`);
+         console.log(status);
          return mockFetchUserRole();
       }
    };
@@ -201,7 +204,7 @@ const SearchProjectList: React.FC = () => {
    };
 
    // Use the useQuery hook to fetch data
-   const searchResultQuery = useQuery(['searchResults', searchTerm], fetchSearchResults);
+   const searchResultQuery = useQuery(['searchResults', searchTerm], async () => await fetchSearchResults(searchTerm));
 
    useEffect(() => {
       if (location.state.searchTerm != null) {
