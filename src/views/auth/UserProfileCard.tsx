@@ -111,7 +111,7 @@ function UserProfileCard(): ReactElement {
       event.preventDefault();
       // Handle forgot password form submission
       console.log(password);
-      api.patch('http://localhost:8080/api/user/password', {
+      api.patch('http://61.109.214.110:80/api/user/password', {
          password: password,
       })
          .then(response => {
