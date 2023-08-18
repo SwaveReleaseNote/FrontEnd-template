@@ -5,10 +5,13 @@ import {useRecoilState, useRecoilValue} from "recoil";
 import {noteFieldState, noteIdState} from "../../../context/atom";
 import data from "../../../components/label/mockData/NoteFiledMockData.json"
 import api from "../../../context/api";
+import { useLocation } from "react-router-dom";
 
 const ReleaseNote = (): JSX.Element => {
     const [selectNote, setSelectNote] = useRecoilState(noteFieldState)
-    const releaseNoteId = selectNote.releaseNoteId
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const releaseNoteId: string | null = searchParams.get('releaseNoteId');
 
     // 리코일을 사용하여 릴리즈 노트 클릭했을때 해당 릴리즈 노트로 가도록 설정
     useEffect(() => {

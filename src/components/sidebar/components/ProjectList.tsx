@@ -2,7 +2,7 @@
 
 import React, { MouseEvent, useEffect, useState } from 'react';
 import api from '../../../context/api';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import projectsMockData from '../mockData/noteListData.json';
 import noteMockData from '../../label/mockData/NoteFiledMockData.json';
 import { RecoilLoadable, useRecoilState } from 'recoil';
@@ -57,6 +57,7 @@ function ProjectList(): JSX.Element {
    const [selectNoteId, setSelectNoteId] = useRecoilState(noteIdState);
    const [isSelect, setIsSelect] = useState(false);
    const [isLoading, setIsLoading] = useState(true);
+   const navigate = useNavigate();
 
    // api 로 받아온 데이터를 projects에 넣어준다
    useEffect(() => {
@@ -99,7 +100,9 @@ function ProjectList(): JSX.Element {
 
    const handleSelectNote = (id: number) => {
       console.log('선택된 노트의 id = ' + id);
-    //   navigate()
+      const queryString = `releaseNoteId=${id}`;
+      const url = `/admin/release-note?${queryString}`;
+      navigate(url);
    };
 
    return (
