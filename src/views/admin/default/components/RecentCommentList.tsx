@@ -31,7 +31,8 @@ const RecentCommentList: React.FC<Props> = ({ projectId }) => {
          if (error.response?.status != null) {
             status = error.response.status;
          }
-         navigate(`../error?status=${status as string}`);
+         // navigate(`../error?status=${status as string}`);
+         console.log(status);
          return mockFechtRecentComments();
       }
    };
@@ -46,42 +47,28 @@ const RecentCommentList: React.FC<Props> = ({ projectId }) => {
             lastModifiedDate: '2023-07-08',
             name: '김성국',
             releaseNoteId: 1,
-            version: '1.0.0',
+            version: '1.8.0',
          },
          {
-            context: 'ASUS도 너프 해야한다.',
+            context: 'ASUS를 너프를 왜하냐?.',
             lastModifiedDate: '2023-07-08',
-            name: '김성국',
+            name: '이승섭',
             releaseNoteId: 2,
-            version: '1.0.0',
+            version: '1.6.0',
          },
          {
-            context: 'ASUS도 너프 해야한다.',
+            context: '맥북 너무 좋다.',
             lastModifiedDate: '2023-07-08',
-            name: '김성국',
+            name: '강준희',
             releaseNoteId: 3,
-            version: '1.0.0',
+            version: '2.2.0',
          },
          {
-            context: 'ASUS도 너프 해야한다.',
+            context: '맥북 갖고 싶다.',
             lastModifiedDate: '2023-07-08',
-            name: '김성국',
+            name: '함건욱',
             releaseNoteId: 4,
-            version: '1.0.0',
-         },
-         {
-            context: 'ASUS도 너프 해야한다.',
-            lastModifiedDate: '2023-07-08',
-            name: '김성국',
-            releaseNoteId: 5,
-            version: '1.0.0',
-         },
-         {
-            context: 'ASUS도 너프 해야한다.',
-            lastModifiedDate: '2023-07-08',
-            name: '김성국',
-            releaseNoteId: 6,
-            version: '1.0.0',
+            version: '1.0.2',
          },
       ];
 

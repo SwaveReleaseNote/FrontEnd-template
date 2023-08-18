@@ -1,5 +1,5 @@
 beforeEach(() => {
-   cy.request('POST', 'http://localhost:3000/api/user/sample').then(response => {
+   cy.request('POST', 'http://61.109.214.110:80/api/user/sample').then(response => {
       const user = response.body;
       cy.log('Test user created:', user);
    });
@@ -8,7 +8,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-   cy.request('DELETE', 'http://localhost:3000/api/user/sample').then(response => {
+   cy.request('DELETE', 'http://61.109.214.110:80/api/user/sample').then(response => {
       const user = response.body;
       cy.log('Test user deleted:', user);
    });

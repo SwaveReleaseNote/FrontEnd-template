@@ -69,7 +69,8 @@ const ManageProject: React.FC = () => {
          if (error.response?.status != null) {
             status = error.response.status;
          }
-         navigate(`../error?status=${status as string}`);
+         // navigate(`../error?status=${status as string}`);
+         console.log(status);
          return mockFetchUserRequest();
       }
    };
@@ -84,7 +85,8 @@ const ManageProject: React.FC = () => {
          if (error.response?.status != null) {
             status = error.response.status;
          }
-         navigate(`../error?status=${status as string}`);
+         // navigate(`../error?status=${status as string}`);
+         console.log(status);
          return mockFetchProjectInfo();
       }
    };

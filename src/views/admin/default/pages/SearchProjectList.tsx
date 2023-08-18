@@ -244,7 +244,8 @@ const SearchProjectList: React.FC = () => {
          if (error.response?.status != null) {
             status = error.response.status;
          }
-         navigate(`../error?status=${status as string}`);
+         // navigate(`../error?status=${status as string}`);
+         console.log(status);
          alert('Server error. Please try again.');
       }
    };
@@ -269,7 +270,8 @@ const SearchProjectList: React.FC = () => {
          if (error.response?.status != null) {
             status = error.response.status;
          }
-         navigate(`../error?status=${status as string}`);
+         // navigate(`../error?status=${status as string}`);
+         console.log(status);
       } finally {
          setShowRoleCheck(false);
       }
@@ -288,7 +290,8 @@ const SearchProjectList: React.FC = () => {
          if (error.response?.status != null) {
             status = error.response.status;
          }
-         navigate(`../error?status=${status as string}`);
+         // navigate(`../error?status=${status as string}`);
+         console.log(status);
       } finally {
          setShowRoleCheck(false);
       }

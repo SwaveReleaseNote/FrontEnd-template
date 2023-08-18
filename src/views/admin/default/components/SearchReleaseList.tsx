@@ -69,7 +69,8 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
          if (error.response?.status != null) {
             status = error.response.status;
          }
-         navigate(`../error?status=${status as string}`);
+         // navigate(`../error?status=${status as string}`);
+         console.log(status);
          return mockFetchReleaseList();
       }
    }
@@ -109,43 +110,43 @@ const SearchReleaseList: React.FC<Props> = ({ searchRelease }) => {
             version: generateRandomVersion(),
             releaseNoteId: 1,
             context:
-               '시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.시스템 내에서 악성 코드를 삭제했습니다.',
+               '추후에 생긴 문제로써 이는 해결이 필요해서 패치를 했습니다.',
          },
          {
-            label: 'Delete',
+            label: 'Update',
             version: generateRandomVersion(),
             releaseNoteId: 2,
-            context: '시스템 내에서 악성 코드를 삭제했습니다.',
+            context: '지정된 수순에 따라 업데이트했습니다.',
          },
          {
-            label: 'Delete',
+            label: 'ETC',
             version: generateRandomVersion(),
             releaseNoteId: 3,
-            context: '시스템 내에서 악성 코드를 삭제했습니다.',
+            context: '추후에 변경할 사항',
          },
          {
             label: 'Delete',
             version: generateRandomVersion(),
             releaseNoteId: 4,
-            context: '시스템 내에서 악성 코드를 삭제했습니다.',
+            context: '악성 코드를 삭제했습니다.',
          },
          {
-            label: 'Delete',
+            label: 'Stop',
             version: generateRandomVersion(),
             releaseNoteId: 5,
-            context: '시스템 내에서 악성 코드를 삭제했습니다.',
+            context: '이벤트 기능을 중지했습니다.',
          },
          {
             label: 'Delete',
             version: generateRandomVersion(),
             releaseNoteId: 6,
-            context: '시스템 내에서 악성 코드를 삭제했습니다.',
+            context: '8번째 기능의 이벤트를 삭제했습니다.',
          },
          {
             label: 'Delete',
             version: generateRandomVersion(),
             releaseNoteId: 7,
-            context: '시스템 내에서 악성 코드를 삭제했습니다.',
+            context: '모든 기능을 삭제했습니다.',
          },
       ];
 
