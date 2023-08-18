@@ -11,7 +11,6 @@ const EventSourceComponent: React.FC = () => {
     message: "",
   }]);
 
-  const [connectEnable,setConnectEnable] = useState(false);
 
   const onChange = (event: any): void => {
     setInputText(event);
@@ -19,15 +18,13 @@ const EventSourceComponent: React.FC = () => {
   }
 
   useEffect(() => {
-    if(!connectEnable){
     const userId =localStorage.getItem("user_id") as string;
     // const eventSource = new EventSource(`http://61.109.214.110:80/api/sse/emitter/${userId}`);
-    const eventSource = new EventSource(`http://266e8974276247f4b3cad8498606fafb.kakaoiedge.com:80/api/sse/emitter/${userId}`);
+    const eventSource = new EventSource(`http://localhost:3000/api/sse/emitter/${userId}`);
     console.log("eventfdghd",eventSource);
 
 
     eventSource.onmessage = event => {
-      setConnectEnable(true);
       const eventData = JSON.parse(event.data);
       console.log('SSE data:', eventData);
       // console.log('SSE data:', jsonData.data);
@@ -43,14 +40,12 @@ const EventSourceComponent: React.FC = () => {
     };
 
     eventSource.onerror = error => {
-      setConnectEnable(false);
       console.error('SSE Error:', error);
     };
-  }
 
-  //  return () => {
-  //    eventSource.close();
-  //  };
+   return () => {
+     eventSource.close();
+   };
   }, []);
 
   useEffect(() => {

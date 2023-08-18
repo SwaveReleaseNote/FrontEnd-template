@@ -111,7 +111,7 @@ function UserProfileCard(): ReactElement {
       event.preventDefault();
       // Handle forgot password form submission
       console.log(password);
-      api.patch('http://266e8974276247f4b3cad8498606fafb.kakaoiedge.com:80/api/user/password', {
+      api.patch('http://localhost:3000/api/user/password', {
          password: password,
       })
          .then(response => {
