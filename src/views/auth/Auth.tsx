@@ -32,7 +32,7 @@ const Auth = (): JSX.Element => {
          // url의 인가코드
          try {
             const res = await axios.post(
-               `http://localhost:8080/api/user/login-by-oauth?code=${code}&provider=${provider?.toString() ?? ''}`,
+               `http://61.109.214.110:80/api/user/login-by-oauth?code=${code}&provider=${provider?.toString() ?? ''}`,
             );
             // 인가코드를 백엔드로 보내고 헤더에서 엑세스 토큰 받아옴
             // const parsedData: TokenData = JSON.parse(res.data.slice(5));
@@ -52,7 +52,7 @@ const Auth = (): JSX.Element => {
             activateStompClient();
             try {
                await axios
-                  .get(`http://localhost:8080/api/user`, {
+                  .get(`http://61.109.214.110:80/api/user`, {
                      headers: {
                         Authorization: token,
                      },

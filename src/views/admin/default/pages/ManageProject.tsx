@@ -290,7 +290,7 @@ const ManageProject: React.FC = () => {
                   <NotificationPopup
                      message="이 프로젝트를 삭제하시겠습니까?"
                      subMessage="프로젝트의 모든 정보가 삭제됩니다."
-                     onConfirm={() => handleConfirmDelete}
+                     onConfirm={handleConfirmDelete}
                      onCancel={handleCancelDelete}
                   />
                )}
