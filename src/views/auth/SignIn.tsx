@@ -130,7 +130,7 @@ const SignIn: React.FC = () => {
             activateStompClient();
             try {
                await axios
-                  .get(`http://61.109.214.110:80/api/user`, {
+                  .get(`http://localhost:3000/api/user`, {
                      headers: {
                         Authorization: `Bearer ${String(token)}`,
                      },

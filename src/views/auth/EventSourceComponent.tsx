@@ -19,7 +19,7 @@ const EventSourceComponent: React.FC = () => {
 
   useEffect(() => {
     const userId =localStorage.getItem("user_id") as string;
-    const eventSource = new EventSource(`http://61.109.214.110:80/api/sse/emitter/${userId}`);
+    const eventSource = new EventSource(`http://localhost:3000/api/sse/emitter/${userId}`);
     // const eventSource = new EventSource(`http://localhost:3000/api/sse/emitter/${userId}`);
     console.log("eventfdghd",eventSource);
 
