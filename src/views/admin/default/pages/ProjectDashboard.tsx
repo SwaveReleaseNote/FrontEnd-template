@@ -10,7 +10,8 @@ import { useQuery } from 'react-query';
 import api from 'context/api';
 // import {useRecoilState, useSetRecoilState} from "recoil";
 // import project from "../../profile/components/Project";
-// import {projectIdState} from "../../../../context/atom";
+import {projectIdState} from "../../../../context/atom";
+import { useRecoilState } from 'recoil';
 
 enum UserRole {
    Subscriber = 'Subscriber',
@@ -29,7 +30,7 @@ const ProjectDashboard: React.FC = () => {
    const projectId: string | null = searchParams.get('projectId');
    const projectName = searchParams.get('projectName');
 
-   // const [getProjectId, setGetProjectId] = useRecoilState(projectIdState);
+   const [getProjectId, setGetProjectId] = useRecoilState(projectIdState);
 
    const fetchUserRole = async (projectId: number): Promise<UserRole> => {
       try {
@@ -61,7 +62,7 @@ const ProjectDashboard: React.FC = () => {
          console.log(checkUserRoleQuery.data);
       }
       
-      // setGetProjectId(projectId);
+      setGetProjectId(Number(projectId));
       
    }, [checkUserRoleQuery.isSuccess]);
 

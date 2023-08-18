@@ -13,7 +13,8 @@ export default function SideMenubar(props: SideMenuProps): JSX.Element {
     const [xPosition, setX] = useState(width);
     const side = useRef<HTMLDivElement>(null);
 
-    const handleSideMenubarOpen = (): void => {
+    const handleSideMenubarOpen = (event: React.MouseEvent<HTMLButtonElement>): void => {
+        event.preventDefault();
         if (!isOpen) {
             setX(width);
             setOpen(true);
