@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import LoadingComponent from './LoadingComponent ';
 import api from 'context/api';
 import { useQuery } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 interface Props {
    projectId: {
@@ -18,7 +18,7 @@ interface MemberStatus {
 
 const MemberStatusCard: React.FC<Props> = ({ projectId }) => {
    const [isLoading, setIsLoading] = useState(true);
-   const navigate = useNavigate();
+   // const navigate = useNavigate();
 
    const fetchMemberStatus = async (): Promise<MemberStatus[]> => {
       try {
@@ -26,11 +26,11 @@ const MemberStatusCard: React.FC<Props> = ({ projectId }) => {
          return response.data;
       } catch (error: any) {
          console.error('Error fetching project Member Status:', error);
-         let status = error.code;
-         if (error.response?.status != null) {
-            status = error.response.status;
-         }
-         navigate(`../error?status=${status as string}`);
+         // let status = error.code;
+         // if (error.response?.status != null) {
+         //    status = error.response.status;
+         // }
+         // navigate(`../error?status=${status as string}`);
          return mockFetchMemberStatus();
       }
    };
@@ -46,12 +46,6 @@ const MemberStatusCard: React.FC<Props> = ({ projectId }) => {
          { memberId: 4, memberName: '강준희', online: true },
          { memberId: 5, memberName: '전강훈', online: true },
          { memberId: 6, memberName: '이승섭', online: true },
-         { memberId: 7, memberName: '이승섭', online: true },
-         { memberId: 8, memberName: '이승섭', online: true },
-         { memberId: 9, memberName: '이승섭', online: true },
-         { memberId: 10, memberName: '이승섭', online: true },
-         { memberId: 11, memberName: '이승섭', online: true },
-         { memberId: 12, memberName: '이승섭', online: true },
       ];
 
       return mockResponse;

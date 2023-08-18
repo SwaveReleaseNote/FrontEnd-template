@@ -3,7 +3,7 @@ import React, { type ReactElement } from 'react';
 interface NotificationPopupProps {
    message: string;
    subMessage: string;
-   onConfirm: () => void;
+   onConfirm: () => Promise<void>;
    onCancel: () => void;
 }
 
@@ -16,7 +16,9 @@ function NotificationPopup({ message, subMessage, onConfirm, onCancel }: Notific
             <div className="mt-4 flex justify-end">
                <button
                   onClick={() => {
-                     onConfirm();
+                     onConfirm().catch(error => {
+                        console.error('Error fetching data:', error);
+                     });
                   }}>
                   Yes
                </button>

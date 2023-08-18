@@ -69,7 +69,8 @@ const ManageProject: React.FC = () => {
          if (error.response?.status != null) {
             status = error.response.status;
          }
-         navigate(`../error?status=${status as string}`);
+         // navigate(`../error?status=${status as string}`);
+         console.log(status);
          return mockFetchUserRequest();
       }
    };
@@ -84,7 +85,8 @@ const ManageProject: React.FC = () => {
          if (error.response?.status != null) {
             status = error.response.status;
          }
-         navigate(`../error?status=${status as string}`);
+         // navigate(`../error?status=${status as string}`);
+         console.log(status);
          return mockFetchProjectInfo();
       }
    };
@@ -290,7 +292,7 @@ const ManageProject: React.FC = () => {
                   <NotificationPopup
                      message="이 프로젝트를 삭제하시겠습니까?"
                      subMessage="프로젝트의 모든 정보가 삭제됩니다."
-                     onConfirm={() => handleConfirmDelete}
+                     onConfirm={handleConfirmDelete}
                      onCancel={handleCancelDelete}
                   />
                )}

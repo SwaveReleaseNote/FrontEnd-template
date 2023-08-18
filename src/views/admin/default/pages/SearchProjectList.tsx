@@ -4,7 +4,6 @@ import { useQueryClient } from 'react-query';
 
 import LoadingComponent from '../components/LoadingComponent ';
 import api from 'context/api';
-import NotificationPopup from '../components/NotificationPopup';
 
 enum UserRole {
    Subscriber = 'Subscriber',
@@ -224,11 +223,9 @@ const SearchProjectList: React.FC = () => {
       }
    }, [location.state.searchTerm]);
 
-   
    useEffect(() => {
-      console.log("useEffect");
+      console.log('useEffect');
    }, [isLoading]);
-
    const handleClickProjectName = async (projectId: number, projectName: string): Promise<void> => {
       try {
          console.log('click project', projectId);
@@ -239,7 +236,6 @@ const SearchProjectList: React.FC = () => {
          } else {
             const queryString = `projectId=${projectId}&projectName=${projectName}`;
             const url = `/admin/dashboard?${queryString}`;
-
             navigate(url);
          }
       } catch (error: any) {
@@ -248,7 +244,8 @@ const SearchProjectList: React.FC = () => {
          if (error.response?.status != null) {
             status = error.response.status;
          }
-         navigate(`../error?status=${status as string}`);
+         // navigate(`../error?status=${status as string}`);
+         console.log(status);
          alert('Server error. Please try again.');
       }
    };
@@ -259,13 +256,13 @@ const SearchProjectList: React.FC = () => {
 
    const handleClickYes = async (projectId: number, projectName: string): Promise<void> => {
       try {
-         console.log('projectId', projectId);
-         console.log('projectName', projectName);
-         const response = await api.post(`project/${projectId}/subscribe`);
-         console.log('response', response);
+         await handleYesClicked(projectId, projectName);
+
          const queryString = `projectId=${projectId}&projectName=${projectName}`;
          const url = `/admin/dashboard?${queryString}`;
-         await queryClient.refetchQueries('projects');
+         queryClient.refetchQueries('projects').catch(error => {
+            console.error(error);
+         });
          navigate(url);
       } catch (error: any) {
          console.error('Error Subscribe project:', error);
@@ -273,7 +270,28 @@ const SearchProjectList: React.FC = () => {
          if (error.response?.status != null) {
             status = error.response.status;
          }
-         navigate(`../error?status=${status as string}`);
+         // navigate(`../error?status=${status as string}`);
+         console.log(status);
+      } finally {
+         setShowRoleCheck(false);
+      }
+   };
+
+   const handleYesClicked = async (projectId: number, projectName: string): Promise<void> => {
+      try {
+         console.log('projectId', projectId);
+         console.log('projectName', projectName);
+         const response = await api.post(`project/${projectId}/subscribe`);
+         console.log('response', response);
+         await queryClient.refetchQueries('projects');
+      } catch (error: any) {
+         console.error('Error Subscribe project:', error);
+         let status = error.code;
+         if (error.response?.status != null) {
+            status = error.response.status;
+         }
+         // navigate(`../error?status=${status as string}`);
+         console.log(status);
       } finally {
          setShowRoleCheck(false);
       }
@@ -299,14 +317,27 @@ const SearchProjectList: React.FC = () => {
                   projects.map(project => (
                      <div className="rounded-xl bg-gray-0 p-3 dark:!bg-navy-900" key={project.id}>
                         {showRoleCheck && (
-                           <NotificationPopup
-                              message="이 프로젝트를 구독하시겠습니까?"
-                              subMessage="이 프로젝트를 볼 권한이 없습니다."
-                              onConfirm={() => {
-                                 void handleClickYes(project.id, project.name);
-                              }}
-                              onCancel={handleClickNo}
-                           />
+                           <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm">
+                              <div className="border-4 font-bold border-red-500 bg-white p-4 rounded-lg">
+                                 <p className="flex text-lg">
+                                    <p className="text-red-500 text-xl mr-2">이 프로젝트를 구독하시겠습니까?</p>
+                                 </p>
+                                 <p className="text-l text-red-500">(이 프로젝트를 볼 권한이 없습니다.)</p>
+                                 <div className="mt-4 flex justify-end">
+                                    <button
+                                       onClick={() => {
+                                          handleClickYes(project.id, project.name).catch(error => {
+                                             console.error(error);
+                                          });
+                                       }}>
+                                       Yes
+                                    </button>
+                                    <button className="ml-2" onClick={handleClickNo}>
+                                       No
+                                    </button>
+                                 </div>
+                              </div>
+                           </div>
                         )}
                         <h2 className="hover:underline hover:text-blue-600 text-2xl">
                            {/* 프로젝트 제목: */}
