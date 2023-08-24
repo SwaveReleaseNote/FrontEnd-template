@@ -43,6 +43,8 @@ const SearchProjectList: React.FC = () => {
    const [showRoleCheck, setShowRoleCheck] = useState(false);
    const [isLoading, setIsLoading] = useState(true);
    const queryClient = useQueryClient();
+   const [clickProjectId, setClickProjectId] = useState(0);
+   const [clickProjectName, setClickProjectName] = useState("");
 
    const [searchResults, setSearchResults] = useState<SearchResult | null>(null);
 
@@ -226,10 +228,13 @@ const SearchProjectList: React.FC = () => {
    useEffect(() => {
       console.log('useEffect');
    }, [isLoading]);
+
    const handleClickProjectName = async (projectId: number, projectName: string): Promise<void> => {
       try {
          console.log('click project', projectId);
          console.log('click project', projectName);
+         setClickProjectId(projectId);
+         setClickProjectName(projectName);
          const userRoleResponse = await fetchUserRole(projectId);
          if (userRoleResponse === UserRole.None) {
             setShowRoleCheck(true);
@@ -254,11 +259,12 @@ const SearchProjectList: React.FC = () => {
       setSelectedCheckbox(value);
    };
 
-   const handleClickYes = async (projectId: number, projectName: string): Promise<void> => {
+   const handleClickYes = async (): Promise<void> => {
       try {
-         await handleYesClicked(projectId, projectName);
+         console.log("handleClickYes", clickProjectId);
+         await handleYesClicked(clickProjectId, clickProjectName);
 
-         const queryString = `projectId=${projectId}&projectName=${projectName}`;
+         const queryString = `projectId=${clickProjectId}&projectName=${clickProjectName}`;
          const url = `/admin/dashboard?${queryString}`;
          queryClient.refetchQueries('projects').catch(error => {
             console.error(error);
@@ -326,7 +332,7 @@ const SearchProjectList: React.FC = () => {
                                  <div className="mt-4 flex justify-end">
                                     <button
                                        onClick={() => {
-                                          handleClickYes(project.id, project.name).catch(error => {
+                                          handleClickYes().catch(error => {
                                              console.error(error);
                                           });
                                        }}>

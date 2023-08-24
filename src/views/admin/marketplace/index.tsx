@@ -17,6 +17,7 @@ const ReleaseNote = (): JSX.Element => {
     useEffect(() => {
         const fetchNote = async (): Promise<void> => {
             try {
+                console.log("releaseNoteId", releaseNoteId);
                 const response = await api.get(`project/release-note/${releaseNoteId}`)
                 const fetchData = response.data
                 setSelectNote(fetchData)
